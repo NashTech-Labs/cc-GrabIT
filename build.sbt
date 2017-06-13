@@ -13,7 +13,7 @@ def test(deps: ModuleID*): Seq[ModuleID] = deps map (_ % "test")
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val root = Project("grabit", file("."))
-  .aggregate(giUtils, giApi, giPersistence, giRegister, giBooking, giPortal)
+  .aggregate(giUtils, giApi, giPersistence, giRegister, giBooking, giPortal, giNotify)
   .settings(basicSettings: _*)
 
 // -------------------------------------------------------------------------------------------------------------------
@@ -53,6 +53,14 @@ lazy val giRegister = Project("gi-register", file("gi-register"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giBooking = Project("gi-booking", file("gi-booking"))
+  .settings(basicSettings: _*)
+  .settings(libraryDependencies ++= compile() ++ test())
+
+// -------------------------------------------------------------------------------------------------------------------
+// NOTIFY
+// -------------------------------------------------------------------------------------------------------------------
+
+lazy val giNotify = Project("gi-notify", file("gi-notify"))
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile() ++ test())
 
