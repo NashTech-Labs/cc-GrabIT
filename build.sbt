@@ -29,8 +29,9 @@ lazy val giUtils = Project("gi-utils", file("gi-utils"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giApi = Project("gi-api", file("gi-api"))
+  .dependsOn(giRegister)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(akkaHttp) ++ test(akkaHttpTestKit))
+  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpSprayJson) ++ test(akkaHttpTestKit))
 
 // -------------------------------------------------------------------------------------------------------------------
 // PERSISTENCE
