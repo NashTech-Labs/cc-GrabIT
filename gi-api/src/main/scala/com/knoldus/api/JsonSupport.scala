@@ -5,5 +5,5 @@ import com.knoldus.register.models.UserRegisterRequest
 import spray.json.DefaultJsonProtocol
 
 object JsonSupport extends DefaultJsonProtocol with SprayJsonSupport {
-  implicit val UserRegisterRequestFormat = jsonFormat4(UserRegisterRequest)
+  implicit val userRegisterRequestFormat = jsonFormat4(UserRegisterRequest)
 }

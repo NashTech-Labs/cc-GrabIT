@@ -21,5 +21,4 @@ trait UserHelper {
       case Failure(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
     }
   }
-  
 }
