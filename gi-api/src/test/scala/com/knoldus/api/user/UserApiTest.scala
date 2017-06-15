@@ -15,20 +15,12 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   implicit val routeTestTimeout = RouteTestTimeout(10 seconds)
 
-  val jsonString ="""{
-                    |"empId":"1111",
-                    |"name":"test name",
-                    |"email":"test@gmail.com",
-                    |"role":"admin"
-                    |}""".stripMargin
-
-  val jsonAST: JsValue = jsonString.parseJson
-
-
   test("user Api route to add users") {
+    val jsonString ="""{"empId":"1111","name":"test name","email":"test@gmail.com","role":"admin"}"""
+    val body: JsValue = jsonString.parseJson
     val requestToken = Math.random()
     Post(
-      s"/add/user?requestToken=$requestToken", jsonAST) ~> addUser ~>
+      s"/add/user?requestToken=$requestToken", body) ~> addUser ~>
       check {
       status shouldBe StatusCodes.OK
       responseAs[String] should include regex ("Success")
@@ -36,11 +28,35 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
   }
 
   test("user Api route to add users when request token is empty") {
+    val jsonString ="""{"empId":"1111","name":"test name","email":"test@gmail.com","role":"admin"}"""
+    val body: JsValue = jsonString.parseJson
+
     Post(
-      "/add/user?requestToken=", jsonAST) ~> addUser ~>
+      "/add/user?requestToken=", body) ~> addUser ~>
       check {
         status shouldBe StatusCodes.InternalServerError
         responseAs[String] shouldBe "Internal Server Error requirement failed: request token is empty"
       }
   }
+
+  test("user Api route to sign in") {
+    val jsonString ="""{"email":"test@gmail.com","password":"testpassword"}"""
+    val body: JsValue = jsonString.parseJson
+    val requestToken = Math.random()
+    Post(s"/signin", body) ~> signIn ~> check {
+        status shouldBe StatusCodes.OK
+        responseAs[String] shouldBe("User logged in successfully")
+      }
+  }
+
+  test("user Api route to sign in when empId or password is empty") {
+    val jsonString ="""{"email":"test@gmail.com","password":""}"""
+    val body: JsValue = jsonString.parseJson
+    val requestToken = Math.random()
+    Post(s"/signin", body) ~> signIn ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] shouldBe "Internal Server Error requirement failed: incomplete sign in details"
+    }
+  }
+
 }
