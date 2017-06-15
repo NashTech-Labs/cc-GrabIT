@@ -40,7 +40,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
   }
 
   test("user Api route to sign in") {
-    val jsonString ="""{"empId":"1111","password":"testpassword"}"""
+    val jsonString ="""{"email":"1111","password":"testpassword"}"""
     val body: JsValue = jsonString.parseJson
     val requestToken = Math.random()
     Post(s"/signin", body) ~> signIn ~> check {
@@ -50,7 +50,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
   }
 
   test("user Api route to sign in when empId or password is empty") {
-    val jsonString ="""{"empId":"1111","password":""}"""
+    val jsonString ="""{"email":"1111","password":""}"""
     val body: JsValue = jsonString.parseJson
     val requestToken = Math.random()
     Post(s"/signin", body) ~> signIn ~> check {

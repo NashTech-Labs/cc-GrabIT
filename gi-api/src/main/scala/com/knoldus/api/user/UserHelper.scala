@@ -29,7 +29,7 @@ trait UserHelper {
     */
   def signIn(signInRequest: SignInRequest): HttpResponse = {
    Try {
-     require(signInRequest.empId.trim.nonEmpty && signInRequest.password.trim.nonEmpty, "incomplete sign in details")
+     require(signInRequest.email.trim.nonEmpty && signInRequest.password.trim.nonEmpty, "incomplete sign in details")
    } match {
      case Success(_) => HttpResponse(StatusCodes.OK, entity = s"User logged in successfully")
      case Failure(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
