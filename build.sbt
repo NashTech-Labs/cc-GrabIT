@@ -38,8 +38,9 @@ lazy val giApi = Project("gi-api", file("gi-api"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
+  .dependsOn(giUtils)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test())
+  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
 // REGISTER
