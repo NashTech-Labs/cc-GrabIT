@@ -1,4 +1,6 @@
 package com.knoldus.utils.models
 
-case class User(id: String, accessToken: String, empId: String, name: String, email: String,
-                password: String, role: String)
+import java.sql.Timestamp
+
+case class User(id: String, accessToken: String, employeeId: String, name: String, email: String,
+                password: String, role: String, createdAt: Timestamp, lastModifiedAt: Timestamp)

@@ -47,7 +47,7 @@ lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giRegister = Project("gi-register", file("gi-register"))
-  .dependsOn(giUtils)
+  .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
 
@@ -56,7 +56,7 @@ lazy val giRegister = Project("gi-register", file("gi-register"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giBooking = Project("gi-booking", file("gi-booking"))
-  .dependsOn(giUtils)
+  .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
 
@@ -65,7 +65,7 @@ lazy val giBooking = Project("gi-booking", file("gi-booking"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giNotify = Project("gi-notify", file("gi-notify"))
-  .dependsOn(giUtils)
+  .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
 

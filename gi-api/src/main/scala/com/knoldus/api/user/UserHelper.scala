@@ -2,10 +2,14 @@ package com.knoldus.api.user
 
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}
+import com.knoldus.register.services.UserService
 
+import scala.concurrent.Future
+import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
+import scala.concurrent.ExecutionContext.Implicits.global
 
-trait UserHelper {
+trait UserHelper extends UserService {
 
   /**
     * Handles response for add user functionality
@@ -13,12 +17,11 @@ trait UserHelper {
     * @param user
     * @return
     */
-  def addUserHandler(requestToken: String, user: UserRegisterRequest): HttpResponse = {
-    Try {
-      require(requestToken.trim.nonEmpty, "request token is empty")
-    } match {
-      case Success(_) => HttpResponse(StatusCodes.OK, entity = s"Success $requestToken $user")
-      case Failure(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
+  def addUserHandler(requestToken: String, user: UserRegisterRequest): Future[HttpResponse] = {
+    addUser(user) map { response =>
+      HttpResponse(StatusCodes.OK, entity = s"User has been Successfully Added")
+    } recover {
+      case NonFatal(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
     }
   }
 
