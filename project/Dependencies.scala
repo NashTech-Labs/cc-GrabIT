@@ -13,7 +13,6 @@ object Dependencies {
   lazy val akkaHttpSprayJson  = "com.typesafe.akka"   %%  "akka-http-spray-json"  % akkaVersion
   lazy val mockito            = "org.mockito"         %   "mockito-all"           % "1.10.19"
   lazy val scalaTest          = "org.scalatest"       %%  "scalatest"             % "2.2.5"
-
   lazy val circeCore          = "io.circe"            %   "circe-core_2.11"       % circeVersion
   lazy val circeParser        = "io.circe"            %%  "circe-parser"          % circeVersion
   lazy val circeGeneric       = "io.circe"            %%  "circe-generic"         % circeVersion

@@ -12,13 +12,13 @@ trait UserApi extends UserHelper {
     * @return
     */
   def addUser: Route =
-    path("add" / "user") {
-      (post & entity(as[UserRegisterRequest])) { userRegisterRequest =>
-        parameters("requestToken") { requestToken =>
-          complete(addUserHandler(requestToken, userRegisterRequest))
-        }
+  path("add" / "user") {
+    (post & entity(as[UserRegisterRequest])) { userRegisterRequest =>
+      parameters("requestToken") { requestToken =>
+        complete(addUserHandler(requestToken, userRegisterRequest))
       }
     }
+  }
 
   /**
     * Creates http route for sign in
@@ -27,7 +27,9 @@ trait UserApi extends UserHelper {
   def signIn: Route =
   path("signin") {
     (post & entity(as[SignInRequest])) { signInRequest =>
-        complete(signIn(signInRequest))
+      complete(signIn(signInRequest))
     }
   }
+
+  val userRoutes = addUser ~ signIn
 }

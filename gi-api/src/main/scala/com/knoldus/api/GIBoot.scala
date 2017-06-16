@@ -9,5 +9,5 @@ import com.knoldus.api.Constants._
 object GIBoot extends App with UserApi {
   implicit val system = ActorSystem("api-actor-system")
   implicit val materializer = ActorMaterializer()
-  Http().bindAndHandle(addUser, "localhost", Port)
+  Http().bindAndHandle(userRoutes, "localhost", Port)
 }
