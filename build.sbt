@@ -31,7 +31,7 @@ lazy val giUtils = Project("gi-utils", file("gi-utils"))
 lazy val giUser = Project("gi-user", file("gi-user"))
   .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpSprayJson) ++ test(akkaHttpTestKit, scalaTest, mockito))
+  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpSprayJson, circeGeneric, circeParser, circeCore, scalaGuice) ++ test(akkaHttpTestKit, mockito, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // PERSISTENCE
