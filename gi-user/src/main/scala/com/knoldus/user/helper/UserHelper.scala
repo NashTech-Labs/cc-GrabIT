@@ -1,7 +1,7 @@
 package com.knoldus.user.helper
 
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
-import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}
+import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 
 import scala.util.{Failure, Success, Try}
 

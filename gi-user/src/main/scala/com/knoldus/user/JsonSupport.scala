@@ -1,7 +1,7 @@
 package com.knoldus.user
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}
+import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import spray.json.DefaultJsonProtocol
 
 object JsonSupport extends DefaultJsonProtocol with SprayJsonSupport {

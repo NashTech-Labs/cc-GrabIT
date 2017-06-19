@@ -2,9 +2,9 @@ package com.knoldus.user.api
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}
 import com.knoldus.user.JsonSupport._
 import com.knoldus.user.helper.UserHelper
+import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 
 class UserApi extends UserHelper {
 
@@ -26,9 +26,9 @@ class UserApi extends UserHelper {
     * @return
     */
   def signIn: Route =
-  path("signin") {
-    (post & entity(as[SignInRequest])) { signInRequest =>
+    path("signin") {
+      (post & entity(as[SignInRequest])) { signInRequest =>
         complete(signIn(signInRequest))
+      }
     }
-  }
 }
