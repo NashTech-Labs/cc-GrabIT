@@ -18,6 +18,7 @@ object Dependencies {
   lazy val hikariCP           = "com.typesafe.slick"  %%  "slick-hikaricp"        % "3.1.1"
   lazy val mockito            = "org.mockito"         %   "mockito-all"           % "1.10.19"
   lazy val postgresql         = "org.postgresql"      %   "postgresql"            % "9.4-1201-jdbc41"
+  lazy val scalaGuice         = "net.codingwell"      %%  "scala-guice"           % "4.1.0"
   lazy val scalaTest          = "org.scalatest"       %%  "scalatest"             % "2.2.5"
   lazy val slick              = "com.typesafe.slick"  %%  "slick"                 % "3.1.1"
 }
