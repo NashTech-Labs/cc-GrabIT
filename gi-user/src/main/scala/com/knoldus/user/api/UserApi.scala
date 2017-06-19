@@ -19,7 +19,7 @@ class UserApi @Inject()(userService: UserService ) {
     * @return
     */
   def addUser: Route =
-  path("add" / "user") {
+  path("user" / "add") {
     (post & entity(as[UserRegisterRequest])) { userRegisterRequest =>
       parameters("accessToken") { accessToken =>
         complete(userService.addUser(userRegisterRequest) map { response =>

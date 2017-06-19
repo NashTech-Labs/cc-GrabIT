@@ -35,7 +35,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val accessToken = Math.random().toString
     when(mockUserService.addUser(user)).thenReturn(Future(1))
     Post(
-      s"/add/user?accessToken=$accessToken", body) ~> addUser ~>
+      s"/user/add?accessToken=$accessToken", body) ~> addUser ~>
       check {
         status shouldBe StatusCodes.OK
         responseAs[String] should include regex "Success"
