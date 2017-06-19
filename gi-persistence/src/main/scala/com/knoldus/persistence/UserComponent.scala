@@ -8,20 +8,19 @@ import com.knoldus.utils.models.User
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 
-object UserComponent extends UserMapping with DBDriver with GIDBComponent with App {
-  this: DriverComponent =>
+trait UserComponent extends UserMapping with PostgresDbComponent {
 
   import driver.api._
-
   /**
     * This method is used for insert user into database
     *
     * @param user
     * @return
     */
-  def insert(user: User) = {
+  def insert(user: User): Future[Int] = {
     val res = db.run(userInfo += user)
      Await.result(res, 2 seconds)
+    res
   }
 
   /**

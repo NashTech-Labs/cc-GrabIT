@@ -1,11 +1,10 @@
 package com.knoldus.persistence.mappings
 
 import java.sql.Timestamp
-
-import com.knoldus.persistence.{DriverComponent, ProvenShape}
+import com.knoldus.persistence._
 import com.knoldus.utils.models.User
 
-trait UserMapping { this: DriverComponent =>
+trait UserMapping { this: DBComponent =>
 
   import driver.api._
 
