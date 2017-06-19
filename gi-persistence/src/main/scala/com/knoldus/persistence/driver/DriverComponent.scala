@@ -8,9 +8,5 @@ import slick.driver.JdbcProfile
  * implement this profile.
  */
 trait DriverComponent {
-
-  implicit val global = scala.concurrent.ExecutionContext.Implicits.global
-
   val driver: JdbcProfile
-
 }

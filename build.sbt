@@ -13,11 +13,11 @@ def test(deps: ModuleID*): Seq[ModuleID] = deps map (_ % "test")
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val root = Project("grabit", file("."))
-  .aggregate(giUtils, giApi, giPersistence, giRegister, giBooking, giPortal, giNotify)
+  .aggregate(giUtils, giUser, giPersistence, giAsset, giBooking, giPortal, giNotify)
   .settings(basicSettings: _*)
 
 // -------------------------------------------------------------------------------------------------------------------
-// UTIL S
+// UTILS
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giUtils = Project("gi-utils", file("gi-utils"))
@@ -25,11 +25,11 @@ lazy val giUtils = Project("gi-utils", file("gi-utils"))
   .settings(libraryDependencies ++= compile() ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
-// API
+// USER
 // -------------------------------------------------------------------------------------------------------------------
 
-lazy val giApi = Project("gi-api", file("gi-api"))
-  .dependsOn(giRegister, giUtils)
+lazy val giUser = Project("gi-user", file("gi-user"))
+  .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpSprayJson) ++ test(akkaHttpTestKit, scalaTest, mockito))
 
@@ -43,11 +43,10 @@ lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
   .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
-// REGISTER
+// ASSET
 // -------------------------------------------------------------------------------------------------------------------
 
-lazy val giRegister = Project("gi-register", file("gi-register"))
-  .dependsOn(giUtils, giPersistence)
+lazy val giAsset = Project("gi-asset", file("gi-asset"))
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
 
