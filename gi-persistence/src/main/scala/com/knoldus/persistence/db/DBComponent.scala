@@ -1,14 +1,16 @@
 package com.knoldus.persistence.db
 
-import com.knoldus.persistence.driver.DriverComponent
+import slick.driver.JdbcProfile
 
 
 /**
- * Creating database component
- */
+  * Creating database component
+  */
 trait DBComponent {
-  this: DriverComponent =>
+  val driver: JdbcProfile
+
   import driver.api._
+
   val db: Database
 
 }

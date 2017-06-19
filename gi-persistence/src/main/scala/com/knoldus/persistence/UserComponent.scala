@@ -5,11 +5,9 @@ import com.knoldus.utils.models.User
 
 import scala.concurrent.Future
 
-trait UserComponent extends UserMapping with DBDriver with GIDBComponent {
-  this: DriverComponent =>
+trait UserComponent extends UserMapping with PostgresDbComponent {
 
   import driver.api._
-
   /**
     *
     * @param user
