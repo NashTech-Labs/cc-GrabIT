@@ -1,4 +1,4 @@
-package com.knoldus.api.user
+package com.knoldus.user.helper
 
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}
@@ -9,6 +9,7 @@ trait UserHelper {
 
   /**
     * Handles response for add user functionality
+    *
     * @param requestToken
     * @param user
     * @return
@@ -24,15 +25,16 @@ trait UserHelper {
 
   /**
     * Handles response for user sign in request
+    *
     * @param signInRequest
     * @return
     */
   def signIn(signInRequest: SignInRequest): HttpResponse = {
-   Try {
-     require(signInRequest.email.trim.nonEmpty && signInRequest.password.trim.nonEmpty, "incomplete sign in details")
-   } match {
-     case Success(_) => HttpResponse(StatusCodes.OK, entity = s"User logged in successfully")
-     case Failure(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
-   }
+    Try {
+      require(signInRequest.email.trim.nonEmpty && signInRequest.password.trim.nonEmpty, "incomplete sign in details")
+    } match {
+      case Success(_) => HttpResponse(StatusCodes.OK, entity = s"User logged in successfully")
+      case Failure(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
+    }
   }
 }

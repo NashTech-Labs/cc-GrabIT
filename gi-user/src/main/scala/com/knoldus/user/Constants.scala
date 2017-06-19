@@ -1,4 +1,4 @@
-package com.knoldus.api
+package com.knoldus.user
 
 //scalastyle:off
 object Constants {
