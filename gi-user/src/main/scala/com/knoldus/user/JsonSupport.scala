@@ -1,4 +1,4 @@
-package com.knoldus.api
+package com.knoldus.user
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}

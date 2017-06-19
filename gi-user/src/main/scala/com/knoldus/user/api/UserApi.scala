@@ -1,11 +1,12 @@
-package com.knoldus.api.user
+package com.knoldus.user.api
 
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import com.knoldus.register.models.{SignInRequest, UserRegisterRequest}
-import com.knoldus.api.JsonSupport._
+import com.knoldus.user.JsonSupport._
+import com.knoldus.user.helper.UserHelper
 
-trait UserApi extends UserHelper {
+class UserApi extends UserHelper {
 
   /**
     * Creates http route for add user

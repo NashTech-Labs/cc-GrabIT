@@ -1,4 +1,4 @@
-package com.knoldus.api.user
+package com.knoldus.user.api
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.model.StatusCodes
@@ -9,11 +9,15 @@ import spray.json._
 
 import scala.concurrent.duration.DurationInt
 
-class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with MockitoSugar with UserApi {
+class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with MockitoSugar {
 
-  override def testConfigSource = "akka.loglevel = WARNING"
+  override def testConfigSource: String = "akka.loglevel = WARNING"
 
   implicit val routeTestTimeout = RouteTestTimeout(10 seconds)
+
+  val userApi = new UserApi
+
+  import userApi._
 
   test("user Api route to add users") {
     val jsonString ="""{"empId":"1111","name":"test name","email":"test@gmail.com","role":"admin"}"""
@@ -22,9 +26,9 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     Post(
       s"/add/user?requestToken=$requestToken", body) ~> addUser ~>
       check {
-      status shouldBe StatusCodes.OK
-      responseAs[String] should include regex ("Success")
-    }
+        status shouldBe StatusCodes.OK
+        responseAs[String] should include regex "Success"
+      }
   }
 
   test("user Api route to add users when request token is empty") {
@@ -44,9 +48,9 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val body: JsValue = jsonString.parseJson
     val requestToken = Math.random()
     Post(s"/signin", body) ~> signIn ~> check {
-        status shouldBe StatusCodes.OK
-        responseAs[String] shouldBe("User logged in successfully")
-      }
+      status shouldBe StatusCodes.OK
+      responseAs[String] shouldBe "User logged in successfully"
+    }
   }
 
   test("user Api route to sign in when empId or password is empty") {
