@@ -7,10 +7,12 @@ import com.google.inject.Inject
 import com.knoldus.user.JsonHelper._
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import com.knoldus.user.service.UserService
+import com.knoldus.utils.models.User
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success, Try}
 import scala.util.control.NonFatal
+import spray.json._
 
 class UserApi @Inject()(userService: UserService ) {
 
@@ -22,12 +24,10 @@ class UserApi @Inject()(userService: UserService ) {
   path("user" / "add") {
     (post & entity(as[UserRegisterRequest])) { userRegisterRequest =>
       parameters("accessToken") { accessToken =>
-        complete(userService.addUser(userRegisterRequest) map { response =>
-          HttpResponse(StatusCodes.OK, entity = s"User has been Successfully Added")
-        } recover {
-          case NonFatal(ex) =>
-            HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
-        })
+        onComplete(userService.addUser(userRegisterRequest)) {
+          case Success(res) => complete(HttpResponse(StatusCodes.OK, entity = s"User has been Successfully Added"))
+          case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+        }
       }
     }
   }
@@ -39,12 +39,11 @@ class UserApi @Inject()(userService: UserService ) {
   def signIn: Route =
   path("signin") {
     (post & entity(as[SignInRequest])) { signInRequest =>
-      complete(Try {
-        require(signInRequest.email.trim.nonEmpty && signInRequest.password.trim.nonEmpty, "incomplete sign in details")
-      } match {
-        case Success(_) => HttpResponse(StatusCodes.OK, entity = s"User logged in successfully")
-        case Failure(ex) => HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}")
-      })
+      onComplete(userService.signIn(signInRequest)) {
+        case Success(Some(user)) => complete(user)
+        case Success(None) => complete(HttpResponse(StatusCodes.BadRequest, entity = "Invalid credentials"))
+        case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+      }
     }
   }
 
