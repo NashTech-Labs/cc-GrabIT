@@ -2,7 +2,7 @@ package com.knoldus.notify.email
 
 import java.util.Properties
 
-import com.knoldus.notify.EmailInfo
+import com.knoldus.notify.{EmailInfo, EmailNotification}
 import com.knoldus.notify.config.Configuration._
 
 import scala.util.{Failure, Success, Try}
@@ -12,9 +12,11 @@ import javax.mail.Session
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
+import pureconfig.error.ConfigReaderFailures
+
 class EmailUtility {
 
-  private val emailConfig = getConfig
+  val emailConfig: Either[ConfigReaderFailures, EmailNotification] = getConfig
 
   def sendEmail(recipients: List[String], subject: String, message: String): Boolean = {
 
@@ -26,9 +28,9 @@ class EmailUtility {
         val properties = getProperties(config.email)
         val session = Session.getDefaultInstance(properties)
         val msg = new MimeMessage(session)
-        val recepientAddress: Array[Address] = (recipients map { recepient => new InternetAddress(recepient) }).toArray
+        val recipientAddress: Array[Address] = (recipients map { recipient => new InternetAddress(recipient) }).toArray
         msg.setFrom(new InternetAddress(emailInfo.user))
-        msg.addRecipients(Message.RecipientType.TO, recepientAddress)
+        msg.addRecipients(Message.RecipientType.TO, recipientAddress)
         msg.setSubject(subject)
         msg.setContent(message, "text/html")
         val transport = session.getTransport(emailInfo.protocol)
@@ -43,7 +45,7 @@ class EmailUtility {
 
   private def getProperties(emailInfo: EmailInfo) = {
     val props = new Properties
-    props.put("mail.smtp.port", emailInfo.smtp.port)
+    props.put("mail.smtp.port", emailInfo.smtp.port.toString)
     props.setProperty("mail.transport.protocol", emailInfo.protocol)
     props.setProperty("mail.smtp.starttls.enable", emailInfo.smtp.starttlsEnable.toString)
     props.setProperty("mail.host", emailInfo.host)

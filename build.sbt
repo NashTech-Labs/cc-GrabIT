@@ -65,7 +65,7 @@ lazy val giBooking = Project("gi-booking", file("gi-booking"))
 
 lazy val giNotify = Project("gi-notify", file("gi-notify"))
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(javaxEmail, pureConfig) ++ test())
+  .settings(libraryDependencies ++= compile(javaxEmail, pureConfig) ++ test(scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // PORTAL
