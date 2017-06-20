@@ -48,4 +48,13 @@ trait UserComponent extends UserMapping with PostgresDbComponent {
   def getUserByAccessToken(accessToken: String): Future[Option[User]] = {
     db.run(userInfo.filter(user => user.accessToken === accessToken).result.headOption)
   }
+
+  /**
+    * This method is used for fetching All user from DB
+    *
+    * @return
+    */
+  def getAllUser: Future[List[User]] = {
+    db.run(userInfo.to[List].result)
+  }
 }
