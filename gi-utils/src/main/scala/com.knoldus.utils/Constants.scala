@@ -1,8 +1,7 @@
 package com.knoldus.utils
 
-/**
-  * Created by jyotsna on 15/6/17.
-  */
+//scalastyle:off
 object Constants {
  val EmptyString = ""
 }
+//scalastyle:on

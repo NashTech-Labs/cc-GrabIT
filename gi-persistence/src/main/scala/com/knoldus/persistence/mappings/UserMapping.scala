@@ -1,7 +1,6 @@
 package com.knoldus.persistence.mappings
 
 import java.sql.Timestamp
-
 import com.knoldus.persistence._
 import com.knoldus.utils.models.User
 
@@ -19,6 +18,7 @@ trait UserMapping { this: DBComponent =>
     def role: Rep[String] = column[String]("role")
     def createdAt: Rep[Timestamp] = column[Timestamp]("created_at")
     def lastModifiedAt: Rep[Timestamp] = column[Timestamp]("last_modified_at")
+
 
     def * : ProvenShape[User] = (
       id,
