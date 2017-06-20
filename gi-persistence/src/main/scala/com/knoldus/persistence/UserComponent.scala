@@ -25,7 +25,7 @@ trait UserComponent extends UserMapping with PostgresDbComponent {
     * @param password
     * @return Option[User]
     */
-  def getUserViaEmailAndPassword(email: String, password: String): Future[Option[User]] = {
+  def getUserByEmailAndPassword(email: String, password: String): Future[Option[User]] = {
     db.run(userInfo.filter(user => user.email === email && user.password === password).result.headOption)
   }
 
@@ -35,7 +35,7 @@ trait UserComponent extends UserMapping with PostgresDbComponent {
     * @param userId
     * @return Option[User]
     */
-  def getUserViaUserId(userId: String): Future[Option[User]] = {
+  def getUserByUserId(userId: String): Future[Option[User]] = {
     db.run(userInfo.filter(user => user.id === userId).result.headOption)
   }
 
@@ -45,7 +45,7 @@ trait UserComponent extends UserMapping with PostgresDbComponent {
     * @param accessToken
     * @return Option[User]
     */
-  def getUserViaAccessToken(accessToken: String): Future[Option[User]] = {
+  def getUserByAccessToken(accessToken: String): Future[Option[User]] = {
     db.run(userInfo.filter(user => user.accessToken === accessToken).result.headOption)
   }
 }
