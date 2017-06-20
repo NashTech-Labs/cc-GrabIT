@@ -48,7 +48,7 @@ lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
 
 lazy val giAsset = Project("gi-asset", file("gi-asset"))
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
+  .settings(libraryDependencies ++= compile() ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
 // BOOKING
@@ -57,16 +57,15 @@ lazy val giAsset = Project("gi-asset", file("gi-asset"))
 lazy val giBooking = Project("gi-booking", file("gi-booking"))
   .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
+  .settings(libraryDependencies ++= compile() ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
 // NOTIFY
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giNotify = Project("gi-notify", file("gi-notify"))
-  .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test(scalaTest, mockito))
+  .settings(libraryDependencies ++= compile(javaxEmail, pureConfig) ++ test(scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // PORTAL
