@@ -1,7 +1,7 @@
 package com.knoldus.user.service
 
 import com.google.inject.Inject
-import com.knoldus.persistence.UserComponent
+import com.knoldus.persistence.components.UserComponent
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import com.knoldus.utils.CommonUtility
 import com.knoldus.utils.Constants._

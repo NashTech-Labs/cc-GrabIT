@@ -1,6 +1,6 @@
 package com.knoldus.user.service
 
-import com.knoldus.persistence.UserComponent
+import com.knoldus.persistence.components.UserComponent
 import com.knoldus.user.TestData._
 import com.knoldus.user.model.SignInRequest
 import com.knoldus.utils.CommonUtility
