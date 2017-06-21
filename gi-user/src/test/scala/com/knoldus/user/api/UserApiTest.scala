@@ -77,7 +77,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     when(mockUserService.signIn(signInRequest)).thenReturn(Future.failed(new RuntimeException))
     Post("/signin", body) ~> signIn ~> check {
       status shouldBe StatusCodes.InternalServerError
-      responseAs[String] shouldBe "Internal Server Error"
+      responseAs[String] should include regex "Internal Server Error"
     }
   }
 
@@ -94,7 +94,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     when(mockUserService.getAllUsers).thenReturn(Future.failed(new RuntimeException))
     Get("/user/get/all") ~> getAllUsers ~> check {
       status shouldBe StatusCodes.InternalServerError
-      responseAs[String] shouldBe "Internal Server Error"
+      responseAs[String] should include regex "Internal Server Error"
     }
   }
 
