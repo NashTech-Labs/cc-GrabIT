@@ -12,7 +12,7 @@ import scala.concurrent.Future
 class UserService @Inject()(userComponent: UserComponent) {
 
   /**
-    * Service to add user object to the database
+    * Adds user object to the database
     * @param userRegisterRequest
     * @return
     */
@@ -25,7 +25,7 @@ class UserService @Inject()(userComponent: UserComponent) {
   }
 
   /**
-    * Service to get user details for sign in
+    * Gets user details for sign in
     * @param signInRequest
     * @return
     */
@@ -34,7 +34,7 @@ class UserService @Inject()(userComponent: UserComponent) {
   }
 
   /**
-    * Service to get all users
+    * Gets list of all users
     * @return
     */
   def getAllUsers: Future[List[User]] = userComponent.getAllUser
