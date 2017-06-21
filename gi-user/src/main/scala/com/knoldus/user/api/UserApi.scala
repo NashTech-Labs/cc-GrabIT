@@ -7,12 +7,8 @@ import com.google.inject.Inject
 import com.knoldus.user.JsonHelper._
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import com.knoldus.user.service.UserService
-import com.knoldus.utils.models.User
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success, Try}
-import scala.util.control.NonFatal
-import spray.json._
+import scala.util.{Failure, Success}
 
 class UserApi @Inject()(userService: UserService ) {
 
@@ -40,7 +36,7 @@ class UserApi @Inject()(userService: UserService ) {
   path("signin") {
     (post & entity(as[SignInRequest])) { signInRequest =>
       onComplete(userService.signIn(signInRequest)) {
-        case Success(Some(user)) => complete(user)
+        case Success(Some(user)) => complete(HttpResponse(StatusCodes.OK, entity = user.accessToken))
         case Success(None) => complete(HttpResponse(StatusCodes.BadRequest, entity = "Invalid credentials"))
         case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
       }
