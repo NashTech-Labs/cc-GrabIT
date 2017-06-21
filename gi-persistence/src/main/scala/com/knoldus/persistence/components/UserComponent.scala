@@ -63,4 +63,4 @@ trait UserComponent extends UserMapping {
   }
 }
 
-object UserComponentPostgres extends UserComponent with PostgresDbComponent
+class UserComponentPostgres extends UserComponent with PostgresDbComponent
