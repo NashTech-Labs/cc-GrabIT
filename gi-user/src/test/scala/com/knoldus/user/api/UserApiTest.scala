@@ -54,7 +54,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     when(mockUserService.signIn(signInRequest)).thenReturn(Future.successful(Some(user.copy(password = "password"))))
     Post(s"/signin", body) ~> signIn ~> check {
       status shouldBe StatusCodes.OK
-      responseAs[String] shouldBe testUUID.toString
+      responseAs[String] should include regex user.email
+      responseAs[String] should include regex testUUID.toString
     }
   }
 
