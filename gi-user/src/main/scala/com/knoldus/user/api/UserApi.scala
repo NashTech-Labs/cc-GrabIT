@@ -36,7 +36,7 @@ class UserApi @Inject()(userService: UserService ) {
   path("signin") {
     (post & entity(as[SignInRequest])) { signInRequest =>
       onComplete(userService.signIn(signInRequest)) {
-        case Success(Some(user)) => complete(HttpResponse(StatusCodes.OK, entity = user.accessToken))
+        case Success(Some(user)) => complete(user)
         case Success(None) => complete(HttpResponse(StatusCodes.BadRequest, entity = "Invalid credentials"))
         case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
       }
