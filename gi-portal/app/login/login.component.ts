@@ -1,28 +1,42 @@
-import { Component, OnInit, trigger, state, style, transition, animate, Input } from '@angular/core';
-//import initDemo = require('../../../assets/js/charts.js');
-import {LoginService} from './login.service';
-import { Router } from '@angular/router';
-import 'rxjs/add/observable/throw';
+﻿import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
-declare var $:any;
+import { AlertService, AuthenticationService } from '../_services/index';
 
 @Component({
-    selector: 'login-cmp',
     moduleId: module.id,
-    styleUrls: ['./login.component.style.css'],
-    templateUrl:'login.component.html'
+    templateUrl: 'login.component.html'
 })
 
-export class LoginComponent implements OnInit{
-    ngOnInit(){
-        
-        console.log("login rendered");
-        // $('[data-toggle="checkbox"]').each(function () {
-        //     if($(this).data('toggle') == 'switch') return;
-        //
-        //     var $checkbox = $(this);
-        //     $checkbox.checkbox();
-        // });
-        //initDemo();
+export class LoginComponent implements OnInit {
+    model: any = {};
+    loading = false;
+    returnUrl: string;
+
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private authenticationService: AuthenticationService,
+        private alertService: AlertService) { }
+
+    ngOnInit() {
+        // reset login status
+        this.authenticationService.logout();
+
+        // get return url from route parameters or default to '/'
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    }
+
+    login() {
+        this.loading = true;
+        this.authenticationService.login(this.model.username, this.model.password)
+            .subscribe(
+                data => {
+                    this.router.navigate([this.returnUrl]);
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                });
     }
 }
