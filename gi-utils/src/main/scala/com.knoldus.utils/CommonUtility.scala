@@ -3,13 +3,13 @@ package com.knoldus.utils
 import java.sql.Timestamp
 import java.util.UUID
 
-class CommonUtility {
+object CommonUtility {
 
   /**
     * Generates random UUID
     * @return
     */
-  def getUUID: UUID = UUID.randomUUID()
+  def getUUID: String = UUID.randomUUID().toString
 
   /**
     * Get current timestamp
