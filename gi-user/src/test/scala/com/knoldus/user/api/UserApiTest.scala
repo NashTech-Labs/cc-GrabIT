@@ -6,11 +6,11 @@ import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
 import com.knoldus.user.TestData._
 import com.knoldus.user.model.SignInRequest
 import com.knoldus.user.service.UserService
+import com.knoldus.utils.models.User
 import org.mockito.Mockito._
 import org.scalatest._
 import org.scalatest.mock.MockitoSugar
 import spray.json._
-
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
@@ -52,7 +52,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val body: JsValue = jsonString.parseJson
     val signInRequest = SignInRequest(user.email, "password")
     when(mockUserService.signIn(signInRequest)).thenReturn(Future.successful(Some(user.copy(password = "password"))))
-    Post(s"/signin", body) ~> signIn ~> check {
+    Post("/signin", body) ~> signIn ~> check {
       status shouldBe StatusCodes.OK
       responseAs[String] should include regex user.email
       responseAs[String] should include regex testUUID.toString
@@ -64,7 +64,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val body: JsValue = jsonString.parseJson
     val signInRequest = SignInRequest(user.email, "password")
     when(mockUserService.signIn(signInRequest)).thenReturn(Future.successful(None))
-    Post(s"/signin", body) ~> signIn ~> check {
+    Post("/signin", body) ~> signIn ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Invalid credentials"
     }
@@ -74,10 +74,27 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val jsonString ="""{"email":"test@gmail.com","password":"password"}"""
     val body: JsValue = jsonString.parseJson
     val signInRequest = SignInRequest(user.email, "password")
-    when(mockUserService.signIn(signInRequest)).thenReturn(Future.failed(new IllegalArgumentException("")))
-    Post(s"/signin", body) ~> signIn ~> check {
+    when(mockUserService.signIn(signInRequest)).thenReturn(Future.failed(new RuntimeException))
+    Post("/signin", body) ~> signIn ~> check {
       status shouldBe StatusCodes.InternalServerError
-      responseAs[String] shouldBe "Internal Server Error "
+      responseAs[String] shouldBe "Internal Server Error"
+    }
+  }
+
+  test("user Api route to fetch all users successfully") {
+    when(mockUserService.getAllUsers).thenReturn(Future.successful(List(user)))
+    Get("/user/get/all") ~> getAllUsers ~> check {
+      status shouldBe StatusCodes.OK
+      responseAs[String] should include regex user.email
+      responseAs[String] should include regex user.name
+    }
+  }
+
+  test("user Api route to fetch all users: Failure case") {
+    when(mockUserService.getAllUsers).thenReturn(Future.failed(new RuntimeException))
+    Get("/user/get/all") ~> getAllUsers ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] shouldBe "Internal Server Error"
     }
   }
 

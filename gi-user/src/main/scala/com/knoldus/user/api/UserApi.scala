@@ -42,5 +42,19 @@ class UserApi @Inject()(userService: UserService ) {
     }
   }
 
-  val routes = addUser ~ signIn
+  /**
+    * Creates http route to get list of all users
+    * @return
+    */
+  def getAllUsers: Route =
+  path("user" / "get" / "all") {
+    (get) {
+      onComplete(userService.getAllUsers) {
+        case Success(users) => complete(users)
+        case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+      }
+    }
+  }
+
+  val routes = addUser ~ signIn ~ getAllUsers
 }
