@@ -7,12 +7,7 @@ import com.google.inject.Inject
 import com.knoldus.user.JsonHelper._
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import com.knoldus.user.service.UserService
-import com.knoldus.utils.models.User
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success, Try}
-import scala.util.control.NonFatal
-import spray.json._
+import scala.util.{Failure, Success}
 
 class UserApi @Inject()(userService: UserService ) {
 
