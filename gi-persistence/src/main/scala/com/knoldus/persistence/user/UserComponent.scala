@@ -1,7 +1,9 @@
-package com.knoldus.persistence
+package com.knoldus.persistence.user
 
-import com.knoldus.persistence.mappings.UserMapping
+import com.knoldus.persistence.PostgresDbComponent
+import com.knoldus.persistence.user.mappings.UserMapping
 import com.knoldus.utils.models.User
+
 import scala.concurrent.Future
 
 class UserComponent extends UserMapping with PostgresDbComponent {
@@ -9,7 +11,7 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   import driver.api._
 
   /**
-    * This method is used for insert user into database
+    * Insert user into database
     *
     * @param user
     * @return
@@ -23,14 +25,14 @@ class UserComponent extends UserMapping with PostgresDbComponent {
     *
     * @param email
     * @param password
-    * @return Future[Option[User]]
+    * @return Future[Option[User] ]
     */
   def getUserByEmailAndPassword(email: String, password: String): Future[Option[User]] = {
     db.run(userInfo.filter(user => user.email === email && user.password === password).result.headOption)
   }
 
   /**
-    * This method is used for fetching user record with the help of userId
+    * Fetches user record with the help of userId
     *
     * @param userId
     * @return Option[User]
@@ -40,7 +42,7 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   }
 
   /**
-    * This method is used for fetching user record with the help of Access Token
+    * Fetches user record with the help of Access Token
     *
     * @param accessToken
     * @return Option[User]
@@ -50,7 +52,7 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   }
 
   /**
-    * This method is used for fetching All user from DB
+    * Fetches All user from DB
     *
     * @return
     */

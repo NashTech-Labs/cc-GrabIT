@@ -1,4 +1,4 @@
-package com.knoldus.persistence.mappings
+package com.knoldus.persistence.user.mappings
 
 import java.sql.Timestamp
 import com.knoldus.persistence._
