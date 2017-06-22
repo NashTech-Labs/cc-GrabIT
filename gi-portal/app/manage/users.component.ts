@@ -1,6 +1,11 @@
 import {Component, OnInit} from "@angular/core";
 import {FormGroup, FormControl, Validators, FormBuilder} from "@angular/forms";
 import {UserModel} from '../_models/userModel'
+import { UsersService } from './users.service';
+import {ActivatedRoute, Router} from "@angular/router";
+import { Observable }     from 'rxjs/Observable';
+
+
 
 @Component({
   selector:'userform',
@@ -13,44 +18,30 @@ import {UserModel} from '../_models/userModel'
 
 export class UserComponent implements OnInit{
 
-//  index: string;
-//   myTask: Task[];
-//   task: Task = new Task('', '', '', '', '');
+
+constructor (private usersService: UsersService, private route: ActivatedRoute, private router: Router){}
+
+   index: string;
+   user: UserModel = new UserModel('', '', '', '');
+   returnedUseraddResponse:any;
+   userData:any=[];
+   formValues:any=[];
+
 
   ngOnInit(){
-  }
+    //Getting the list of users
+    //  this.usersService.getUserList().subscribe(
+    //     (data) => this.userData = data
+    //   )
+    }
 
-  //creating this property for pre-filled value in form
-  myName="Nikhil Kumar";
-
-  formValues:any=[];
-
-  // pushTask() {
-  //   if (this.index) {
-  //     //this.service.update(this.index, this.task);
-  //     // this.service.remove(this.task._id).subscribe((data: any) => alert(JSON.stringify(data)));
-  //     this.service.updateTask(this.task).subscribe((data: any) => {
-  //       alert('Task Updated')
-  //       this.router.navigate(['show']);
-  //     }, err => {
-  //       console.error(err);
-  //     })
-  //   } else {
-  //     //this.service.add(this.task);
-  //     this.service.addTask(this.task).subscribe((data: any) => {
-  //       alert('Task Added')
-  //       this.router.navigate(['show']);
-  //     }, err => {
-  //       console.error(err);
-  //     })
-  //   }
-  // }
-
-
-  onSubmit(value: any){
-        console.log(value);
-        alert("submitted successfully");
+  onSubmit(value:any) {
+      this.usersService.addUser(this.user).subscribe((data: any) => {
+       this.returnedUseraddResponse = data;
+        alert('User Added')
         this.formValues = value;
         console.log("Form Submitted values : "+ JSON.stringify(this.formValues));
+        //this.router.navigate(['/home']);
+      })
   }
 }
