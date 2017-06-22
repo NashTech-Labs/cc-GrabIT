@@ -2,8 +2,8 @@ package com.knoldus.persistence.booking.mappings
 
 import com.knoldus.persistence.PostgresDbComponent
 import com.knoldus.utils.models.Booking
-
-import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 class BookingComponent extends BookingMapping with PostgresDbComponent {
 
@@ -13,7 +13,7 @@ class BookingComponent extends BookingMapping with PostgresDbComponent {
     * Insert booking into database
     *
     * @param booking
-    * @return Future[Int] 
+    * @return Future[Int]
     */
 
   def insert(booking: Booking): Future[Int] = {
@@ -31,13 +31,30 @@ class BookingComponent extends BookingMapping with PostgresDbComponent {
   }
 
   /**
-    * Update Booking Details
+    * Update Asset Feedback
     *
-    * @param booking
-    * @return Future[Int]
+    * @param bookingId
+    * @param assetFeedback
+    * @param assetRating
+    * @return
     */
-  def updateBookingDetails(booking: Booking): Future[Int] = {
-    db.run(bookingInfo.filter(bookingData => bookingData.id === booking.id).update(booking))
+  def updateAssetFeedbackDetails(bookingId: String, assetRating: Int, assetFeedback: String): Future[Int] = {
+    db.run(bookingInfo.filter(bookingData => bookingData.id === bookingId)
+      .map(value => (value.assetRating, value.assetFeedback))
+      .update((assetRating, assetFeedback)))
   }
 
+  /**
+    * Update User Feedback
+    *
+    * @param bookingId
+    * @param userRating
+    * @param userFeedback
+    * @return
+    */
+  def updateUserFeedbackDetails(bookingId: String, userRating: Int, userFeedback: String): Future[Int] = {
+    db.run(bookingInfo.filter(bookingData => bookingData.id === bookingId)
+      .map(value => (value.userRating, value.userFeedback))
+      .update((userRating, userFeedback)))
+  }
 }
