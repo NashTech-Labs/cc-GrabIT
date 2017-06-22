@@ -4,6 +4,7 @@ import java.sql.Timestamp
 
 import com.knoldus.persistence.db.H2DBComponent
 import com.knoldus.utils.models.User
+import org.h2.jdbc.JdbcSQLException
 import org.scalatest.AsyncFunSuite
 
 class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBComponent {
@@ -15,6 +16,12 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
     resultF.map(res => assert(res === 1))
   }
 
+  test("Insert user into database with existing primary key") {
+    val dummyTimeStamp = new Timestamp(System.currentTimeMillis())
+    val user = User("id-2", "acc-tok-3", "emp-id-3", "knol-joy", "anurag@knoldus.com", "knol-password3", "knol-fullStack3", dummyTimeStamp, dummyTimeStamp)
+    recoverToSucceededIf[JdbcSQLException](insert(user))
+  }
+
   test("Fetch user record with the help of email and password") {
     val result = getUserByEmailAndPassword("sahil.sawhney@knoldus.in", "knol-password1")
     val dummyTimeStamp = new Timestamp(System.currentTimeMillis())
@@ -22,13 +29,23 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
       "id-1", "acc-tok-1", "emp-id-1", "knol-sahil", "sahil.sawhney@knoldus.in", "knol-password1", "knol-fullStack1", dummyTimeStamp, dummyTimeStamp
     )
     result.map { actualUser =>
-      assert(actualUser.get.id === expectedUser.id)
-      assert(actualUser.get.accessToken === expectedUser.accessToken)
-      assert(actualUser.get.employeeId === expectedUser.employeeId)
-      assert(actualUser.get.name === expectedUser.name)
-      assert(actualUser.get.email === expectedUser.email)
-      assert(actualUser.get.password === expectedUser.password)
-      assert(actualUser.get.role === expectedUser.role)
+      assert(actualUser.map(_.id) === Some(expectedUser.id))
+      assert(actualUser.map(_.accessToken) === Some(expectedUser.accessToken))
+      assert(actualUser.map(_.email) === Some(expectedUser.email))
+    }
+  }
+
+  test("Fetch user record with the wrong value of email") {
+    val result = getUserByEmailAndPassword("wrong.email@knoldus.com", "knol-password1")
+    result.map { actualUser =>
+      assert(actualUser === None)
+    }
+  }
+
+  test("Fetch user record with the wrong value of password") {
+    val result = getUserByEmailAndPassword("sahil.sawhney@knoldus.in", "wrong-password1")
+    result.map { actualUser =>
+      assert(actualUser === None)
     }
   }
 
@@ -39,13 +56,16 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
       "id-2", "acc-tok-2", "emp-id-2", "knol-joy", "jyotsana@knoldus.com", "knol-password2", "knol-fullStack2", dummyTimeStamp, dummyTimeStamp
     )
     result.map { actualUser =>
-      assert(actualUser.get.id === expectedUser.id)
-      assert(actualUser.get.accessToken === expectedUser.accessToken)
-      assert(actualUser.get.employeeId === expectedUser.employeeId)
-      assert(actualUser.get.name === expectedUser.name)
-      assert(actualUser.get.email === expectedUser.email)
-      assert(actualUser.get.password === expectedUser.password)
-      assert(actualUser.get.role === expectedUser.role)
+      assert(actualUser.map(_.id) === Some(expectedUser.id))
+      assert(actualUser.map(_.accessToken) === Some(expectedUser.accessToken))
+      assert(actualUser.map(_.email) === Some(expectedUser.email))
+    }
+  }
+
+  test("Fetch user record with the wrong userId") {
+    val result = getUserByUserId("wrong-id")
+    result.map { actualUser =>
+      assert(actualUser === None)
     }
   }
 
@@ -56,13 +76,16 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
       "id-1", "acc-tok-1", "emp-id-1", "knol-sahil", "sahil.sawhney@knoldus.in", "knol-password1", "knol-fullStack1", dummyTimeStamp, dummyTimeStamp
     )
     result.map { actualUser =>
-      assert(actualUser.get.id === expectedUser.id)
-      assert(actualUser.get.accessToken === expectedUser.accessToken)
-      assert(actualUser.get.employeeId === expectedUser.employeeId)
-      assert(actualUser.get.name === expectedUser.name)
-      assert(actualUser.get.email === expectedUser.email)
-      assert(actualUser.get.password === expectedUser.password)
-      assert(actualUser.get.role === expectedUser.role)
+      assert(actualUser.map(_.id) === Some(expectedUser.id))
+      assert(actualUser.map(_.accessToken) === Some(expectedUser.accessToken))
+      assert(actualUser.map(_.email) === Some(expectedUser.email))
+    }
+  }
+
+  test("Fetch user record with wrong Access Token") {
+    val result = getUserByAccessToken("wrong-acc-tok")
+    result.map { actualUser =>
+      assert(actualUser === None)
     }
   }
 
