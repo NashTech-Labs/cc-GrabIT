@@ -1,6 +1,7 @@
 package com.knoldus.user.api
 
 import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
 import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
@@ -29,7 +30,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users") {
     val accessToken = Math.random().toString
-    when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future(1))
+    when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future.successful(1))
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.OK
       responseAs[String] should include regex "Success"
@@ -40,7 +42,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val accessToken = Math.random().toString
     val userRegister = userRegisterRequest.copy(name = EmptyString)
     val userRegisterJson = userRegister.asJson.toString
-    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Name should not be empty"
@@ -51,7 +54,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val accessToken = Math.random().toString
     val userRegister = userRegisterRequest.copy(email = "invalid")
     val userRegisterJson = userRegister.asJson.toString
-    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Email should be in valid format"
@@ -62,26 +66,39 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     val accessToken = Math.random().toString
     val userRegister = userRegisterRequest.copy(empId = EmptyString)
     val userRegisterJson = userRegister.asJson.toString
-    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Employee id should not be empty"
     }
   }
 
-  test("user Api route to add users when when role is invalid") {
+  test("user Api route to add users when role is invalid") {
     val accessToken = Math.random().toString
     val userRegister = userRegisterRequest.copy(role = "invalid")
     val userRegisterJson = userRegister.asJson.toString
-    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "User role should be valid"
     }
   }
 
+  test("user Api route to add users when user is not authorized") {
+    val accessToken = Math.random().toString
+    val userRegister = userRegisterRequest.copy(role = "invalid")
+    val userRegisterJson = userRegister.asJson.toString
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(false))
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      rejection shouldEqual AuthorizationFailedRejection
+    }
+  }
+
   test("user Api route for failure case") {
     val accessToken = Math.random().toString
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future.failed(new RuntimeException("Invalid user")))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.InternalServerError

@@ -49,4 +49,15 @@ class UserService @Inject()(userComponent: UserComponent) {
     */
   def getAllUsers: Future[List[User]] = userComponent.getAllUser
 
+
+  /**
+    * Checks whether user is admin or not
+    * @param accessToken
+    * @return
+    */
+  def isAdmin(accessToken: String): Future[Boolean] = {
+    userComponent.getUserByAccessToken(accessToken).map { user =>
+      user.fold(false)(user => user.role == "admin")
+    }
+  }
 }

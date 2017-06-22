@@ -24,10 +24,12 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
   path("user" / "add") {
     (post & entity(as[String])) { data =>
       parameters("accessToken") { accessToken =>
-        val decodedUserRequest = decode[UserRegisterRequest](data)
-        decodedUserRequest match {
-          case Right(userRegisterRequest) => handleAddUser(userRegisterRequest, userService.addUser)
-          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
+        authorizeAsync(_ => userService.isAdmin(accessToken)) {
+          val decodedUserRequest = decode[UserRegisterRequest](data)
+          decodedUserRequest match {
+            case Right(userRegisterRequest) => handleAddUser(userRegisterRequest, userService.addUser)
+            case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
+          }
         }
       }
     }
