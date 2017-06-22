@@ -22,8 +22,9 @@ class UserService @Inject()(userComponent: UserComponent) {
   def addUser(userRegisterRequest: UserRegisterRequest): Future[Int] = {
     val uuid = getUUID
     val currentTimestamp = getCurrentTimestamp
+    val password = generateRandomString(PasswordLength)
     val user = User(uuid, uuid, userRegisterRequest.empId, userRegisterRequest.name, userRegisterRequest.email,
-      EmptyString, userRegisterRequest.role, currentTimestamp, currentTimestamp)
+      generateHashedPassword(password), userRegisterRequest.role, currentTimestamp, currentTimestamp)
     userComponent.insert(user)
   }
 
