@@ -1,0 +1,37 @@
+<div class="container">
+  <h2>User Form MDF</h2>
+  <!--<form [formGroup]="userFormMDF" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" #ngRef class="form-control" formControlName="name" >
+      {{ngRef.className}}
+      <div *ngIf="userFormMDF.controls['name'].hasError('required')" class="alert alert-danger">Please enter name</div>
+      <div *ngIf="userFormMDF.controls['name'].hasError('minlength')" class="alert alert-danger">At least 3 Characters</div>
+      <div *ngIf="userFormMDF.controls['name'].hasError('maxlength')" class="alert alert-danger">Max can be 20 Characters</div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="text" class="form-control" formControlName="email" placeholder="abc@abc.com">
+      <div *ngIf="userFormMDF.controls['email'].hasError('required')" class="alert alert-danger">Please provide email</div>
+      <div *ngIf="userFormMDF.controls['email'].hasError('email')" class="alert alert-danger">Valid email required</div>
+    </div>
+    <div formGroupName="address">
+      <div class="form-group">
+        <label>Street</label>
+        <input type="text" class="form-control" formControlName="street" >
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" class="form-control" formControlName="city" >
+      </div>
+      <div class="form-group">
+        <label>Postal</label>
+        <input type="text" class="form-control" formControlName="postal" >
+      </div>
+    </div>
+    <button [disabled]="!userFormMDF.valid" class="btn btn-primary" type="submit">Submit</button>
+  </form>
+</div>
+<div> Submitted Values<br>
+  {{formValues| json}}-->
+</div>

@@ -22,7 +22,7 @@ lazy val root = Project("grabit", file("."))
 
 lazy val giUtils = Project("gi-utils", file("gi-utils"))
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test())
+  .settings(libraryDependencies ++= compile(circeGeneric, circeParser, circeCore) ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
 // USER
@@ -31,7 +31,7 @@ lazy val giUtils = Project("gi-utils", file("gi-utils"))
 lazy val giUser = Project("gi-user", file("gi-user"))
   .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpSprayJson, circeGeneric, circeParser, circeCore, scalaGuice) ++ test(akkaHttpTestKit, mockito, scalaTest))
+  .settings(libraryDependencies ++= compile(akkaHttp, scalaGuice) ++ test(akkaHttpTestKit, mockito, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // PERSISTENCE

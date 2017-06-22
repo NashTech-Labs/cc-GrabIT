@@ -13,7 +13,8 @@ object BuildSettings {
     fork := true,
     ivyScala := ivyScala.value map(_.copy(overrideScalaVersion = true)),
     scalacOptions := Seq("-target:jvm-1.8", "-encoding", "UTF-8", "-deprecation", "-unchecked"),
-    parallelExecution in Test := false
+    parallelExecution in Test := false,
+    resolvers += "Typesafe Repository" at "https://repo.typesafe.com/typesafe/releases/"
   )
 
 }
