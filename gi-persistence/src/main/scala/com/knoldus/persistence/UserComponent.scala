@@ -19,14 +19,13 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   }
 
   /**
-    * Fetches user detail using email and password
+    * Fetches user detail using email
     *
     * @param email
-    * @param password
     * @return Future[Option[User]]
-    */
-  def getUserByEmailAndPassword(email: String, password: String): Future[Option[User]] = {
-    db.run(userInfo.filter(user => user.email === email && user.password === password).result.headOption)
+    **/
+  def getUserByEmail(email: String): Future[Option[User]] = {
+    db.run(userInfo.filter(user => user.email === email).result.headOption)
   }
 
   /**

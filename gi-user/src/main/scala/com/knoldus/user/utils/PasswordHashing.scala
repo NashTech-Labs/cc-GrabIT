@@ -1,7 +1,9 @@
 package com.knoldus.user.utils
 
+import com.google.inject.ImplementedBy
 import org.mindrot.jbcrypt.BCrypt
 
+@ImplementedBy(PasswordHashing)
 trait PasswordHashingComponent {
 
   /**

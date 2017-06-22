@@ -3,16 +3,18 @@ package com.knoldus.user.service
 import com.google.inject.Inject
 import com.knoldus.persistence.UserComponent
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
+import com.knoldus.user.utils.PasswordHashingComponent
 import com.knoldus.utils.CommonUtility._
 import com.knoldus.utils.Constants._
 import com.knoldus.utils.models.User
 
 import scala.concurrent.Future
 
-class UserService @Inject()(userComponent: UserComponent) {
+class UserService @Inject()(userComponent: UserComponent, passwordHashing: PasswordHashingComponent) {
 
   /**
     * Adds user object to the database
+    *
     * @param userRegisterRequest
     * @return
     */
@@ -26,15 +28,21 @@ class UserService @Inject()(userComponent: UserComponent) {
 
   /**
     * Gets user details for sign in
+    *
     * @param signInRequest
     * @return
     */
   def signIn(signInRequest: SignInRequest): Future[Option[User]] = {
-    userComponent.getUserByEmailAndPassword(signInRequest.email, signInRequest.password)
+    userComponent.getUserByEmail(signInRequest.email).map { userData =>
+      userData.flatMap { user =>
+        if (passwordHashing.passwordMatches(signInRequest.password, user.password)) Some(user) else None
+      }
+    }
   }
 
   /**
     * Gets list of all users
+    *
     * @return
     */
   def getAllUsers: Future[List[User]] = userComponent.getAllUser
