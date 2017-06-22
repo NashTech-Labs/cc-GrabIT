@@ -1,16 +1,17 @@
 package com.knoldus.user.service
 
 import com.google.inject.Inject
-import com.knoldus.persistence.UserComponent
+import com.knoldus.persistence.components.UserComponent
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
-import com.knoldus.user.utils.PasswordHashingComponent
+import com.knoldus.user.utils.PasswordHashing._
 import com.knoldus.utils.CommonUtility._
 import com.knoldus.utils.Constants._
 import com.knoldus.utils.models.User
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
-class UserService @Inject()(userComponent: UserComponent, passwordHashing: PasswordHashingComponent) {
+class UserService @Inject()(userComponent: UserComponent) {
 
   /**
     * Adds user object to the database
@@ -35,7 +36,7 @@ class UserService @Inject()(userComponent: UserComponent, passwordHashing: Passw
   def signIn(signInRequest: SignInRequest): Future[Option[User]] = {
     userComponent.getUserByEmail(signInRequest.email).map { userData =>
       userData.flatMap { user =>
-        if (passwordHashing.passwordMatches(signInRequest.password, user.password)) Some(user) else None
+        if (passwordMatches(signInRequest.password, user.password)) Some(user) else None
       }
     }
   }

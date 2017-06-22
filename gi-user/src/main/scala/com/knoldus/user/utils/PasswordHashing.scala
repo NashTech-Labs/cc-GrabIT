@@ -1,10 +1,8 @@
 package com.knoldus.user.utils
 
-import com.google.inject.ImplementedBy
 import org.mindrot.jbcrypt.BCrypt
 
-@ImplementedBy(PasswordHashing)
-trait PasswordHashingComponent {
+object PasswordHashing {
 
   /**
     * Generate hashed password
@@ -29,5 +27,3 @@ trait PasswordHashingComponent {
   }
 
 }
-
-object PasswordHashing extends PasswordHashingComponent

@@ -15,7 +15,7 @@ object TestData extends JsonHelper {
   val testTimestamp = new Timestamp(123)
   val password = "test123"
   val testUUID = UUID.fromString("38400000-8cf0-11bd-b23e-10b96e4ef00d")
-  val hashPassword = PasswordHashing.generateHashedPassword("password")
+  val hashPassword = PasswordHashing.generateHashedPassword(password)
 
   val userRegisterRequest = UserRegisterRequest("1111", "test name", "test@gmail.com", "admin")
   val userRegisterJson = userRegisterRequest.asJson.toString
