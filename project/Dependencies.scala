@@ -14,6 +14,7 @@ object Dependencies {
   val scalaTestVersion = "2.2.5"
   val javaxMailVersion = "1.4.7"
   val pureConfigVersion = "0.7.2"
+  val jbCryptVersion = "0.4"
 
   lazy val akkaHttp           = "com.typesafe.akka"       %%  "akka-http"             % akkaVersion
   lazy val akkaHttpTestKit    = "com.typesafe.akka"       %%  "akka-http-testkit"     % akkaVersion
@@ -22,6 +23,7 @@ object Dependencies {
   lazy val circeGeneric       = "io.circe"                %%  "circe-generic"         % circeVersion
   lazy val hikariCP           = "com.typesafe.slick"      %%  "slick-hikaricp"        % hikariSlickVersion
   lazy val javaxEmail         = "javax.mail"              %   "mail"                  % javaxMailVersion
+  lazy val jbCrypt            = "org.mindrot"             %  "jbcrypt"                % jbCryptVersion
   lazy val mockito            = "org.mockito"             %   "mockito-all"           % mockitoVersion
   lazy val postgresql         = "org.postgresql"          %   "postgresql"            % postgresqlVersion
   lazy val pureConfig         = "com.github.pureconfig"   %%  "pureconfig"            % pureConfigVersion
