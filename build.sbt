@@ -40,7 +40,7 @@ lazy val giUser = Project("gi-user", file("gi-user"))
 lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
   .dependsOn(giUtils)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test())
+  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test(h2DB, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // ASSET

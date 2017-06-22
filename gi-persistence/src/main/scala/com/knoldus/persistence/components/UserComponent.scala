@@ -1,10 +1,14 @@
-package com.knoldus.persistence
+package com.knoldus.persistence.components
 
 import com.knoldus.persistence.mappings.UserMapping
+import com.knoldus.persistence.{DBComponent, PostgresDbComponent}
 import com.knoldus.utils.models.User
+
 import scala.concurrent.Future
 
-class UserComponent extends UserMapping with PostgresDbComponent {
+trait UserComponent extends UserMapping {
+
+  this: DBComponent =>
 
   import driver.api._
 
@@ -58,3 +62,5 @@ class UserComponent extends UserMapping with PostgresDbComponent {
     db.run(userInfo.to[List].result)
   }
 }
+
+class UserComponentPostgres extends UserComponent with PostgresDbComponent
