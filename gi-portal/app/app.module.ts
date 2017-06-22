@@ -1,29 +1,55 @@
-import { NgModule }      from '@angular/core';
+﻿import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
+import { FormsModule }    from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { AppComponent }   from './app.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { SidebarModule } from './sidebar/sidebar.module';
-import { FooterModule } from './shared/footer/footer.module';
-import { NavbarModule} from './shared/navbar/navbar.module';
-import { LoginModule } from './login/login.module';
+import { CommonModule } from '@angular/common';
 
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+// used to create fake backend
+import { fakeBackendProvider } from './_helpers/index';
+import { MockBackend, MockConnection } from '@angular/http/testing';
+import { BaseRequestOptions } from '@angular/http';
+
+import { AppComponent }  from './app.component';
+import { routing }        from './app.routing';
+import { ManageModule } from './manage/manage.module'
+import { AlertComponent } from './_directives/index';
+import { AuthGuard } from './_guards/index';
+import { AlertService, AuthenticationService, UserService } from './_services/index';
+import { HomeComponent } from './home/index';
+import { HomeModule } from './home/home.modue';
+import { LoginComponent } from './login/index';
+import { RegisterComponent } from './register/index';
+import { SidebarComponent } from './home/sidebar.component';
+
 
 @NgModule({
     imports: [
         BrowserModule,
-        DashboardModule,
-        SidebarModule,
-        NavbarModule,
-        FooterModule,
-        LoginModule,
-        RouterModule.forRoot([])
+        FormsModule,
+        HttpModule,
+        routing,
+        ManageModule,
+        HomeModule,
+        CommonModule
     ],
-    declarations: [ AppComponent, DashboardComponent ],
-    providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
-    bootstrap:    [ AppComponent ]
+    declarations: [
+        AppComponent,
+        AlertComponent,
+        LoginComponent,
+        RegisterComponent
+    ],
+    providers: [
+        AuthGuard,
+        AlertService,
+        AuthenticationService,
+        UserService,
+
+        // providers used to create fake backend
+        fakeBackendProvider,
+        MockBackend,
+        BaseRequestOptions
+    ],
+    bootstrap: [AppComponent]
 })
+
 export class AppModule { }
