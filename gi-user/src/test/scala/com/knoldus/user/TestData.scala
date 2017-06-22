@@ -19,7 +19,6 @@ object TestData extends JsonHelper {
 
   val userRegisterRequest = UserRegisterRequest("1111", "test name", "test@gmail.com", "admin")
   val userRegisterJson = userRegisterRequest.asJson.toString
-
   val user = User("1", testUUID.toString, userRegisterRequest.empId, userRegisterRequest.name,
     userRegisterRequest.email, hashPassword, userRegisterRequest.role, testTimestamp, testTimestamp)
 
