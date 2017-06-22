@@ -22,8 +22,8 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
     recoverToSucceededIf[JdbcSQLException](insert(user))
   }
 
-  test("Fetch user record with the help of email and password") {
-    val result = getUserByEmailAndPassword("sahil.sawhney@knoldus.in", "knol-password1")
+  test("Fetch user record with the help of email ") {
+    val result = getUserByEmail("sahil.sawhney@knoldus.in")
     val dummyTimeStamp = new Timestamp(System.currentTimeMillis())
     val expectedUser = User(
       "id-1", "acc-tok-1", "emp-id-1", "knol-sahil", "sahil.sawhney@knoldus.in", "knol-password1", "knol-fullStack1", dummyTimeStamp, dummyTimeStamp
@@ -36,14 +36,7 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
   }
 
   test("Fetch user record with the wrong value of email") {
-    val result = getUserByEmailAndPassword("wrong.email@knoldus.com", "knol-password1")
-    result.map { actualUser =>
-      assert(actualUser === None)
-    }
-  }
-
-  test("Fetch user record with the wrong value of password") {
-    val result = getUserByEmailAndPassword("sahil.sawhney@knoldus.in", "wrong-password1")
+    val result = getUserByEmail("wrong.email@knoldus.com")
     result.map { actualUser =>
       assert(actualUser === None)
     }
