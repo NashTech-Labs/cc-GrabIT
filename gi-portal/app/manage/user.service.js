@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var Observable_1 = require("rxjs/Observable");
 require("rxjs/add/operator/map");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/debounceTime");
@@ -20,9 +21,47 @@ require("rxjs/add/operator/toPromise");
 var UserService = (function () {
     function UserService(http) {
         this.http = http;
-        this.listUsersURL = '/api/';
-        this.addUserUrl = '/api/';
+        this.listUsersApi = '/api/';
+        this.addUserApi = '/api/';
     }
+    UserService.prototype.addUser = function (user) {
+        var _this = this;
+        var jsonHeader = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
+        var obj = {
+            name: user.name,
+            emailId: user.emailId,
+            employeeId: user.employeeId,
+            role: user.role
+        };
+        return this.http.post(this.addUserApi, obj, { headers: jsonHeader })
+            .map(function (data) {
+            return _this.eaxtractData(data);
+        })
+            .catch(function (e) {
+            return _this.handle(e);
+        });
+    };
+    UserService.prototype.eaxtractData = function (res) {
+        var body = res.json();
+        return body;
+    };
+    UserService.prototype.handle = function (error) {
+        var errMsg;
+        try {
+            if (JSON.parse(error._body).message) {
+                errMsg = JSON.parse(error._body).message;
+            }
+            else {
+                errMsg = 'Some thing went wrong';
+            }
+        }
+        catch (e) {
+            errMsg = 'Somthing Went Wrong try again!!';
+        }
+        return Observable_1.Observable.throw(new Error(errMsg));
+    };
     return UserService;
 }());
 UserService = __decorate([

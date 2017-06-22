@@ -2,6 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { CommonModule } from '@angular/common';
 
 // used to create fake backend
 import { fakeBackendProvider } from './_helpers/index';
@@ -20,6 +21,7 @@ import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { SidebarComponent } from './home/sidebar.component';
 
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -27,7 +29,8 @@ import { SidebarComponent } from './home/sidebar.component';
         HttpModule,
         routing,
         ManageModule,
-        HomeModule
+        HomeModule,
+        CommonModule
     ],
     declarations: [
         AppComponent,

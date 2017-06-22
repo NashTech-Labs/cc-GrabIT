@@ -10,6 +10,7 @@ var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var forms_1 = require("@angular/forms");
 var http_1 = require("@angular/http");
+var common_1 = require("@angular/common");
 // used to create fake backend
 var index_1 = require("./_helpers/index");
 var testing_1 = require("@angular/http/testing");
@@ -36,7 +37,8 @@ AppModule = __decorate([
             http_1.HttpModule,
             app_routing_1.routing,
             manage_module_1.ManageModule,
-            home_modue_1.HomeModule
+            home_modue_1.HomeModule,
+            common_1.CommonModule
         ],
         declarations: [
             app_component_1.AppComponent,

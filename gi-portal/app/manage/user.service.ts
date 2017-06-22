@@ -16,10 +16,51 @@ export class UserService {
 constructor(private http:Http) {}
 
 
-    private listUsersURL = '/api/';
-    private addUserUrl = '/api/';
+    private listUsersApi = '/api/';
+    private addUserApi = '/api/';
 
-    
+
+    addUser(user: UserModel): Observable<any> {
+    let jsonHeader = new Headers({
+      'Content-Type': 'application/json'
+    });
+    let obj = {
+      name: user.name,
+      emailId: user.emailId,
+      employeeId: user.employeeId,
+      role: user.role
+    };
+    return this.http.post(this.addUserApi, obj, {headers: jsonHeader})
+      .map(data => {
+        return this.eaxtractData(data)
+      })
+      .catch((e: any) => {
+        return this.handle(e)
+      });
+  }
+
+  
+  eaxtractData(res: any) {
+    let body = res.json();
+    return body;
+  }
+
+  private handle(error: any) {
+    let errMsg: string;
+    try {
+      if (JSON.parse(error._body).message) {
+        errMsg = JSON.parse(error._body).message
+      } else {
+        errMsg = 'Some thing went wrong';
+      }
+
+    }
+    catch (e) {
+      errMsg = 'Somthing Went Wrong try again!!'
+    }
+    return Observable.throw(new Error(errMsg));
+  }
+
 
 
 }

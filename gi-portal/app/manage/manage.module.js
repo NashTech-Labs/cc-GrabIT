@@ -11,6 +11,8 @@ var common_1 = require("@angular/common");
 var http_1 = require("@angular/http");
 var manage_route_1 = require("./manage.route");
 var user_service_1 = require("./user.service");
+var forms_1 = require("@angular/forms");
+var common_2 = require("@angular/common");
 var users_component_1 = require("./users.component");
 var ManageModule = (function () {
     function ManageModule() {
@@ -19,7 +21,7 @@ var ManageModule = (function () {
 }());
 ManageModule = __decorate([
     core_1.NgModule({
-        imports: [manage_route_1.manageRouting, http_1.HttpModule],
+        imports: [manage_route_1.manageRouting, http_1.HttpModule, forms_1.FormsModule, common_2.CommonModule],
         declarations: [users_component_1.UserComponent],
         providers: [user_service_1.UserService, common_1.DatePipe]
     })
