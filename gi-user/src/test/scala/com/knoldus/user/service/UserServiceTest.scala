@@ -2,7 +2,9 @@ package com.knoldus.user.service
 
 import com.knoldus.notify.email.EmailUtility
 import com.knoldus.persistence.components.UserComponent
+import com.knoldus.user.Constants
 import com.knoldus.user.TestData._
+import com.knoldus.utils.email.EmailTemplate
 import com.knoldus.utils.models.User
 import org.mockito.Mockito._
 import org.mockito.Matchers._
@@ -21,6 +23,7 @@ class UserServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
 
   test("add user functionality when user gets added successfully") {
     when(mockUserComponent.insert(any[User])).thenReturn(Future.successful(1))
+    when(mockEmailUtility.sendEmail(List("test@gmail.com"), "welcome subject", "welcome message")).thenReturn(true)
     val output = userService.addUser(userRegisterRequest)
     output.map { result => result shouldBe 1 }
   }
