@@ -5,7 +5,7 @@ import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
 import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
-import com.knoldus.utils.Constants.EmptyString
+import com.knoldus.user.Constants.Employee
 import com.knoldus.utils.models.User
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -40,10 +40,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when name is empty") {
     val accessToken = Math.random().toString
-    val userRegister = userRegisterRequest.copy(name = EmptyString)
-    val userRegisterJson = userRegister.asJson.toString
+    val userRegisterJson = """{"empId":"1111","name":"","email":"test@gmail.com","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
-    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Name should not be empty"
@@ -52,10 +50,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when email is in invalid format") {
     val accessToken = Math.random().toString
-    val userRegister = userRegisterRequest.copy(email = "invalid")
-    val userRegisterJson = userRegister.asJson.toString
+    val userRegisterJson = """{"empId":"1111","name":"test name","email":"invalid","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
-    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Email should be in valid format"
@@ -64,10 +60,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when employee id is empty") {
     val accessToken = Math.random().toString
-    val userRegister = userRegisterRequest.copy(empId = EmptyString)
-    val userRegisterJson = userRegister.asJson.toString
+    val userRegisterJson = """{"empId":"","name":"test name","email":"test@gmail.com","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
-    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Employee id should not be empty"
@@ -76,10 +70,8 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when role is invalid") {
     val accessToken = Math.random().toString
-    val userRegister = userRegisterRequest.copy(role = "invalid")
-    val userRegisterJson = userRegister.asJson.toString
+    val userRegisterJson = """{"empId":"1111","name":"test name","email":"test@gmail.com","role":"invalid"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
-    when(mockUserService.addUser(userRegister)).thenReturn(Future.successful(1))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "User role should be valid"
@@ -88,7 +80,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when user is not authorized") {
     val accessToken = Math.random().toString
-    val userRegister = userRegisterRequest.copy(role = "invalid")
+    val userRegister = userRegisterRequest.copy(role = Employee)
     val userRegisterJson = userRegister.asJson.toString
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(false))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {

@@ -10,6 +10,7 @@ import com.knoldus.utils.models.User
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
+import com.knoldus.user.Constants.Admin
 
 class UserService @Inject()(userComponent: UserComponent) {
 
@@ -57,7 +58,7 @@ class UserService @Inject()(userComponent: UserComponent) {
     */
   def isAdmin(accessToken: String): Future[Boolean] = {
     userComponent.getUserByAccessToken(accessToken).map { user =>
-      user.fold(false)(user => user.role == "admin")
+      user.fold(false)(user => user.role == Admin)
     }
   }
 }

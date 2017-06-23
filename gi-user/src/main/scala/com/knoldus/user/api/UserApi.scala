@@ -11,7 +11,7 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import io.circe.syntax._
 
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 
 class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
@@ -25,10 +25,14 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
     (post & entity(as[String])) { data =>
       parameters("accessToken") { accessToken =>
         authorizeAsync(_ => userService.isAdmin(accessToken)) {
-          val decodedUserRequest = decode[UserRegisterRequest](data)
-          decodedUserRequest match {
-            case Right(userRegisterRequest) => handleAddUser(userRegisterRequest, userService.addUser)
-            case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
+          Try {
+            decode[UserRegisterRequest](data)
+          } match {
+            case Success(decodedUserRequest) => decodedUserRequest match {
+              case Right(userRegisterRequest) => handleAddUser(userRegisterRequest, userService.addUser)
+              case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
+            }
+            case Failure(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"${ex.getMessage}".replace("requirement failed: ", "")))
           }
         }
       }
