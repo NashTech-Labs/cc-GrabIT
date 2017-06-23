@@ -23,7 +23,7 @@ class UserServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
 
   test("add user functionality when user gets added successfully") {
     when(mockUserComponent.insert(any[User])).thenReturn(Future.successful(1))
-    when(mockEmailUtility.sendEmail(List("test@gmail.com"), "welcome subject", "welcome message")).thenReturn(true)
+    when(mockEmailUtility.sendEmail(any[List[String]], any[String], any[String])).thenReturn(true)
     val output = userService.addUser(userRegisterRequest)
     output.map { result => result shouldBe 1 }
   }
