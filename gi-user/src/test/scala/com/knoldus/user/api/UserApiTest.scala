@@ -2,16 +2,19 @@ package com.knoldus.user.api
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
-import com.knoldus.user.model.SignInRequest
+import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
+import com.knoldus.utils.Constants.EmptyString
 import com.knoldus.utils.models.User
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
 import org.mockito.Mockito._
 import org.scalatest._
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
+
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
-import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
-import com.knoldus.user.TestData._
 
 class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with MockitoSugar {
 
@@ -19,7 +22,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   implicit val routeTestTimeout = RouteTestTimeout(10 seconds)
 
-  val mockUserService = mock[UserService]
+  private val mockUserService = mock[UserService]
   val userApi = new UserApi(mockUserService)
 
   import userApi._
@@ -27,23 +30,63 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
   test("user Api route to add users") {
     val accessToken = Math.random().toString
     when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future(1))
-    Post(
-      s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~>
-      check {
-        status shouldBe StatusCodes.OK
-        responseAs[String] should include regex "Success"
-      }
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.OK
+      responseAs[String] should include regex "Success"
+    }
+  }
+
+  test("user Api route to add users when name is empty") {
+    val accessToken = Math.random().toString
+    val userRegister = userRegisterRequest.copy(name = EmptyString)
+    val userRegisterJson = userRegister.asJson.toString
+    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] shouldBe "Name should not be empty"
+    }
+  }
+
+  test("user Api route to add users when email is in invalid format") {
+    val accessToken = Math.random().toString
+    val userRegister = userRegisterRequest.copy(email = "invalid")
+    val userRegisterJson = userRegister.asJson.toString
+    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] shouldBe "Email should be in valid format"
+    }
+  }
+
+  test("user Api route to add users when employee id is empty") {
+    val accessToken = Math.random().toString
+    val userRegister = userRegisterRequest.copy(empId = EmptyString)
+    val userRegisterJson = userRegister.asJson.toString
+    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] shouldBe "Employee id should not be empty"
+    }
+  }
+
+  test("user Api route to add users when when role is invalid") {
+    val accessToken = Math.random().toString
+    val userRegister = userRegisterRequest.copy(role = "invalid")
+    val userRegisterJson = userRegister.asJson.toString
+    when(mockUserService.addUser(userRegister)).thenReturn(Future(1))
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] shouldBe "User role should be valid"
+    }
   }
 
   test("user Api route for failure case") {
     val accessToken = Math.random().toString
     when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future.failed(new RuntimeException("Invalid user")))
-    Post(
-      s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~>
-      check {
-        status shouldBe StatusCodes.InternalServerError
-        responseAs[String] should include regex "Internal Server Error Invalid user"
-      }
+    Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error Invalid user"
+    }
   }
 
   test("user Api route to sign in") {

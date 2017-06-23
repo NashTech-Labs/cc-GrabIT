@@ -4,7 +4,7 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import com.google.inject.Inject
-import com.knoldus.user.helper.UserApiHepler
+import com.knoldus.user.helper.UserApiHelper
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import com.knoldus.user.service.UserService
 import io.circe.generic.auto._
@@ -14,7 +14,7 @@ import io.circe.syntax._
 import scala.util.{Failure, Success}
 
 
-class UserApi @Inject()(userService: UserService ) extends UserApiHepler {
+class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
 
   /**
     * Creates http route for add user
