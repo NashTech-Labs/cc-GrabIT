@@ -18,11 +18,11 @@ object TestData extends JsonHelper {
   val hashPassword = PasswordHashing.generateHashedPassword(password)
 
   val userRegisterRequest = UserRegisterRequest("1111", "test name", "test@gmail.com", "admin")
-  val userRegisterJson = userRegisterRequest.asJson.toString
+  val userRegisterJson = userRegisterRequest.asJson.noSpaces
   val user = User("1", testUUID.toString, userRegisterRequest.empId, userRegisterRequest.name,
     userRegisterRequest.email, hashPassword, userRegisterRequest.role, testTimestamp, testTimestamp)
 
   val signInRequest = SignInRequest(user.email, password)
-  val signInRequestJson = signInRequest.asJson.toString
+  val signInRequestJson = signInRequest.asJson.noSpaces
 
 }
