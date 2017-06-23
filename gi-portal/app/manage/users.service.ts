@@ -19,8 +19,8 @@ export class UsersService {
 constructor(private http:Http) {}
 
    // Api urls of backend
-    private listUsersApi = '/api/';
-    private addUserApi = '/adduserApi/';
+    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=12345';
+    private addUserApi = 'localhost:9999/user/add?accessToken=12345';
 
 
    //addUser method to add the user

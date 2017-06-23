@@ -23,10 +23,11 @@ var UserComponent = (function () {
         this.formValues = [];
     }
     UserComponent.prototype.ngOnInit = function () {
-        //Getting the list of users
-        //  this.usersService.getUserList().subscribe(
-        //     (data) => this.userData = data
-        //   )
+        // Getting the list of users
+        /*this.usersService.getUserList().subscribe(
+           (data) => {this.userData = data
+            console.log(data)}
+         )*/
     };
     UserComponent.prototype.onSubmit = function (value) {
         var _this = this;

@@ -4,6 +4,7 @@ import {UserModel} from '../_models/userModel'
 import { UsersService } from './users.service';
 import {ActivatedRoute, Router} from "@angular/router";
 import { Observable }     from 'rxjs/Observable';
+import {log} from "util";
 
 
 
@@ -29,10 +30,11 @@ constructor (private usersService: UsersService, private route: ActivatedRoute, 
 
 
   ngOnInit(){
-    //Getting the list of users
-    //  this.usersService.getUserList().subscribe(
-    //     (data) => this.userData = data
-    //   )
+    // Getting the list of users
+     /*this.usersService.getUserList().subscribe(
+        (data) => {this.userData = data
+         console.log(data)}
+      )*/
     }
 
   onSubmit(value:any) {

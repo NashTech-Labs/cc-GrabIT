@@ -28,4 +28,28 @@
   </form>
 </div>
 
+ <div class="container">
+     <h1>Created Task</h1>
+     <table class="table table-striped">
+         <thead>
+         <tr>
+             <th>Name</th>
+             <th>Email</th>
+             <th>EmployeeId</th>
+             <th>Role</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr *ngFor="let user of userData;let index = index">
+             <td >{{user.name}}</td>
+             <td >{{user.email}}</td>
+             <td >{{user.employeeId}}</td>
+             <td >{{user.role}}</td>
+             <td><input type="button" value="Edit" ></td>
+             <td><input type="button" value="Done" ></td>
+         </tr>
+         </tbody>
+     </table>
+ </div>
+
 
