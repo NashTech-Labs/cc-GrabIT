@@ -1,5 +1,7 @@
 package com.knoldus.user.api
 
+import akka.http.scaladsl.model.HttpCharsetRange.*
+import akka.http.scaladsl.model.headers.HttpOriginRange
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -12,7 +14,8 @@ import io.circe.parser._
 import io.circe.syntax._
 
 import scala.util.{Failure, Success}
-
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
+import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 
 class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
 
@@ -21,13 +24,15 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
     * @return
     */
   def addUser: Route =
-  path("user" / "add") {
-    (post & entity(as[String])) { data =>
-      parameters("accessToken") { accessToken =>
-        val decodedUserRequest = decode[UserRegisterRequest](data)
-        decodedUserRequest match {
-          case Right(userRegisterRequest) => handleAddUser(userRegisterRequest, userService.addUser)
-          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
+  cors() {
+    path("user" / "add") {
+      (post & entity(as[String])) { data =>
+        parameters("accessToken") { accessToken =>
+          val decodedUserRequest = decode[UserRegisterRequest](data)
+          decodedUserRequest match {
+            case Right(userRegisterRequest) => handleAddUser(userRegisterRequest, userService.addUser)
+            case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
+          }
         }
       }
     }
@@ -38,13 +43,15 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
     * @return
     */
   def signIn: Route =
-  path("signin") {
-    (post & entity(as[String])) { data =>
-      val decodedSignInRequest = decode[SignInRequest](data)
+  cors() {
+    path("signin") {
+      (post & entity(as[String])) { data =>
+        val decodedSignInRequest = decode[SignInRequest](data)
 
-      decodedSignInRequest match {
-        case Right(signInRequest) => handleSignIn(signInRequest, userService.signIn)
-        case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"${ex.getMessage}"))
+        decodedSignInRequest match {
+          case Right(signInRequest) => handleSignIn(signInRequest, userService.signIn)
+          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"${ex.getMessage}"))
+        }
       }
     }
   }
@@ -54,11 +61,13 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
     * @return
     */
   def getAllUsers: Route =
-  path("user" / "get" / "all") {
-    get {
-      onComplete(userService.getAllUsers) {
-        case Success(users) => complete(HttpResponse(StatusCodes.OK, entity = users.asJson.toString))
-        case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+  cors() {
+    path("user" / "get" / "all") {
+      get {
+        onComplete(userService.getAllUsers) {
+          case Success(users) => complete(HttpResponse(StatusCodes.OK, entity = users.asJson.toString))
+          case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+        }
       }
     }
   }
