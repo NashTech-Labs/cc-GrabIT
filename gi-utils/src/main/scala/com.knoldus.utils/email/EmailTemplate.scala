@@ -1,9 +1,10 @@
 package com.knoldus.utils.email
 
+//scalastyle:off
 object EmailTemplate {
 
   val addUserSubject = "Welcome To GrabIT"
-  def addUserMessage(name: String, email: String, password: String) = s"""
+  def addUserMessage(name: String, email: String, password: String): String = s"""
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
       <html xmlns="http://www.w3.org/1999/xhtml">
           <head>
@@ -69,3 +70,4 @@ object EmailTemplate {
       """.stripMargin
 
 }
+//scalastyle:off

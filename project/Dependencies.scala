@@ -18,8 +18,8 @@ object Dependencies {
   val h2DBVersion = "1.4.193"
 
   lazy val akkaHttp           = "com.typesafe.akka"       %%  "akka-http"             % akkaVersion
-  lazy val akkaHttpTestKit    = "com.typesafe.akka"       %%  "akka-http-testkit"     % akkaVersion
   lazy val akkaHttpCors       = "ch.megard"               %%  "akka-http-cors"        % "0.2.1"
+  lazy val akkaHttpTestKit    = "com.typesafe.akka"       %%  "akka-http-testkit"     % akkaVersion
   lazy val circeCore          = "io.circe"                %   "circe-core_2.11"       % circeVersion
   lazy val circeParser        = "io.circe"                %%  "circe-parser"          % circeVersion
   lazy val circeGeneric       = "io.circe"                %%  "circe-generic"         % circeVersion

@@ -1,18 +1,14 @@
 package com.knoldus.notify.email
 
 import java.util.Properties
+import javax.mail.{Address, Message, Session}
+import javax.mail.internet.{InternetAddress, MimeMessage}
 
-import com.knoldus.notify.{EmailInfo, EmailNotification}
 import com.knoldus.notify.config.Configuration._
+import com.knoldus.notify.{EmailInfo, EmailNotification}
+import pureconfig.error.ConfigReaderFailures
 
 import scala.util.{Failure, Success, Try}
-import javax.mail.Address
-import javax.mail.Message
-import javax.mail.Session
-import javax.mail.internet.InternetAddress
-import javax.mail.internet.MimeMessage
-
-import pureconfig.error.ConfigReaderFailures
 
 class EmailUtility {
 

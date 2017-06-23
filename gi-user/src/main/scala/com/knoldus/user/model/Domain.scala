@@ -2,8 +2,6 @@ package com.knoldus.user.model
 
 import com.knoldus.user.Constants._
 
-import scala.util.{Failure, Success, Try}
-
 case class UserRegisterRequest(employeeId: String, name: String, email: String, role: String) {
 
     require(name.trim.length > 0, "Name should not be empty")
@@ -12,8 +10,7 @@ case class UserRegisterRequest(employeeId: String, name: String, email: String, 
     require(List(Admin, Employee).contains(role), "User role should be valid")
 
   private def isEmailValid(email: String): Boolean = {
-    val emailPattern = """^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$""".r
-    emailPattern findFirstIn email.toCharArray match {
+    EmailPattern.r findFirstIn email.toCharArray match {
       case Some(_) => true
       case None => false
     }
