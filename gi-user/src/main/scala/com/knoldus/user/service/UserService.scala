@@ -26,10 +26,8 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     val uuid = getUUID
     val currentTimestamp = getCurrentTimestamp
     val password = generateRandomString(PasswordLength)
-
     val message = addUserMessage(userRegisterRequest.name, userRegisterRequest.email, password)
-
-    val user = User(uuid, uuid, userRegisterRequest.empId, userRegisterRequest.name, userRegisterRequest.email,
+    val user = User(uuid, uuid, userRegisterRequest.employeeId, userRegisterRequest.name, userRegisterRequest.email,
       generateHashedPassword(password), userRegisterRequest.role, currentTimestamp, currentTimestamp)
 
     for {

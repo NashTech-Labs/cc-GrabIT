@@ -40,7 +40,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when name is empty") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"1111","name":"","email":"test@gmail.com","role":"admin"}"""
+    val userRegisterJson = """{"employeeId":"1111","name":"","email":"test@gmail.com","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -50,7 +50,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when email is in invalid format") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"1111","name":"test name","email":"invalid","role":"admin"}"""
+    val userRegisterJson = """{"employeeId":"1111","name":"test name","email":"invalid","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -60,7 +60,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when employee id is empty") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"","name":"test name","email":"test@gmail.com","role":"admin"}"""
+    val userRegisterJson = """{"employeeId":"","name":"test name","email":"test@gmail.com","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -70,7 +70,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when role is invalid") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"1111","name":"test name","email":"test@gmail.com","role":"invalid"}"""
+    val userRegisterJson = """{"employeeId":"1111","name":"test name","email":"test@gmail.com","role":"invalid"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest

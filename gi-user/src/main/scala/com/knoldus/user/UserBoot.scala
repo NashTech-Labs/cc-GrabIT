@@ -8,6 +8,7 @@ import com.knoldus.user.Constants.Port
 import com.knoldus.user.api.UserApi
 import com.knoldus.user.module.UserModule
 
+// $COVERAGE-OFF
 object UserBoot extends App {
 
   val injector = Guice.createInjector(new UserModule)
@@ -20,3 +21,4 @@ object UserBoot extends App {
   Http().bindAndHandle(userApi.routes, "localhost", Port)
 
 }
+// $COVERAGE-ON
