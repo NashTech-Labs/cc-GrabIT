@@ -10,6 +10,7 @@ import com.knoldus.utils.models.User
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
+import com.knoldus.user.Constants.Admin
 
 class UserService @Inject()(userComponent: UserComponent) {
 
@@ -23,7 +24,7 @@ class UserService @Inject()(userComponent: UserComponent) {
     val uuid = getUUID
     val currentTimestamp = getCurrentTimestamp
     val password = generateRandomString(PasswordLength)
-    val user = User(uuid, uuid, userRegisterRequest.empId, userRegisterRequest.name, userRegisterRequest.email,
+    val user = User(uuid, uuid, userRegisterRequest.employeeId, userRegisterRequest.name, userRegisterRequest.email,
       generateHashedPassword(password), userRegisterRequest.role, currentTimestamp, currentTimestamp)
     userComponent.insert(user)
   }
@@ -49,4 +50,15 @@ class UserService @Inject()(userComponent: UserComponent) {
     */
   def getAllUsers: Future[List[User]] = userComponent.getAllUser
 
+
+  /**
+    * Checks whether user is admin or not
+    * @param accessToken
+    * @return
+    */
+  def isAdmin(accessToken: String): Future[Boolean] = {
+    userComponent.getUserByAccessToken(accessToken).map { user =>
+      user.fold(false)(user => user.role == Admin)
+    }
+  }
 }

@@ -52,4 +52,22 @@ class UserServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
     val output = userService.getAllUsers
     output.map { result => result shouldBe List(user) }
   }
+
+  test("whether user is admin successfully") {
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(Some(user)))
+    val output = userService.isAdmin(accessToken)
+    output.map(result => result shouldBe true)
+  }
+
+  test("whether user is admin if role is Employee") {
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(Some(user.copy(role = "Employee"))))
+    val output = userService.isAdmin(accessToken)
+    output.map(result => result shouldBe false)
+  }
+
+  test("whether user is admin if user is not present") {
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(None))
+    val output = userService.isAdmin(accessToken)
+    output.map(result => result shouldBe false)
+  }
 }
