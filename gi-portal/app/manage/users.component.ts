@@ -31,10 +31,12 @@ constructor (private usersService: UsersService, private route: ActivatedRoute, 
 
   ngOnInit(){
     // Getting the list of users
-     /*this.usersService.getUserList().subscribe(
+     this.usersService.getUserList().subscribe(
         (data) => {this.userData = data
-         console.log(data)}
-      )*/
+         console.log("data in component >>>>")
+         console.log(data)
+        }
+      )
     }
 
   onSubmit(value:any) {
