@@ -18,13 +18,13 @@ require("rxjs/add/operator/debounceTime");
 require("rxjs/add/operator/distinctUntilChanged");
 require("rxjs/add/operator/switchMap");
 require("rxjs/add/operator/toPromise");
-var UserService = (function () {
-    function UserService(http) {
+var UsersService = (function () {
+    function UsersService(http) {
         this.http = http;
         this.listUsersApi = '/api/';
         this.addUserApi = '/api/';
     }
-    UserService.prototype.addUser = function (user) {
+    UsersService.prototype.addUser = function (user) {
         var _this = this;
         var jsonHeader = new http_1.Headers({
             'Content-Type': 'application/json'
@@ -43,11 +43,11 @@ var UserService = (function () {
             return _this.handle(e);
         });
     };
-    UserService.prototype.eaxtractData = function (res) {
+    UsersService.prototype.eaxtractData = function (res) {
         var body = res.json();
         return body;
     };
-    UserService.prototype.handle = function (error) {
+    UsersService.prototype.handle = function (error) {
         var errMsg;
         try {
             if (JSON.parse(error._body).message) {
@@ -62,11 +62,11 @@ var UserService = (function () {
         }
         return Observable_1.Observable.throw(new Error(errMsg));
     };
-    return UserService;
+    return UsersService;
 }());
-UserService = __decorate([
+UsersService = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [http_1.Http])
-], UserService);
-exports.UserService = UserService;
+], UsersService);
+exports.UsersService = UsersService;
 //# sourceMappingURL=user.service.js.map
