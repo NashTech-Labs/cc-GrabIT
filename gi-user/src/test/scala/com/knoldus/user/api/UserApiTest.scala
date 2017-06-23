@@ -125,17 +125,26 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
   }
 
   test("user Api route to fetch all users successfully") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     when(mockUserService.getAllUsers).thenReturn(Future.successful(List(user)))
-    Get("/user/get/all") ~> getAllUsers ~> check {
+    Get(s"/user/get/all?accessToken=$accessToken") ~> getAllUsers ~> check {
       status shouldBe StatusCodes.OK
       val res = decode[List[User]](responseAs[String])
       res shouldBe Right(List(user))
     }
   }
 
+  test("user Api route to fetch all users when user is not authorized") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(false))
+    Get(s"/user/get/all?accessToken=$accessToken") ~> getAllUsers ~> check {
+      rejection shouldBe AuthorizationFailedRejection
+    }
+  }
+
   test("user Api route to fetch all users: Failure case") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     when(mockUserService.getAllUsers).thenReturn(Future.failed(new RuntimeException))
-    Get("/user/get/all") ~> getAllUsers ~> check {
+    Get(s"/user/get/all?accessToken=$accessToken") ~> getAllUsers ~> check {
       status shouldBe StatusCodes.InternalServerError
       responseAs[String] should include regex "Internal Server Error"
     }

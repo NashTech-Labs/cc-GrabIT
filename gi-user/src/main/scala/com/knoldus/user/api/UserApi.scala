@@ -62,9 +62,13 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
   def getAllUsers: Route =
   path("user" / "get" / "all") {
     get {
-      onComplete(userService.getAllUsers) {
-        case Success(users) => complete(HttpResponse(StatusCodes.OK, entity = users.asJson.toString))
-        case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+      parameters("accessToken") { accessToken =>
+        authorizeAsync(_ => userService.isAdmin(accessToken)) {
+          onComplete(userService.getAllUsers) {
+            case Success(users) => complete(HttpResponse(StatusCodes.OK, entity = users.asJson.toString))
+            case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+          }
+        }
       }
     }
   }
