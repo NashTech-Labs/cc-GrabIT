@@ -1,7 +1,10 @@
 package com.knoldus.user.service
 
+import com.knoldus.notify.email.EmailUtility
 import com.knoldus.persistence.components.UserComponent
+import com.knoldus.user.Constants
 import com.knoldus.user.TestData._
+import com.knoldus.utils.email.EmailTemplate
 import com.knoldus.utils.models.User
 import org.mockito.Mockito._
 import org.mockito.Matchers._
@@ -14,11 +17,13 @@ import scala.concurrent.Future
 class UserServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
 
   private val mockUserComponent = mock[UserComponent]
+  private val mockEmailUtility = mock[EmailUtility]
 
-  val userService = new UserService(mockUserComponent)
+  val userService = new UserService(mockUserComponent, mockEmailUtility)
 
   test("add user functionality when user gets added successfully") {
     when(mockUserComponent.insert(any[User])).thenReturn(Future.successful(1))
+    when(mockEmailUtility.sendEmail(any[List[String]], any[String], any[String])).thenReturn(true)
     val output = userService.addUser(userRegisterRequest)
     output.map { result => result shouldBe 1 }
   }

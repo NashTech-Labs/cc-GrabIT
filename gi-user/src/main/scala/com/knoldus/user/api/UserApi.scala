@@ -54,7 +54,7 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
 
         decodedSignInRequest match {
           case Right(signInRequest) => handleSignIn(signInRequest, userService.signIn)
-          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"${ex.getMessage}"))
+          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
         }
       }
     }

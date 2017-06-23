@@ -3,6 +3,7 @@ package com.knoldus.user.api
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
+import com.knoldus.notify.email.EmailUtility
 import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
 import com.knoldus.user.Constants.Employee
@@ -88,6 +89,17 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     }
   }
 
+  test("user Api route to add users when input json could not be parsed") {
+    val accessToken = Math.random().toString
+    val invalidJson = """{"invalid"}"""
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future.successful(1))
+    Post(s"/user/add?accessToken=$accessToken", invalidJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Body params are missing or incorrect"
+    }
+  }
+
   test("user Api route for failure case") {
     val accessToken = Math.random().toString
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
@@ -113,6 +125,15 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     Post("/signin", signInRequestJson) ~> signIn ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Invalid credentials"
+    }
+  }
+
+  test("user Api route to sign in when body params are invalid") {
+    val invalidJson = """{"invalid"}"""
+    when(mockUserService.signIn(signInRequest)).thenReturn(Future.successful(None))
+    Post("/signin", invalidJson) ~> signIn ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Body params are missing or incorrect"
     }
   }
 
