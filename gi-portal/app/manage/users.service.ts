@@ -19,27 +19,29 @@ export class UsersService {
 constructor(private http:Http) {}
 
    // Api urls of backend
-    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=de71c82f-7ade-46fe-a8cb-4de659c91d71';
-    private addUserApi = 'http://localhost:9999/user/add?accessToken=de71c82f-7ade-46fe-a8cb-4de659c91d71';
+    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=11';
+    private addUserApi = 'http://localhost:9999/user/add?accessToken=11';
 
 
-   //addUser method to add the user
+    /*
+     * addUser method to add the user
+     */
+
     addUser(user: UserModel): Observable<any> {
-    let jsonHeader = new Headers({
-      'Content-Type': 'application/json'
-    });
-    let obj = {
-      name: 'asdf',
-      email: 'user@emailId.in',
-      employeeId: '123',
-      role: 'admin'
-    };
-    console.log(">>>>>>>>>>>> "+obj);
-    return this.http.post(this.addUserApi, obj, {headers: jsonHeader})
-      .map(data => {
-        return this.eaxtractData(data)
-      })
-  }
+        let jsonHeader = new Headers({
+          'Content-Type': 'application/json'
+        });
+        let obj = {
+          name: user.name,
+          email: user.emailId,
+          employeeId: user.employeeId,
+          role: user.role
+        };
+        return this.http.post(this.addUserApi, obj, {headers: jsonHeader})
+          .map(data => {
+            return this.eaxtractData(data)
+          })
+      }
 
    // getting the list of user
     getUserList(){
@@ -53,7 +55,6 @@ constructor(private http:Http) {}
         console.error("Problem in service:::: " + error);
         // return Observable.throw(error || "Server Error");
       }
-
 
     eaxtractData(res: any) {
       let body = res.json();

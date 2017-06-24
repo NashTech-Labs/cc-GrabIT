@@ -30,11 +30,10 @@ constructor (private usersService: UsersService, private route: ActivatedRoute, 
 
 
   ngOnInit(){
-    // Getting the list of users
+    // Getting the list of users when users view appear
      this.usersService.getUserList().subscribe(
-        (data) => {this.userData = data
-         console.log("data in component >>>>")
-         console.log(data)
+        (data) => {
+            this.userData = data
         }
       )
     }

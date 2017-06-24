@@ -24,11 +24,9 @@ var UserComponent = (function () {
     }
     UserComponent.prototype.ngOnInit = function () {
         var _this = this;
-        // Getting the list of users
+        // Getting the list of users when users view appear
         this.usersService.getUserList().subscribe(function (data) {
             _this.userData = data;
-            console.log("data in component >>>>");
-            console.log(data);
         });
     };
     UserComponent.prototype.onSubmit = function (value) {
