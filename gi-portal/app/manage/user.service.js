@@ -11,23 +11,62 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var Observable_1 = require("rxjs/Observable");
 require("rxjs/add/operator/map");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/debounceTime");
 require("rxjs/add/operator/distinctUntilChanged");
 require("rxjs/add/operator/switchMap");
 require("rxjs/add/operator/toPromise");
-var UserService = (function () {
-    function UserService(http) {
+var UsersService = (function () {
+    function UsersService(http) {
         this.http = http;
-        this.listUsersURL = '/api/';
-        this.addUserUrl = '/api/';
+        this.listUsersApi = '/api/';
+        this.addUserApi = '/api/';
     }
-    return UserService;
+    UsersService.prototype.addUser = function (user) {
+        var _this = this;
+        var jsonHeader = new http_1.Headers({
+            'Content-Type': 'application/json'
+        });
+        var obj = {
+            name: user.name,
+            emailId: user.emailId,
+            employeeId: user.employeeId,
+            role: user.role
+        };
+        return this.http.post(this.addUserApi, obj, { headers: jsonHeader })
+            .map(function (data) {
+            return _this.eaxtractData(data);
+        })
+            .catch(function (e) {
+            return _this.handle(e);
+        });
+    };
+    UsersService.prototype.eaxtractData = function (res) {
+        var body = res.json();
+        return body;
+    };
+    UsersService.prototype.handle = function (error) {
+        var errMsg;
+        try {
+            if (JSON.parse(error._body).message) {
+                errMsg = JSON.parse(error._body).message;
+            }
+            else {
+                errMsg = 'Some thing went wrong';
+            }
+        }
+        catch (e) {
+            errMsg = 'Somthing Went Wrong try again!!';
+        }
+        return Observable_1.Observable.throw(new Error(errMsg));
+    };
+    return UsersService;
 }());
-UserService = __decorate([
+UsersService = __decorate([
     core_1.Injectable(),
     __metadata("design:paramtypes", [http_1.Http])
-], UserService);
-exports.UserService = UserService;
+], UsersService);
+exports.UsersService = UsersService;
 //# sourceMappingURL=user.service.js.map

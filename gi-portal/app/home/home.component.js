@@ -18,7 +18,6 @@ var HomeComponent = (function () {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
     HomeComponent.prototype.ngOnInit = function () {
-        console.log('--------------------------');
         this.loadAllUsers();
     };
     HomeComponent.prototype.deleteUser = function (id) {

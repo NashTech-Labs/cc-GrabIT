@@ -1,17 +1,19 @@
 package com.knoldus.persistence.user
 
-import com.knoldus.persistence.PostgresDbComponent
 import com.knoldus.persistence.user.mappings.UserMapping
+import com.knoldus.persistence.{DBComponent, PostgresDbComponent}
 import com.knoldus.utils.models.User
 
 import scala.concurrent.Future
 
-class UserComponent extends UserMapping with PostgresDbComponent {
+trait UserComponent extends UserMapping {
+
+  this: DBComponent =>
 
   import driver.api._
 
   /**
-    * Insert user into database
+    * This method is used for insert user into database
     *
     * @param user
     * @return
@@ -21,18 +23,17 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   }
 
   /**
-    * Fetches user detail using email and password
+    * Fetches user detail using email
     *
     * @param email
-    * @param password
-    * @return Future[Option[User] ]
-    */
-  def getUserByEmailAndPassword(email: String, password: String): Future[Option[User]] = {
-    db.run(userInfo.filter(user => user.email === email && user.password === password).result.headOption)
+    * @return Future[Option[User]]
+    **/
+  def getUserByEmail(email: String): Future[Option[User]] = {
+    db.run(userInfo.filter(user => user.email === email).result.headOption)
   }
 
   /**
-    * Fetches user record with the help of userId
+    * This method is used for fetching user record with the help of userId
     *
     * @param userId
     * @return Option[User]
@@ -42,7 +43,7 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   }
 
   /**
-    * Fetches user record with the help of Access Token
+    * This method is used for fetching user record with the help of Access Token
     *
     * @param accessToken
     * @return Option[User]
@@ -52,7 +53,7 @@ class UserComponent extends UserMapping with PostgresDbComponent {
   }
 
   /**
-    * Fetches All user from DB
+    * This method is used for fetching All user from DB
     *
     * @return
     */
@@ -60,3 +61,5 @@ class UserComponent extends UserMapping with PostgresDbComponent {
     db.run(userInfo.to[List].result)
   }
 }
+
+class UserComponentPostgres extends UserComponent with PostgresDbComponent

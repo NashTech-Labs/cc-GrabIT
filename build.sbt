@@ -22,16 +22,16 @@ lazy val root = Project("grabit", file("."))
 
 lazy val giUtils = Project("gi-utils", file("gi-utils"))
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test())
+  .settings(libraryDependencies ++= compile(circeGeneric, circeParser, circeCore) ++ test())
 
 // -------------------------------------------------------------------------------------------------------------------
 // USER
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giUser = Project("gi-user", file("gi-user"))
-  .dependsOn(giUtils, giPersistence)
+  .dependsOn(giUtils, giPersistence, giNotify)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpSprayJson, circeGeneric, circeParser, circeCore, scalaGuice) ++ test(akkaHttpTestKit, mockito, scalaTest))
+  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpCors, scalaGuice, jbCrypt) ++ test(akkaHttpTestKit, mockito, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // PERSISTENCE
@@ -40,7 +40,7 @@ lazy val giUser = Project("gi-user", file("gi-user"))
 lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
   .dependsOn(giUtils)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test())
+  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test(h2DB, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // ASSET

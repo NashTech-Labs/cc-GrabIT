@@ -10,37 +10,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var userModel_1 = require("../_models/userModel");
+var users_service_1 = require("./users.service");
+var router_1 = require("@angular/router");
 var UserComponent = (function () {
-    function UserComponent() {
+    function UserComponent(usersService, route, router) {
+        this.usersService = usersService;
+        this.route = route;
+        this.router = router;
+        this.user = new userModel_1.UserModel('', '', '', '');
+        this.userData = [];
         this.formValues = [];
     }
     UserComponent.prototype.ngOnInit = function () {
-        // this.userFormMDF = this._formbuilder.group({
-        //     name: ['Nikhil',[Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
-        //     email:['abc@abc.com', [Validators.required, Validators.email]],
-        //   address: this._formbuilder.group({
-        //     street: [null, [Validators.required]],
-        //     city:[null],
-        //     postal:[null, [Validators.required]]
-        //   })
-        // })
+        //Getting the list of users
+        //  this.usersService.getUserList().subscribe(
+        //     (data) => this.userData = data
+        //   )
     };
-    //Commented this code because we are using formcontrol many times and that is not a feasable solution,
-    // for this we will use formbuilder approach above.
-    /*
-    userFormMDF = new FormGroup({
-      name : new FormControl('Nikhil Kumar', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-      email: new FormControl('abc@abc.in',[Validators.required, Validators.email]),
-      address: new FormGroup({
-        street: new FormControl(null, Validators.required),
-        city: new FormControl(),
-        postal: new FormControl(null, Validators.required)
-      })
-    });
-    */
-    UserComponent.prototype.onSubmit = function () {
-        // console.log(this.userFormMDF.value);
-        // this.formValues = this.userFormMDF.value;
+    UserComponent.prototype.onSubmit = function (value) {
+        var _this = this;
+        this.usersService.addUser(this.user).subscribe(function (data) {
+            _this.returnedUseraddResponse = data;
+            alert('User Added');
+            _this.formValues = value;
+            console.log("Form Submitted values : " + JSON.stringify(_this.formValues));
+            //this.router.navigate(['/home']);
+        });
     };
     return UserComponent;
 }());
@@ -50,7 +46,7 @@ UserComponent = __decorate([
         templateUrl: 'app/manage/users.component.html',
         styles: ["\n      input.ng-invalid{border-left: 5px solid red}\n      input.ng-valid{border-left:5px solid green}\n  "]
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router])
 ], UserComponent);
 exports.UserComponent = UserComponent;
 //# sourceMappingURL=users.component.js.map

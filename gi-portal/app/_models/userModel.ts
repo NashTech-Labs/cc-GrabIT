@@ -1,6 +1,9 @@
 export class UserModel {
-    empId:string;
-    name: string;
-    emailid:string;
+    name:string;
+    emailId: string;
+    employeeId:string;
     role:string;
+
+  constructor(name?: string, emailId?: string, employeeId?: string, role?: string) {}
+
 }
