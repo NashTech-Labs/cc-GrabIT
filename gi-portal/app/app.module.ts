@@ -20,6 +20,8 @@ import { HomeModule } from './home/home.modue';
 import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { SidebarComponent } from './home/sidebar.component';
+import { ChartsModule } from 'ng2-charts';
+
 
 
 @NgModule({
@@ -30,7 +32,8 @@ import { SidebarComponent } from './home/sidebar.component';
         routing,
         ManageModule,
         HomeModule,
-        CommonModule
+        CommonModule,
+        ChartsModule
     ],
     declarations: [
         AppComponent,

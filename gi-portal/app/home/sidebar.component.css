@@ -14,6 +14,14 @@
     transition: all 0.5s ease;
 }
 
+.grow { transition: all .2s ease-in-out; }
+.grow:hover {
+    transform: scale(1.1);
+    border-color: aquamarine;
+    border-width: 1px;
+    border-style: solid;
+}
+
 #wrapper.toggled {
     padding-left: 250px;
 }

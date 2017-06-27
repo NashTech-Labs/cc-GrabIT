@@ -12,6 +12,9 @@ var common_1 = require("@angular/common");
 var home_component_1 = require("./home.component");
 var home_routes_1 = require("./home.routes");
 var sidebar_component_1 = require("./sidebar.component");
+var dashboard_component_1 = require("./dashboard.component");
+var chart_component_1 = require("./chart.component");
+var ng2_charts_1 = require("ng2-charts");
 var HomeModule = (function () {
     function HomeModule() {
     }
@@ -19,8 +22,8 @@ var HomeModule = (function () {
 }());
 HomeModule = __decorate([
     core_1.NgModule({
-        imports: [home_routes_1.homeRouting, http_1.HttpModule, common_1.CommonModule],
-        declarations: [home_component_1.HomeComponent, sidebar_component_1.SidebarComponent]
+        imports: [home_routes_1.homeRouting, http_1.HttpModule, common_1.CommonModule, ng2_charts_1.ChartsModule],
+        declarations: [home_component_1.HomeComponent, sidebar_component_1.SidebarComponent, dashboard_component_1.DashboardComponent, chart_component_1.ChartComponent]
     })
 ], HomeModule);
 exports.HomeModule = HomeModule;

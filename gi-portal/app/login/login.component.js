@@ -13,11 +13,12 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var index_1 = require("../_services/index");
 var LoginComponent = (function () {
-    function LoginComponent(route, router, authenticationService, alertService) {
+    function LoginComponent(route, router, authenticationService, alertService, elementRef) {
         this.route = route;
         this.router = router;
         this.authenticationService = authenticationService;
         this.alertService = alertService;
+        this.elementRef = elementRef;
         this.model = {};
         this.loading = false;
     }
@@ -26,6 +27,16 @@ var LoginComponent = (function () {
         this.authenticationService.logout();
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function (e) {
+            e.preventDefault();
+            jQuery("#wrapper").toggleClass("toggled");
+        });
+        // jQuery(this.elementRef.nativeElement).ready(function(){
+        //     jQuery(this).find('.jumbotron ').removeClass();
+        //     jQuery(this).find('.container ').removeClass();
+        //     jQuery(this).find('.col-sm-8').removeClass();
+        //
+        // });
     };
     LoginComponent.prototype.login = function () {
         var _this = this;
@@ -43,12 +54,14 @@ var LoginComponent = (function () {
 LoginComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
-        templateUrl: 'login.component.html'
+        templateUrl: 'login.component.html',
+        styleUrls: ['login.component.css']
     }),
     __metadata("design:paramtypes", [router_1.ActivatedRoute,
         router_1.Router,
         index_1.AuthenticationService,
-        index_1.AlertService])
+        index_1.AlertService,
+        core_1.ElementRef])
 ], LoginComponent);
 exports.LoginComponent = LoginComponent;
 //# sourceMappingURL=login.component.js.map

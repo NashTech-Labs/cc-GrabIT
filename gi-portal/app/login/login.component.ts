@@ -1,23 +1,26 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component,ElementRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { AlertService, AuthenticationService } from '../_services/index';
+declare var jQuery:any;
+
 
 @Component({
     moduleId: module.id,
-    templateUrl: 'login.component.html'
+    templateUrl: 'login.component.html',
+    styleUrls:['login.component.css']
 })
 
 export class LoginComponent implements OnInit {
     model: any = {};
     loading = false;
     returnUrl: string;
-
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private authenticationService: AuthenticationService,
-        private alertService: AlertService) { }
+        private alertService: AlertService,
+        private elementRef: ElementRef
+        ) { }
 
     ngOnInit() {
         // reset login status
@@ -25,6 +28,20 @@ export class LoginComponent implements OnInit {
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+
+        jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function(e:any){
+            e.preventDefault();
+            jQuery("#wrapper").toggleClass("toggled");
+        })
+
+        // jQuery(this.elementRef.nativeElement).ready(function(){
+        //     jQuery(this).find('.jumbotron ').removeClass();
+        //     jQuery(this).find('.container ').removeClass();
+        //     jQuery(this).find('.col-sm-8').removeClass();
+        //
+        // });
+
     }
 
     login() {

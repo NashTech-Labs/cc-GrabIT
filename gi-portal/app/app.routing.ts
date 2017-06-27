@@ -5,9 +5,10 @@ import { LoginComponent } from './login/index';
 import { RegisterComponent } from './register/index';
 import { AuthGuard } from './_guards/index';
 import {SidebarComponent} from './home/sidebar.component'
+import {DashboardComponent} from "./home/dashboard.component";
 
 const appRoutes: Routes = [
-   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
    // { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard]},
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },

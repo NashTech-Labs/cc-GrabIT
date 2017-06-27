@@ -1,0 +1,40 @@
+.jumbotro {
+    background: url('../../app/assets/images/bg.gif') no-repeat center center fixed !important;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+!important;
+}
+.panel-default {
+    opacity: 0.9;
+    margin-top: 30px;
+}
+.panel{
+    background-color: rgba(255,255,255,.15) !important;
+    border-color: rgba(178, 168, 206, 0.02);
+    box-shadow: 1px 6px 21px 1px black !important;
+}
+
+.panel-heading {
+    panel-border:rgba(0, 0, 0, 0.15) !important;
+    background-color: transparent;
+    color:snow !important;
+}
+
+input:focus {
+    outline:none;
+    border-color:#9ecaed;
+    box-shadow:0 0 20px aquamarine;
+}
+
+.btn:hover{
+    outline:none;
+    border-color:#9ecaed;
+    box-shadow:0 0 20px aquamarine;
+}
+
+.form-padding-top{
+    padding-top:6%
+}

@@ -24,6 +24,7 @@ var index_4 = require("./_services/index");
 var home_modue_1 = require("./home/home.modue");
 var index_5 = require("./login/index");
 var index_6 = require("./register/index");
+var ng2_charts_1 = require("ng2-charts");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -38,7 +39,8 @@ AppModule = __decorate([
             app_routing_1.routing,
             manage_module_1.ManageModule,
             home_modue_1.HomeModule,
-            common_1.CommonModule
+            common_1.CommonModule,
+            ng2_charts_1.ChartsModule
         ],
         declarations: [
             app_component_1.AppComponent,
