@@ -1,7 +1,7 @@
 package com.knoldus.user.module
 
 import com.google.inject.AbstractModule
-import com.knoldus.persistence.components.{UserComponent, UserComponentPostgres}
+import com.knoldus.persistence.user.{UserComponent, UserComponentPostgres}
 import net.codingwell.scalaguice.ScalaModule
 
 // $COVERAGE-OFF$
