@@ -12,7 +12,7 @@ trait AssetMapping {this: DBComponent =>
     def name: Rep[String] = column[String]("name")
     def uniqueName: Rep[String] = column[String]("unique_name")
     def assetType: Rep[String] = column[String]("type")
-    def isAvailable: Rep[String] = column[String]("is_available")
+    def isAvailable: Rep[Boolean] = column[Boolean]("is_available")
     def createdAt: Rep[Timestamp] = column[Timestamp]("created_at")
     def lastModifiedAt: Rep[Timestamp] = column[Timestamp]("last_modified_at")
 

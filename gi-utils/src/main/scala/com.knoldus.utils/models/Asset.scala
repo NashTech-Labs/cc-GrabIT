@@ -7,7 +7,7 @@ case class Asset(
                   name: String,
                   uniqueName: String,
                   assetType: String,
-                  isAvailable: String,
+                  isAvailable: Boolean,
                   createdAt: Timestamp,
                   lastModifiedAt: Timestamp
                 )

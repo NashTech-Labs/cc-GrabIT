@@ -6,13 +6,13 @@ case class Booking(
                     id: String,
                     userId: String,
                     assetId: String,
-                    startTime: Timestamp,
-                    endTime: Timestamp,
-                    bookingDate: Timestamp,
                     userRating: Int,
                     userFeedback: String,
                     assetRating: Int,
                     assetFeedback: String,
                     status: String,
-                    actionPerformedBy: String
+                    actionPerformedBy: String,
+                    bookingDate: Timestamp,
+                    startTime: Timestamp,
+                    endTime: Timestamp
                   )

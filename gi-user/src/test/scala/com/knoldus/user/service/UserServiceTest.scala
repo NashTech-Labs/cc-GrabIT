@@ -1,16 +1,13 @@
 package com.knoldus.user.service
 
-import com.knoldus.persistence.user.UserComponent
 import com.knoldus.notify.email.EmailUtility
-import com.knoldus.persistence.components.UserComponent
-import com.knoldus.user.Constants
+import com.knoldus.persistence.user.UserComponent
 import com.knoldus.user.TestData._
-import com.knoldus.utils.email.EmailTemplate
 import com.knoldus.utils.models.User
-import org.mockito.Mockito._
 import org.mockito.Matchers._
-import org.scalatest.mockito.MockitoSugar
+import org.mockito.Mockito._
 import org.scalatest._
+import org.scalatest.mockito.MockitoSugar
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

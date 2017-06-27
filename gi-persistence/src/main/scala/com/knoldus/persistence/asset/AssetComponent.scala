@@ -1,12 +1,13 @@
 package com.knoldus.persistence.asset.mappings
 
-import com.knoldus.persistence.PostgresDbComponent
+import com.knoldus.persistence._
 import com.knoldus.utils.models.Asset
 
 import scala.concurrent.Future
 
-class AssetComponent extends AssetMapping with PostgresDbComponent {
+trait AssetComponent extends AssetMapping {
 
+  this: DBComponent =>
   import driver.api._
 
   /**
@@ -30,3 +31,5 @@ class AssetComponent extends AssetMapping with PostgresDbComponent {
   }
 
 }
+
+class AssetPostgresComponent extends AssetComponent with PostgresDbComponent

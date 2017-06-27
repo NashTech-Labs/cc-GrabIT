@@ -1,11 +1,14 @@
 package com.knoldus.persistence.booking.mappings
 
 import com.knoldus.persistence.PostgresDbComponent
+import com.knoldus.persistence.db.DBComponent
 import com.knoldus.utils.models.Booking
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Future}
 
-class BookingComponent extends BookingMapping with PostgresDbComponent {
+import scala.concurrent.Future
+
+trait BookingComponent extends BookingMapping {
+
+  this: DBComponent =>
 
   import driver.api._
 
@@ -58,3 +61,5 @@ class BookingComponent extends BookingMapping with PostgresDbComponent {
       .update((userRating, userFeedback)))
   }
 }
+
+class BookingPOstgresComponent extends BookingComponent with PostgresDbComponent
