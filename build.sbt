@@ -29,7 +29,7 @@ lazy val giUtils = Project("gi-utils", file("gi-utils"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giUser = Project("gi-user", file("gi-user"))
-  .dependsOn(giUtils, giPersistence)
+  .dependsOn(giUtils, giPersistence, giNotify)
   .settings(basicSettings: _*)
   .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpCors, scalaGuice, jbCrypt) ++ test(akkaHttpTestKit, mockito, scalaTest))
 

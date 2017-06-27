@@ -1,10 +1,9 @@
 package com.knoldus.user.api
 
-import akka.http.scaladsl.model.HttpCharsetRange.*
-import akka.http.scaladsl.model.headers.HttpOriginRange
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
 import com.google.inject.Inject
 import com.knoldus.user.helper.UserApiHelper
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
@@ -14,8 +13,6 @@ import io.circe.parser._
 import io.circe.syntax._
 
 import scala.util.{Failure, Success, Try}
-import ch.megard.akka.http.cors.scaladsl.CorsDirectives._
-import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 
 
 class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
@@ -57,7 +54,7 @@ class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
 
         decodedSignInRequest match {
           case Right(signInRequest) => handleSignIn(signInRequest, userService.signIn)
-          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"${ex.getMessage}"))
+          case Left(ex) => complete(HttpResponse(StatusCodes.BadRequest, entity = s"Body params are missing or incorrect: ${ex.getMessage}"))
         }
       }
     }

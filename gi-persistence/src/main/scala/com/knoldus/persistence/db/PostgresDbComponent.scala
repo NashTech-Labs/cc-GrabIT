@@ -1,7 +1,9 @@
 package com.knoldus.persistence.db
 
 import slick.jdbc.PostgresProfile
+import slick.jdbc.PostgresProfile.api.Database
 
+// $COVERAGE-OFF$
 trait PostgresDbComponent extends DBComponent {
 
   val driver = PostgresProfile
@@ -12,6 +14,6 @@ trait PostgresDbComponent extends DBComponent {
 }
 
 object DBConnection {
-  import slick.jdbc.PostgresProfile.api.Database
   val connectionPool = Database.forConfig("db")
 }
+// $COVERAGE-ON$

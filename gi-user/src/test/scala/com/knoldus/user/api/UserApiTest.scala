@@ -3,6 +3,7 @@ package com.knoldus.user.api
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
+import com.knoldus.notify.email.EmailUtility
 import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
 import com.knoldus.user.Constants.Employee
@@ -40,7 +41,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when name is empty") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"1111","name":"","email":"test@gmail.com","role":"admin"}"""
+    val userRegisterJson = """{"employeeId":"1111","name":"","email":"test@gmail.com","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -50,7 +51,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when email is in invalid format") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"1111","name":"test name","email":"invalid","role":"admin"}"""
+    val userRegisterJson = """{"employeeId":"1111","name":"test name","email":"invalid","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -60,7 +61,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when employee id is empty") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"","name":"test name","email":"test@gmail.com","role":"admin"}"""
+    val userRegisterJson = """{"employeeId":"","name":"test name","email":"test@gmail.com","role":"admin"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -70,7 +71,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
 
   test("user Api route to add users when role is invalid") {
     val accessToken = Math.random().toString
-    val userRegisterJson = """{"empId":"1111","name":"test name","email":"test@gmail.com","role":"invalid"}"""
+    val userRegisterJson = """{"employeeId":"1111","name":"test name","email":"test@gmail.com","role":"invalid"}"""
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -85,6 +86,17 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(false))
     Post(s"/user/add?accessToken=$accessToken", userRegisterJson) ~> addUser ~> check {
       rejection shouldEqual AuthorizationFailedRejection
+    }
+  }
+
+  test("user Api route to add users when input json could not be parsed") {
+    val accessToken = Math.random().toString
+    val invalidJson = """{"invalid"}"""
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future.successful(1))
+    Post(s"/user/add?accessToken=$accessToken", invalidJson) ~> addUser ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Body params are missing or incorrect"
     }
   }
 
@@ -113,6 +125,15 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     Post("/signin", signInRequestJson) ~> signIn ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] shouldBe "Invalid credentials"
+    }
+  }
+
+  test("user Api route to sign in when body params are invalid") {
+    val invalidJson = """{"invalid"}"""
+    when(mockUserService.signIn(signInRequest)).thenReturn(Future.successful(None))
+    Post("/signin", invalidJson) ~> signIn ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Body params are missing or incorrect"
     }
   }
 

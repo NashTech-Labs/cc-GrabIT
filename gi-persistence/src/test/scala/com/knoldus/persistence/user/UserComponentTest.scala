@@ -1,4 +1,4 @@
-package com.knoldus.persistence.components
+package com.knoldus.persistence.user
 
 import java.sql.Timestamp
 

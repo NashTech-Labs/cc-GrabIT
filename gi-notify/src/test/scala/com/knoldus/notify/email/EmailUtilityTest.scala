@@ -10,14 +10,11 @@ class EmailUtilityTest extends FunSuite {
 
   val emailUtility = new EmailUtility
 
-  /*
-   This test cases is commented so that whenever CI build runs tis test should not be run
-    */
-  /* test("email sending functionality") {
+   test("email sending functionality") {
      val message = "Hi User "
-     val result = emailUtility.sendEmail(List("rishi@knoldus.com"), message, "test")
+     val result = emailUtility.sendEmail(List("rishi1@knoldus.com"), message, "test")
      assert(result)
-   }*/
+   }
 
   test("email sending failure due to config parsing failure") {
     val conf = parseString(s"""{ n: 1 }""")

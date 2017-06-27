@@ -12,8 +12,7 @@ case class UserRegisterRequest(employeeId: String, name: String, email: String, 
     require(List(Admin, Employee).contains(role), "User role should be valid")
 
   private def isEmailValid(email: String): Boolean = {
-    val emailPattern = """^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$""".r
-    emailPattern findFirstIn email.toCharArray match {
+    EmailPattern.r findFirstIn email.toCharArray match {
       case Some(_) => true
       case None => false
     }

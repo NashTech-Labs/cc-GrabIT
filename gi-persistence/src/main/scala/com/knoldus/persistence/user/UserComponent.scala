@@ -1,6 +1,6 @@
-package com.knoldus.persistence.components
+package com.knoldus.persistence.user
 
-import com.knoldus.persistence.mappings.UserMapping
+import com.knoldus.persistence.user.mappings.UserMapping
 import com.knoldus.persistence.{DBComponent, PostgresDbComponent}
 import com.knoldus.utils.models.User
 
