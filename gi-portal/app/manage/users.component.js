@@ -14,7 +14,7 @@ var userModel_1 = require("../_models/userModel");
 var users_service_1 = require("./users.service");
 var router_1 = require("@angular/router");
 var UserComponent = (function () {
-    function UserComponent(usersService, route, router) {
+    function UserComponent(usersService, route, router, elementRef) {
         this.usersService = usersService;
         this.route = route;
         this.router = router;
@@ -33,10 +33,11 @@ var UserComponent = (function () {
         var _this = this;
         this.usersService.addUser(this.user).subscribe(function (data) {
             _this.returnedUseraddResponse = data;
-            alert('User Added');
             _this.formValues = value;
-            console.log("Form Submitted values : " + JSON.stringify(_this.formValues));
-            //this.router.navigate(['/home']);
+            console.log(">>>>>>>>>>>>>>.." + JSON.stringify(data));
+            jQuery(_this.elementRef.nativeElement).find('#menu-toggle').on('click', function (e) {
+                jQuery("#newUserModal").modal('hide');
+            });
         });
     };
     return UserComponent;
@@ -47,7 +48,7 @@ UserComponent = __decorate([
         templateUrl: 'app/manage/users.component.html',
         styles: ["\n      input.ng-invalid{border-left: 5px solid red}\n      input.ng-valid{border-left:5px solid green}\n  "]
     }),
-    __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router])
+    __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router, core_1.ElementRef])
 ], UserComponent);
 exports.UserComponent = UserComponent;
 //# sourceMappingURL=users.component.js.map

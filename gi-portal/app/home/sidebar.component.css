@@ -26,6 +26,7 @@
     padding-left: 250px;
 }
 
+
 #sidebar-wrapper {
     position: fixed;
     left: 250px;
@@ -128,4 +129,12 @@
         position: relative;
         margin-right: 0;
     }
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px !important;
+}
+
+#wrapper #sidebar-wrapper {
+    width: 0 !important;
 }

@@ -27,23 +27,19 @@ var LoginComponent = (function () {
         this.authenticationService.logout();
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        //sidebar menu toggle
         jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function (e) {
             e.preventDefault();
             jQuery("#wrapper").toggleClass("toggled");
         });
-        // jQuery(this.elementRef.nativeElement).ready(function(){
-        //     jQuery(this).find('.jumbotron ').removeClass();
-        //     jQuery(this).find('.container ').removeClass();
-        //     jQuery(this).find('.col-sm-8').removeClass();
-        //
-        // });
     };
     LoginComponent.prototype.login = function () {
         var _this = this;
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
+        this.authenticationService.login(this.model.email, this.model.password)
             .subscribe(function (data) {
-            _this.router.navigate([_this.returnUrl]);
+            // this.router.navigate([this.returnUrl]);
+            _this.router.navigate(['/home/manage/dashboard']);
         }, function (error) {
             _this.alertService.error(error);
             _this.loading = false;

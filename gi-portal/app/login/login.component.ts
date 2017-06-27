@@ -29,27 +29,21 @@ export class LoginComponent implements OnInit {
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-
+        //sidebar menu toggle
         jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function(e:any){
             e.preventDefault();
             jQuery("#wrapper").toggleClass("toggled");
         })
-
-        // jQuery(this.elementRef.nativeElement).ready(function(){
-        //     jQuery(this).find('.jumbotron ').removeClass();
-        //     jQuery(this).find('.container ').removeClass();
-        //     jQuery(this).find('.col-sm-8').removeClass();
-        //
-        // });
-
     }
 
     login() {
         this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
+        this.authenticationService.login(this.model.email, this.model.password)
             .subscribe(
                 data => {
-                    this.router.navigate([this.returnUrl]);
+                        // this.router.navigate([this.returnUrl]);
+                        this.router.navigate(['/home/manage/dashboard']);
+
                 },
                 error => {
                     this.alertService.error(error);

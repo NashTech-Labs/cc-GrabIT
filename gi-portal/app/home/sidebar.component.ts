@@ -25,7 +25,7 @@ constructor(elementRef: ElementRef){
       
       jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function(e:any){
           e.preventDefault();
-                jQuery("#wrapper").toggleClass("toggled");
+          jQuery("#wrapper").toggleClass("toggled");
       })
     }
 }

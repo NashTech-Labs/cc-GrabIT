@@ -48,9 +48,9 @@ import { ChartsModule } from 'ng2-charts';
         UserService,
 
         // providers used to create fake backend
-        fakeBackendProvider,
-        MockBackend,
-        BaseRequestOptions
+        // fakeBackendProvider,
+        // MockBackend,
+        // BaseRequestOptions
     ],
     bootstrap: [AppComponent]
 })

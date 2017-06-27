@@ -1,11 +1,11 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, ElementRef, OnInit} from "@angular/core";
 import {FormGroup, FormControl, Validators, FormBuilder} from "@angular/forms";
 import {UserModel} from '../_models/userModel'
 import { UsersService } from './users.service';
 import {ActivatedRoute, Router} from "@angular/router";
 import { Observable }     from 'rxjs/Observable';
 import {log} from "util";
-
+declare var jQuery:any;
 
 
 @Component({
@@ -20,13 +20,15 @@ import {log} from "util";
 export class UserComponent implements OnInit{
 
 
-constructor (private usersService: UsersService, private route: ActivatedRoute, private router: Router){}
+constructor (private usersService: UsersService, private route: ActivatedRoute, private router: Router, elementRef: ElementRef){}
 
    index: string;
    user: UserModel = new UserModel('', '', '', '');
    returnedUseraddResponse:any;
    userData:any=[];
    formValues:any=[];
+   elementRef: ElementRef;
+
 
 
   ngOnInit(){
@@ -41,10 +43,13 @@ constructor (private usersService: UsersService, private route: ActivatedRoute, 
   onSubmit(value:any) {
       this.usersService.addUser(this.user).subscribe((data: any) => {
        this.returnedUseraddResponse = data;
-        alert('User Added')
         this.formValues = value;
-        console.log("Form Submitted values : "+ JSON.stringify(this.formValues));
-        //this.router.navigate(['/home']);
+        console.log(">>>>>>>>>>>>>>.."+ JSON.stringify(data));
+
+          jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function(e:any){
+              jQuery("#newUserModal").modal('hide');
+          })
+
       })
   }
 }

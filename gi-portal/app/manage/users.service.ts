@@ -18,9 +18,14 @@ export class UsersService {
 
 constructor(private http:Http) {}
 
-   // Api urls of backend
-    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=11';
-    private addUserApi = 'http://localhost:9999/user/add?accessToken=11';
+
+    private currentUserStorage = localStorage.getItem('currentUser');
+    private accessToken = JSON.parse(this.currentUserStorage).accessToken;
+
+    // Api urls of backend
+    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken='+this.accessToken;
+    private addUserApi = 'http://localhost:9999/user/add?accessToken='+this.accessToken;
+
 
 
     /*
