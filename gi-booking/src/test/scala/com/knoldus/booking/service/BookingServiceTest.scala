@@ -1,8 +1,9 @@
 package com.knoldus.booking.service
 
 import com.knoldus.booking.model.BookingRequest
+import com.knoldus.booking.service.BookingService
 import com.knoldus.persistence.booking.BookingComponent
-import com.knoldus.utils.models.{Booking, User}
+import com.knoldus.utils.models.Booking
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest._
