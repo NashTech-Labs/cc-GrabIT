@@ -10,12 +10,12 @@ function fakeBackendFactory(backend, options, realBackend) {
         // wrap in timeout to simulate server api call
         setTimeout(function () {
             // authenticate
-            if (connection.request.url.endsWith('/api/authenticate') && connection.request.method === http_1.RequestMethod.Post) {
+            if (connection.request.url.endsWith('http://localhost:9999/signin') && connection.request.method === http_1.RequestMethod.Post) {
                 // get parameters from post request
                 var params_1 = JSON.parse(connection.request.getBody());
                 // find if any user matches login credentials
                 var filteredUsers = users.filter(function (user) {
-                    return user.username === params_1.username && user.password === params_1.password;
+                    return user.email === params_1.email && user.password === params_1.password;
                 });
                 if (filteredUsers.length) {
                     // if login details are valid return 200 OK with user details and fake jwt token
@@ -24,10 +24,14 @@ function fakeBackendFactory(backend, options, realBackend) {
                         status: 200,
                         body: {
                             id: user.id,
-                            username: user.username,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            token: 'fake-jwt-token'
+                            accessToken: user.accessToken,
+                            employeeId: user.employeeId,
+                            name: user.name,
+                            email: user.email,
+                            password: user.password,
+                            role: user.role,
+                            createdAt: user.createdAt,
+                            lastModifiedAt: user.lastModifiedAt
                         }
                     })));
                 }

@@ -12,18 +12,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
+require("rxjs/add/operator/catch");
+require("rxjs/add/operator/debounceTime");
+require("rxjs/add/operator/distinctUntilChanged");
+require("rxjs/add/operator/switchMap");
+require("rxjs/add/operator/toPromise");
+require("rxjs/Observable");
 var AuthenticationService = (function () {
     function AuthenticationService(http) {
         this.http = http;
     }
-    AuthenticationService.prototype.login = function (username, password) {
-        return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
+    AuthenticationService.prototype.login = function (email, password) {
+        return this.http.post('http://localhost:9999/signin', JSON.stringify({ email: email, password: password }))
             .map(function (response) {
-            // login successful if there's a jwt token in the response
+            // login successful if there's a token in the response
             var user = response.json();
-            if (user && user.token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
+            console.log("Access token:::::::::::::::::" + JSON.stringify(user));
+            if (user.accessToken) {
+                // store user details and  token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('currentUser', JSON.stringify(user));
+                var currentUserStorage = localStorage.getItem('currentUser');
+                var accessToken = JSON.parse(currentUserStorage).accessToken;
             }
             return user;
         });

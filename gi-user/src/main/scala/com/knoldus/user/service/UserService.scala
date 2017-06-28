@@ -28,7 +28,7 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     val password = generateRandomString(PasswordLength)
     val message = addUserMessage(userRegisterRequest.name, userRegisterRequest.email, password)
     val user = User(uuid, uuid, userRegisterRequest.employeeId, userRegisterRequest.name, userRegisterRequest.email,
-      generateHashedPassword(password), userRegisterRequest.role, currentTimestamp, currentTimestamp)
+     generateHashedPassword(password), userRegisterRequest.role, currentTimestamp, currentTimestamp)
 
     for {
       insertedRecord <- userComponent.insert(user)
@@ -57,7 +57,9 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     *
     * @return
     */
-  def getAllUsers: Future[List[User]] = userComponent.getAllUser
+  def getAllUsers: Future[List[User]] = userComponent.getAllUser.map { users =>
+    users
+  }
 
 
   /**
