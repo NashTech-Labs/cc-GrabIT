@@ -47,8 +47,9 @@ lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
 // -------------------------------------------------------------------------------------------------------------------
 
 lazy val giAsset = Project("gi-asset", file("gi-asset"))
+  .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile() ++ test())
+  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpCors, scalaGuice) ++ test(akkaHttpTestKit, mockito, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // BOOKING

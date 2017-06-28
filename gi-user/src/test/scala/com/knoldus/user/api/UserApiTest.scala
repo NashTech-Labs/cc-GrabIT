@@ -3,10 +3,9 @@ package com.knoldus.user.api
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
-import com.knoldus.notify.email.EmailUtility
+import com.knoldus.user.Constants.Employee
 import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
-import com.knoldus.user.Constants.Employee
 import com.knoldus.utils.models.User
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -100,7 +99,7 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     }
   }
 
-  test("user Api route for failure case") {
+  test("user Api route to add user for failure case") {
     val accessToken = Math.random().toString
     when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     when(mockUserService.addUser(userRegisterRequest)).thenReturn(Future.failed(new RuntimeException("Invalid user")))
