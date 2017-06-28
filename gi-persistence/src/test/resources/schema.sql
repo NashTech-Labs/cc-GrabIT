@@ -32,5 +32,6 @@ CREATE TABLE IF NOT EXISTS booking (
   action_performed_by TEXT,
   booking_date timestamp,
   start_time timestamp,
-  end_time timestamp
+  end_time timestamp,
+  finish_time timestamp
 );
