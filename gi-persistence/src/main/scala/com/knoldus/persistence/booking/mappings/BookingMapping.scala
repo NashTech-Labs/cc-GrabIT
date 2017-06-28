@@ -18,13 +18,13 @@ trait BookingMapping {
 
     def assetId: Rep[String] = column[String]("asset_id")
 
-    def userRating: Rep[Int] = column[Int]("user_rating")
+    def userRating: Rep[Option[Int]] = column[Option[Int]]("user_rating")
 
-    def userFeedback: Rep[String] = column[String]("user_feedback")
+    def userFeedback: Rep[Option[String]] = column[Option[String]]("user_feedback")
 
-    def assetRating: Rep[Int] = column[Int]("asset_rating")
+    def assetRating: Rep[Option[Int]] = column[Option[Int]]("asset_rating")
 
-    def assetFeedback: Rep[String] = column[String]("asset_feedback")
+    def assetFeedback: Rep[Option[String]] = column[Option[String]]("asset_feedback")
 
     def status: Rep[String] = column[String]("status")
 
@@ -35,6 +35,8 @@ trait BookingMapping {
     def startTime: Rep[Timestamp] = column[Timestamp]("start_time")
 
     def endTime: Rep[Timestamp] = column[Timestamp]("end_time")
+
+    def finishTime: Rep[Option[Timestamp]] = column[Option[Timestamp]]("finish_time")
 
     def * : ProvenShape[Booking] = (
       id,
@@ -48,8 +50,9 @@ trait BookingMapping {
       actionPerformedBy,
       bookingDate,
       startTime,
-      endTime
-      ) <> (Booking.tupled, Booking.unapply)
+      endTime,
+      finishTime
+    ) <> (Booking.tupled, Booking.unapply)
   }
 
   val bookingInfo: TableQuery[BookingMapping] = TableQuery[BookingMapping]
