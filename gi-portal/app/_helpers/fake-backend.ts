@@ -11,13 +11,13 @@ export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOpt
         setTimeout(() => {
 
             // authenticate
-            if (connection.request.url.endsWith('/api/authenticate') && connection.request.method === RequestMethod.Post) {
+            if (connection.request.url.endsWith('http://localhost:9999/signin') && connection.request.method === RequestMethod.Post) {
                 // get parameters from post request
                 let params = JSON.parse(connection.request.getBody());
 
                 // find if any user matches login credentials
                 let filteredUsers = users.filter(user => {
-                    return user.username === params.username && user.password === params.password;
+                    return user.email === params.email && user.password === params.password;
                 });
 
                 if (filteredUsers.length) {
@@ -26,11 +26,16 @@ export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOpt
                     connection.mockRespond(new Response(new ResponseOptions({
                         status: 200,
                         body: {
-                            id: user.id,
-                            username: user.username,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            token: 'fake-jwt-token'
+
+                            id :user.id,
+                            accessToken : user.accessToken,
+                            employeeId : user.employeeId ,
+                            name:user.name,
+                            email : user.email,
+                            password : user.password,
+                            role : user.role,
+                            createdAt : user.createdAt,
+                            lastModifiedAt : user.lastModifiedAt
                         }
                     })));
                 } else {
@@ -40,6 +45,42 @@ export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOpt
 
                 return;
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             // get users
             if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Get) {

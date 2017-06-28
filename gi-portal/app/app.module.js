@@ -11,19 +11,16 @@ var platform_browser_1 = require("@angular/platform-browser");
 var forms_1 = require("@angular/forms");
 var http_1 = require("@angular/http");
 var common_1 = require("@angular/common");
-// used to create fake backend
-var index_1 = require("./_helpers/index");
-var testing_1 = require("@angular/http/testing");
-var http_2 = require("@angular/http");
 var app_component_1 = require("./app.component");
 var app_routing_1 = require("./app.routing");
 var manage_module_1 = require("./manage/manage.module");
-var index_2 = require("./_directives/index");
-var index_3 = require("./_guards/index");
-var index_4 = require("./_services/index");
+var index_1 = require("./_directives/index");
+var index_2 = require("./_guards/index");
+var index_3 = require("./_services/index");
 var home_modue_1 = require("./home/home.modue");
-var index_5 = require("./login/index");
-var index_6 = require("./register/index");
+var index_4 = require("./login/index");
+var index_5 = require("./register/index");
+var ng2_charts_1 = require("ng2-charts");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -38,23 +35,20 @@ AppModule = __decorate([
             app_routing_1.routing,
             manage_module_1.ManageModule,
             home_modue_1.HomeModule,
-            common_1.CommonModule
+            common_1.CommonModule,
+            ng2_charts_1.ChartsModule
         ],
         declarations: [
             app_component_1.AppComponent,
-            index_2.AlertComponent,
-            index_5.LoginComponent,
-            index_6.RegisterComponent
+            index_1.AlertComponent,
+            index_4.LoginComponent,
+            index_5.RegisterComponent
         ],
         providers: [
-            index_3.AuthGuard,
-            index_4.AlertService,
-            index_4.AuthenticationService,
-            index_4.UserService,
-            // providers used to create fake backend
-            index_1.fakeBackendProvider,
-            testing_1.MockBackend,
-            http_2.BaseRequestOptions
+            index_2.AuthGuard,
+            index_3.AlertService,
+            index_3.AuthenticationService,
+            index_3.UserService,
         ],
         bootstrap: [app_component_1.AppComponent]
     })

@@ -2,6 +2,8 @@ package com.knoldus.user.model
 
 import com.knoldus.user.Constants._
 
+import scala.util.{Failure, Success, Try}
+
 case class UserRegisterRequest(employeeId: String, name: String, email: String, role: String) {
 
     require(name.trim.length > 0, "Name should not be empty")

@@ -18,41 +18,48 @@ export class UsersService {
 
 constructor(private http:Http) {}
 
-   // Api urls of backend
-    private listUsersApi = '/api/';
-    private addUserApi = '/adduserApi/';
+
+    private currentUserStorage = localStorage.getItem('currentUser');
+    private accessToken = JSON.parse(this.currentUserStorage).accessToken;
+
+    // Api urls of backend
+    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken='+this.accessToken;
+    private addUserApi = 'http://localhost:9999/user/add?accessToken='+this.accessToken;
 
 
-   //addUser method to add the user
+
+    /*
+     * addUser method to add the user
+     */
+
     addUser(user: UserModel): Observable<any> {
-    let jsonHeader = new Headers({
-      'Content-Type': 'application/json'
-    });
-    let obj = {
-      name: user.name,
-      emailId: user.emailId,
-      employeeId: user.employeeId,
-      role: user.role
-    };
-    return this.http.post(this.addUserApi, obj, {headers: jsonHeader})
-      .map(data => {
-        return this.eaxtractData(data)
-      })
-  }
+        let jsonHeader = new Headers({
+          'Content-Type': 'application/json'
+        });
+        let obj = {
+          name: user.name,
+          email: user.emailId,
+          employeeId: user.employeeId,
+          role: user.role
+        };
+        return this.http.post(this.addUserApi, obj, {headers: jsonHeader})
+          .map(data => {
+            return this.eaxtractData(data)
+          })
+      }
 
    // getting the list of user
     getUserList(){
           return this.http.get(this.listUsersApi).map(
             (response: Response) => response.json()
           )
-        .catch(this._errorHandler);
+        // .catch(this._errorHandler);
       }
 
     _errorHandler(error: Response){
         console.error("Problem in service:::: " + error);
-        return Observable.throw(error || "Server Error");
+        // return Observable.throw(error || "Server Error");
       }
-
 
     eaxtractData(res: any) {
       let body = res.json();
