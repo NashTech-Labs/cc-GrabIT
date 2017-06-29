@@ -7,9 +7,9 @@ import { User } from '../_models/index';
 export class UserService {
     constructor(private http: Http) { }
 
-    getAll() {
-        return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
-    }
+    // getAll() {
+    //     return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());
+    // }
 
     getById(id: number) {
         return this.http.get('/api/users/' + id, this.jwt()).map((response: Response) => response.json());

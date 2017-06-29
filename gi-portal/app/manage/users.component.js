@@ -29,15 +29,18 @@ var UserComponent = (function () {
             _this.userData = data;
         });
     };
+    /**
+     * onSubmit method to store the new employee/admin details
+     * @param value
+     */
     UserComponent.prototype.onSubmit = function (value) {
         var _this = this;
         this.usersService.addUser(this.user).subscribe(function (data) {
             _this.returnedUseraddResponse = data;
             _this.formValues = value;
-            console.log(">>>>>>>>>>>>>>.." + JSON.stringify(data));
-            jQuery(_this.elementRef.nativeElement).find('#menu-toggle').on('click', function (e) {
-                jQuery("#newUserModal").modal('hide');
-            });
+            swal('Good job!', 'New user has been added!', 'success');
+            jQuery(".modal-body input").val("");
+            jQuery('#newUserModal').modal('hide');
         });
     };
     return UserComponent;
@@ -46,7 +49,7 @@ UserComponent = __decorate([
     core_1.Component({
         selector: 'userform',
         templateUrl: 'app/manage/users.component.html',
-        styles: ["\n      input.ng-invalid{border-left: 5px solid red}\n      input.ng-valid{border-left:5px solid green}\n  "]
+        styleUrls: ['app/assets/css/user.component.css']
     }),
     __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router, core_1.ElementRef])
 ], UserComponent);
