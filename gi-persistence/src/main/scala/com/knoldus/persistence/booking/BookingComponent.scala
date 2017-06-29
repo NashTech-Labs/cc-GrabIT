@@ -1,6 +1,7 @@
-package com.knoldus.persistence.booking.mappings
+package com.knoldus.persistence.booking
 
 import com.knoldus.persistence.PostgresDbComponent
+import com.knoldus.persistence.booking.mappings.BookingMapping
 import com.knoldus.persistence.db.DBComponent
 import com.knoldus.utils.models.Booking
 
@@ -41,7 +42,7 @@ trait BookingComponent extends BookingMapping {
     * @param assetRating
     * @return
     */
-  def updateAssetFeedbackDetails(bookingId: String, assetRating: Int, assetFeedback: String): Future[Int] = {
+  def updateAssetFeedbackDetails(bookingId: String, assetRating: Option[Int], assetFeedback: Option[String]): Future[Int] = {
     db.run(bookingInfo.filter(bookingData => bookingData.id === bookingId)
       .map(value => (value.assetRating, value.assetFeedback))
       .update((assetRating, assetFeedback)))
@@ -55,7 +56,7 @@ trait BookingComponent extends BookingMapping {
     * @param userFeedback
     * @return
     */
-  def updateUserFeedbackDetails(bookingId: String, userRating: Int, userFeedback: String): Future[Int] = {
+  def updateUserFeedbackDetails(bookingId: String, userRating: Option[Int], userFeedback: Option[String]): Future[Int] = {
     db.run(bookingInfo.filter(bookingData => bookingData.id === bookingId)
       .map(value => (value.userRating, value.userFeedback))
       .update((userRating, userFeedback)))
