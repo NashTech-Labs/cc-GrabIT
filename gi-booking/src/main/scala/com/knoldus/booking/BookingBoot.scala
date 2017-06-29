@@ -15,7 +15,7 @@ object BookingBoot {
 
   val bookingApi = injector.instance[BookingApi]
 
-  implicit val system = ActorSystem("com.knoldus.booking.service.service.api-actor-system")
+  implicit val system = ActorSystem("booking-api-actor-system")
   implicit val materializer = ActorMaterializer()
   Http().bindAndHandle(bookingApi.routes, "localhost", Port)
 }

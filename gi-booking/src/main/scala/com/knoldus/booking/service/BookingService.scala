@@ -7,6 +7,7 @@ import com.knoldus.booking.model.BookingRequest
 import com.knoldus.persistence.booking.BookingComponent
 import com.knoldus.utils.CommonUtility._
 import com.knoldus.utils.models.Booking
+import com.knoldus.booking.Constants.BOOKED
 
 import scala.concurrent.Future
 
@@ -21,7 +22,7 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
     */
   def addBooking(bookingRequest: BookingRequest): Future[Int] = {
 
-    val bookingData = Booking(getUUID, bookingRequest.userId, bookingRequest.assetId, None, None, None, None, "Booked", bookingRequest.actionPerformedBy,
+    val bookingData = Booking(getUUID, bookingRequest.userId, bookingRequest.assetId, None, None, None, None, BOOKED, None,
       Timestamp.valueOf(bookingRequest.bookingDate), Timestamp.valueOf(bookingRequest.startTime), Timestamp.valueOf(bookingRequest.endTime), None)
 
     bookingComponent.insert(bookingData)

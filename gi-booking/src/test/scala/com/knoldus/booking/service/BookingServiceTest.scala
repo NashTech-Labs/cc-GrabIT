@@ -17,7 +17,7 @@ class BookingServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
 
   val bookingService = new BookingService(mockBookingComponent)
 
-  val bookingRequest = BookingRequest("123","a-123", "anurag","2017-06-26 18:48:05.123","2017-06-27 18:48:05.123","2017-06-27 17:48:05.123")
+  val bookingRequest = BookingRequest("123", "a-123", "2017-06-26 18:48:05.123", "2017-06-27 18:48:05.123", "2017-06-27 17:48:05.123")
   test("add booking functionality when booking gets added successfully") {
 
     when(mockBookingComponent.insert(any[Booking])).thenReturn(Future.successful(1))

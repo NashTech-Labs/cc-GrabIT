@@ -28,7 +28,7 @@ trait BookingMapping {
 
     def status: Rep[String] = column[String]("status")
 
-    def actionPerformedBy: Rep[String] = column[String]("action_performed_by")
+    def actionPerformedBy: Rep[Option[String]] = column[Option[String]]("action_performed_by")
 
     def bookingDate: Rep[Timestamp] = column[Timestamp]("booking_date")
 

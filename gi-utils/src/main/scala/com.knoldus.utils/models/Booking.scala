@@ -11,7 +11,7 @@ case class Booking(
                     assetRating: Option[Int],
                     assetFeedback: Option[String],
                     status: String,
-                    actionPerformedBy: String,
+                    actionPerformedBy: Option[String],
                     bookingDate: Timestamp,
                     startTime: Timestamp,
                     endTime: Timestamp,

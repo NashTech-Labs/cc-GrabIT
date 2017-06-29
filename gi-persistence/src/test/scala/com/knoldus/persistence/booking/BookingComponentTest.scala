@@ -11,7 +11,7 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
 
   test("Insert booking record in database successfully") {
     val timestamp = new Timestamp(123)
-    val booking = Booking("id-2", "user-id-1", "asset-id-1", Some(4), Some("user rating"), Some(3), Some("asset rating"), "booked", "user-id-2",
+    val booking = Booking("id-2", "user-id-1", "asset-id-1", Some(4), Some("user rating"), Some(3), Some("asset rating"), "booked", Some("user-id-2"),
       timestamp, timestamp, timestamp, Some(timestamp))
     val result = insert(booking)
     result.map(count => assert(count === 1))
@@ -19,7 +19,7 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
 
   test("Insert booking record in database when primary key already exists") {
     val timestamp = new Timestamp(123)
-    val booking = Booking("id-1", "user-id-1", "asset-id-1", Some(4), Some("user rating"), Some(3), Some("asset rating"), "booked", "user-id-2",
+    val booking = Booking("id-1", "user-id-1", "asset-id-1", Some(4), Some("user rating"), Some(3), Some("asset rating"), "booked", Some("user-id-2"),
       timestamp, timestamp, timestamp, Some(timestamp))
     val result = insert(booking)
     recoverToSucceededIf[JdbcSQLException](result)
