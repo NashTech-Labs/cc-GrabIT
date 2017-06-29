@@ -23,10 +23,6 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
   val bookingApi = new BookingApi(mockBookingService)
 
   import bookingApi._
-/*
-(userId: String, assetId: String, actionPerformedBy: String, bookingDate : String, startTime: String,
-                          endTime: String
- */
   val bookingRequest = BookingRequest("123", "a-123", "anurag", "2017-06-26 18:48:05.123", "2017-06-27 18:48:05.123", "2017-06-27 17:48:05.123")
 
   test("booking Api route to add booking") {
