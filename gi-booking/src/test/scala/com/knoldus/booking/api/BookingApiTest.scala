@@ -23,9 +23,12 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
   val bookingApi = new BookingApi(mockBookingService)
 
   import bookingApi._
-
+/*
+(userId: String, assetId: String, actionPerformedBy: String, bookingDate : String, startTime: String,
+                          endTime: String
+ */
   val bookingRequest = BookingRequest("123", "a-123", "anurag", "2017-06-26 18:48:05.123", "2017-06-27 18:48:05.123", "2017-06-27 17:48:05.123")
-  val bookingRequest1 = BookingRequest("123", "a-123", "", "2017-06-26 18:48:05.123", "2017-06-27 18:48:05.123", "2017-06-27 17:48:05.123")
+
   test("booking Api route to add booking") {
     when(mockBookingService.addBooking(bookingRequest)).thenReturn(Future.successful(1))
     Post(s"/booking/add", bookingRequest.asJson.noSpaces) ~> addBooking ~> check {
@@ -34,11 +37,63 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     }
   }
 
-/*  test("booking Api route to add booking when action perform by empty") {
-   // when(mockBookingService.addBooking(bookingRequest)).thenReturn(Future.successful(0))
-    Post(s"/booking/add", bookingRequest1.asJson.noSpaces) ~> addBooking ~> check {
+  test("booking Api route to add booking when action perform by empty") {
+    val bookingRequestJson =
+      """{"userId":"123","assetId":"a-123","actionPerformedBy":"","bookingDate":"2017-06-26 18:48:05.123",
+        |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
+    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
       status shouldBe StatusCodes.BadRequest
-      responseAs[String] should contain "Action Performer name should not be empty"
+      responseAs[String] should include regex "Action Performer name should not be empty"
     }
-  }*/
+  }
+
+  test("booking Api route to add booking when userId empty") {
+    val bookingRequestJson =
+      """{"userId":"","assetId":"a-123","actionPerformedBy":"Anurag","bookingDate":"2017-06-26 18:48:05.123",
+        |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
+    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "User Id should not be empty"
+    }
+  }
+
+  test("booking Api route to add booking when assetId empty") {
+    val bookingRequestJson =
+      """{"userId":"123","assetId":"","actionPerformedBy":"Anurag","bookingDate":"2017-06-26 18:48:05.123",
+        |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
+    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Asset Id should not be empty"
+    }
+  }
+
+  test("booking Api route to add booking when bookingDate empty") {
+    val bookingRequestJson =
+      """{"userId":"123","assetId":"a-123","actionPerformedBy":"Anurag","bookingDate":"",
+        |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
+    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Booking Date should not be empty"
+    }
+  }
+
+  test("booking Api route to add booking when startTime empty") {
+    val bookingRequestJson =
+      """{"userId":"123","assetId":"a-123","actionPerformedBy":"Anurag","bookingDate":"2017-06-26 18:48:05.123",
+        |"startTime":"","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
+    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Start Time should not be empty"
+    }
+  }
+
+  test("booking Api route to add booking when endTime empty") {
+    val bookingRequestJson =
+      """{"userId":"123","assetId":"a-123","actionPerformedBy":"Anurag","bookingDate":"2017-06-26 18:48:05.123",
+        |"startTime":"2017-06-27 18:48:05.123","endTime":""}""".stripMargin
+    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "End Time should not be empty"
+    }
+  }
 }
