@@ -18,15 +18,14 @@ var HomeComponent = (function () {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
     HomeComponent.prototype.ngOnInit = function () {
-        this.loadAllUsers();
+        // this.loadAllUsers();
     };
     HomeComponent.prototype.deleteUser = function (id) {
         var _this = this;
         this.userService.delete(id).subscribe(function () { _this.loadAllUsers(); });
     };
     HomeComponent.prototype.loadAllUsers = function () {
-        var _this = this;
-        this.userService.getAll().subscribe(function (users) { _this.users = users; });
+        // this.userService.getAll().subscribe(users => { this.users = users; });
     };
     return HomeComponent;
 }());
