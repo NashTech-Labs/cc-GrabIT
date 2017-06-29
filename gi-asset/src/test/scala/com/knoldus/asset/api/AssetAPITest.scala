@@ -9,9 +9,15 @@ import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{AsyncFunSuite, Matchers}
 import com.knoldus.asset.TestData._
+import com.knoldus.utils.json.JsonHelper
+import com.knoldus.utils.models.Asset
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
+
 import scala.concurrent.Future
 
-class AssetAPITest extends AsyncFunSuite with ScalatestRouteTest with Matchers with MockitoSugar {
+class AssetAPITest extends AsyncFunSuite with ScalatestRouteTest with Matchers with MockitoSugar with JsonHelper {
 
   val mockAssetService = mock[AssetService]
   val assetAPI = new AssetAPI(mockAssetService)
@@ -50,4 +56,30 @@ class AssetAPITest extends AsyncFunSuite with ScalatestRouteTest with Matchers w
       responseAs[String] should include regex "Internal Server Error"
     }
   }
+
+  test("get All users Api route successfully") {
+    when(mockAssetService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockAssetService.getAllAssets).thenReturn(Future.successful(List(asset)))
+    Get(s"/asset/get/all?accessToken=$accessToken") ~> getAllAssets ~> check {
+      status shouldBe StatusCodes.OK
+      decode[List[Asset]](responseAs[String]).right.get shouldBe List(asset)
+    }
+  }
+
+  test("get All users Api route when user is not admin") {
+    when(mockAssetService.isAdmin(accessToken)).thenReturn(Future.successful(false))
+    Get(s"/asset/get/all?accessToken=$accessToken") ~> getAllAssets ~> check {
+      rejection shouldBe AuthorizationFailedRejection
+    }
+  }
+
+  test("get All users Api route when asset service fails") {
+    when(mockAssetService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockAssetService.getAllAssets).thenReturn(Future.failed(new RuntimeException))
+    Get(s"/asset/get/all?accessToken=$accessToken") ~> getAllAssets ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }
+
 }

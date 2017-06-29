@@ -1,11 +1,13 @@
 package com.knoldus.persistence.user
 
+import com.google.inject.ImplementedBy
 import com.knoldus.persistence.user.mappings.UserMapping
 import com.knoldus.persistence.{DBComponent, PostgresDbComponent}
 import com.knoldus.utils.models.User
 
 import scala.concurrent.Future
 
+@ImplementedBy(classOf[UserPostgresComponent])
 trait UserComponent extends UserMapping {
 
   this: DBComponent =>
@@ -62,4 +64,4 @@ trait UserComponent extends UserMapping {
   }
 }
 
-class UserComponentPostgres extends UserComponent with PostgresDbComponent
+class UserPostgresComponent extends UserComponent with PostgresDbComponent

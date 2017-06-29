@@ -4,7 +4,7 @@ import java.sql.Timestamp
 
 import com.knoldus.asset.model.AssetRequest
 import com.knoldus.utils.json.JsonHelper
-import com.knoldus.utils.models.User
+import com.knoldus.utils.models.{Asset, User}
 import io.circe.generic.auto._
 import io.circe.syntax._
 
@@ -16,4 +16,6 @@ object TestData extends JsonHelper {
 
   val assetRequest = AssetRequest("projector 1", "projectorUnique1", "projector")
   val assetRequestJson = assetRequest.asJson.noSpaces
+
+  val asset = Asset("id", "projector 1", "projectorUnique1", "projector", true, testTimestamp, testTimestamp)
 }

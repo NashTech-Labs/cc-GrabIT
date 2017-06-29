@@ -4,11 +4,12 @@ import akka.http.scaladsl.model.{HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import com.knoldus.asset.model.AssetRequest
+import com.knoldus.utils.json.JsonHelper
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-trait AssetApiHelper {
+trait AssetApiHelper extends JsonHelper {
 
   def handleAddAsset(assetRequest: AssetRequest, addAsset: (AssetRequest) => Future[Int]): Route = {
     onComplete(addAsset(assetRequest)) {
