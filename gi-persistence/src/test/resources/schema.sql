@@ -13,11 +13,12 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS asset (
   id VARCHAR(20) PRIMARY KEY,
   name TEXT,
-  unique_name TEXT,
+  unique_name VARCHAR(20),
   type TEXT,
   is_available Boolean,
   created_at timestamp,
-  last_modified_at timestamp
+  last_modified_at timestamp,
+  UNIQUE KEY unique_name_key (unique_name)
 );
 
 CREATE TABLE IF NOT EXISTS booking (

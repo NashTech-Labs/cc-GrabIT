@@ -15,7 +15,7 @@ import io.circe.syntax._
 import scala.util.{Failure, Success, Try}
 
 
-class UserApi @Inject()(userService: UserService ) extends UserApiHelper {
+class UserApi @Inject()(userService: UserService) extends UserApiHelper {
 
   /**
     * Creates http route for add user
