@@ -3,7 +3,6 @@ package com.knoldus.user.service
 import com.google.inject.Inject
 import com.knoldus.notify.email.EmailUtility
 import com.knoldus.persistence.user.UserComponent
-import com.knoldus.user.Constants.Admin
 import com.knoldus.user.model.{SignInRequest, UserRegisterRequest}
 import com.knoldus.user.utils.PasswordHashing._
 import com.knoldus.utils.CommonUtility._

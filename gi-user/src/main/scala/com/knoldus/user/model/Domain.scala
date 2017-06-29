@@ -1,8 +1,7 @@
 package com.knoldus.user.model
 
-import com.knoldus.user.Constants._
-
-import scala.util.{Failure, Success, Try}
+import com.knoldus.utils.Constants._
+import com.knoldus.user.Constants.EmailPattern
 
 case class UserRegisterRequest(employeeId: String, name: String, email: String, role: String) {
 

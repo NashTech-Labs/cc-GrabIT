@@ -3,7 +3,7 @@ package com.knoldus.user.api
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
-import com.knoldus.user.Constants.Employee
+import com.knoldus.utils.Constants.Employee
 import com.knoldus.user.TestData._
 import com.knoldus.user.service.UserService
 import com.knoldus.utils.models.User
