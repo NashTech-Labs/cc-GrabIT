@@ -1,5 +1,6 @@
 package com.knoldus.persistence.booking
 
+import com.google.inject.ImplementedBy
 import com.knoldus.persistence.PostgresDbComponent
 import com.knoldus.persistence.booking.mappings.BookingMapping
 import com.knoldus.persistence.db.DBComponent
@@ -7,6 +8,7 @@ import com.knoldus.utils.models.Booking
 
 import scala.concurrent.Future
 
+@ImplementedBy(classOf[BookingPostgresComponent])
 trait BookingComponent extends BookingMapping {
 
   this: DBComponent =>
@@ -63,4 +65,4 @@ trait BookingComponent extends BookingMapping {
   }
 }
 
-class BookingPOstgresComponent extends BookingComponent with PostgresDbComponent
+class BookingPostgresComponent extends BookingComponent with PostgresDbComponent

@@ -40,7 +40,7 @@ lazy val giUser = Project("gi-user", file("gi-user"))
 lazy val giPersistence = Project("gi-persistence", file("gi-persistence"))
   .dependsOn(giUtils)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP) ++ test(h2DB, scalaTest))
+  .settings(libraryDependencies ++= compile(postgresql, slick, hikariCP, scalaGuice) ++ test(h2DB, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // ASSET
@@ -58,7 +58,7 @@ lazy val giAsset = Project("gi-asset", file("gi-asset"))
 lazy val giBooking = Project("gi-booking", file("gi-booking"))
   .dependsOn(giUtils, giPersistence)
   .settings(basicSettings: _*)
-  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpCors, scalaGuice, jbCrypt) ++ test(akkaHttpTestKit, mockito, scalaTest))
+  .settings(libraryDependencies ++= compile(akkaHttp, akkaHttpCors, scalaGuice) ++ test(akkaHttpTestKit, mockito, scalaTest))
 
 // -------------------------------------------------------------------------------------------------------------------
 // NOTIFY

@@ -26,20 +26,26 @@ class AssetServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
   }
 
   test("whether user is admin successfully") {
-    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(Some(user)))
-    val output = assetService.isAdmin(accessToken)
-    output.map(result => result shouldBe true)
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future.successful(Some(user)))
+    val result = assetService.isAdmin(accessToken)
+    result.map(isAdmin => isAdmin shouldBe true)
   }
 
   test("whether user is admin if role is Employee") {
-    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(Some(user.copy(role = "Employee"))))
-    val output = assetService.isAdmin(accessToken)
-    output.map(result => result shouldBe false)
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future.successful(Some(user.copy(role = "Employee"))))
+    val result = assetService.isAdmin(accessToken)
+    result.map(isAdmin => isAdmin shouldBe false)
   }
 
   test("whether user is admin if user is not present") {
-    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(None))
-    val output = assetService.isAdmin(accessToken)
-    output.map(result => result shouldBe false)
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future.successful(None))
+    val result = assetService.isAdmin(accessToken)
+    result.map(isAdmin => isAdmin shouldBe false)
+  }
+
+  test("get all assets functionality") {
+    when(mockAssetComponent.getAllAsset).thenReturn(Future.successful(List(asset)))
+    val result = assetService.getAllAssets
+    result.map(assets => assets shouldBe List(asset))
   }
 }

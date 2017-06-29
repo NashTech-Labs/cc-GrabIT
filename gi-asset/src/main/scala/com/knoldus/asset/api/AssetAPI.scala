@@ -10,6 +10,7 @@ import com.knoldus.asset.model.AssetRequest
 import com.knoldus.asset.service.AssetService
 import io.circe.generic.auto._
 import io.circe.parser._
+import io.circe.syntax._
 
 import scala.util.{Failure, Success, Try}
 
@@ -41,6 +42,26 @@ class AssetAPI @Inject()(assetService: AssetService) extends AssetApiHelper {
     }
   }
 
-  val routes = addAsset
+  /**
+    * Creates http route to get list of all assets
+    * @return
+    */
+  def getAllAssets: Route =
+    cors() {
+      path("asset" / "get" / "all") {
+        get {
+          parameters("accessToken") { accessToken =>
+            authorizeAsync(_ => assetService.isAdmin(accessToken)) {
+              onComplete(assetService.getAllAssets) {
+                case Success(assets) => complete(HttpResponse(StatusCodes.OK, entity = assets.asJson.toString))
+                case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+              }
+            }
+          }
+        }
+      }
+    }
+
+  val routes = addAsset ~ getAllAssets
 
 }

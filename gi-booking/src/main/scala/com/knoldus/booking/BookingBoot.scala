@@ -10,7 +10,7 @@ import com.knoldus.booking.module.BookingModule
 import net.codingwell.scalaguice.InjectorExtensions._
 
 
-object BookingBoot {
+object BookingBoot extends App {
   val injector = Guice.createInjector(new BookingModule)
 
   val bookingApi = injector.instance[BookingApi]

@@ -16,7 +16,7 @@ class AssetService @Inject()(assetComponent: AssetComponent, userComponent: User
   /**
     * Insert asset record
     * @param assetRequest
-    * @return
+    * @return Future[Int]
     */
   def insert(assetRequest: AssetRequest): Future[Int] = {
     val cuurentTime = getCurrentTimestamp
@@ -26,9 +26,15 @@ class AssetService @Inject()(assetComponent: AssetComponent, userComponent: User
   }
 
   /**
+    * Fetches list of all assets
+    * @return
+    */
+  def getAllAssets: Future[List[Asset]] = assetComponent.getAllAsset
+
+  /**
     * Checks if a user is admin
     * @param accessToken
-    * @return
+    * @return Future[List[Asset]]
     */
   def isAdmin(accessToken: String): Future[Boolean] = {
     userComponent.getUserByAccessToken(accessToken).map { user =>

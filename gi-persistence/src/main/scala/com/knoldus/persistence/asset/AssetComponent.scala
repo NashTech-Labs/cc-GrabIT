@@ -1,10 +1,12 @@
 package com.knoldus.persistence.asset.mappings
 
+import com.google.inject.ImplementedBy
 import com.knoldus.persistence._
 import com.knoldus.utils.models.Asset
 
 import scala.concurrent.Future
 
+@ImplementedBy(classOf[AssetPostgresComponent])
 trait AssetComponent extends AssetMapping {
 
   this: DBComponent =>
