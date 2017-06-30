@@ -18,9 +18,12 @@ var UserComponent = (function () {
         this.usersService = usersService;
         this.route = route;
         this.router = router;
-        this.user = new userModel_1.UserModel('', '', '', '');
+        this.user = new userModel_1.UserModel('', '', '', 'ADMINNN');
         this.userData = [];
         this.formValues = [];
+        this.roles = [
+            "admin", "employee"
+        ];
     }
     UserComponent.prototype.ngOnInit = function () {
         var _this = this;

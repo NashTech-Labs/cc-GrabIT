@@ -17,12 +17,14 @@ export class UserComponent implements OnInit {
     }
 
     index: string;
-    user: UserModel = new UserModel('', '', '', '');
+    user: UserModel = new UserModel('', '', '', 'ADMINNN');
     returnedUseraddResponse: any;
     userData: any = [];
     formValues: any = [];
     elementRef: ElementRef;
-
+    private roles = [
+        "admin", "employee"
+    ];
     ngOnInit() {
         // Getting the list of users when users view appear
         this.usersService.getUserList().subscribe(
