@@ -39,7 +39,14 @@ var LoginComponent = (function () {
         this.authenticationService.login(this.model.email, this.model.password)
             .subscribe(function (data) {
             // this.router.navigate([this.returnUrl]);
-            _this.router.navigate(['/home/manage/dashboard']);
+            var userRole = data.role;
+            console.log("User data:::::::::::::::::::::::" + userRole);
+            if (userRole === 'admin') {
+                _this.router.navigate(['/home/manage/dashboard']);
+            }
+            else {
+                _this.router.navigate(['/home/user/dashboard']);
+            }
         }, function (error) {
             _this.alertService.error(error);
             _this.loading = false;

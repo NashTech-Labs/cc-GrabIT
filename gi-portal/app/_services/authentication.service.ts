@@ -20,8 +20,6 @@ export class AuthenticationService {
             .map((response: Response) => {
                 // login successful if there's a token in the response
                 let user = response.json();
-
-                console.log("Access token:::::::::::::::::"+ JSON.stringify(user));
                 if (user.accessToken) {
                     // store user details and  token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));

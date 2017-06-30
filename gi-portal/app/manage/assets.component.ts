@@ -31,7 +31,6 @@ export class AssetsComponent implements OnInit {
         this.assetsService.getAssetsList().subscribe(
             (data) => {
                 this.assetsData = data;
-                console.log("responded data::::::"+ JSON.stringify(this.assetsData));
             }
         )
     }

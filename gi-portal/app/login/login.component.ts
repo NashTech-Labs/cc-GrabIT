@@ -41,9 +41,16 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.model.email, this.model.password)
             .subscribe(
                 data => {
-                        // this.router.navigate([this.returnUrl]);
-                        this.router.navigate(['/home/manage/dashboard']);
+                    // this.router.navigate([this.returnUrl]);
 
+                    let userRole = data.role;
+                    console.log("User data:::::::::::::::::::::::"+ userRole);
+                    if(userRole === 'admin'){
+                        this.router.navigate(['/home/manage/dashboard']);
+                    }else {
+                        this.router.navigate(['/home/user/dashboard']);
+
+                    }
                 },
                 error => {
                     this.alertService.error(error);
