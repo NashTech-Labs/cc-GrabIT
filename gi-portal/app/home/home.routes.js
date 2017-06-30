@@ -5,6 +5,7 @@ var index_1 = require("../home/index");
 var index_2 = require("../_guards/index");
 var users_component_1 = require("../manage/users.component");
 var dashboard_component_1 = require("./dashboard.component");
+var assets_component_1 = require("../manage/assets.component");
 var routes = [
     {
         path: 'home',
@@ -14,6 +15,10 @@ var routes = [
             {
                 path: 'manage/user',
                 component: users_component_1.UserComponent
+            },
+            {
+                path: 'manage/assets',
+                component: assets_component_1.AssetsComponent
             },
             {
                 path: 'dashboard',
