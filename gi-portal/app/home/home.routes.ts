@@ -5,6 +5,7 @@ import { AuthGuard } from '../_guards/index';
 import { SidebarComponent } from '../home/sidebar.component'
 import { UserComponent } from '../manage/users.component';
 import { DashboardComponent } from './dashboard.component';
+import {AssetsComponent} from "../manage/assets.component";
 
 const routes:Routes = [ 
     {
@@ -15,6 +16,10 @@ const routes:Routes = [
             {
                 path: 'manage/user',
                 component: UserComponent
+            },
+            {
+                path: 'manage/assets',
+                component: AssetsComponent
             },
             {
                 path: 'dashboard',

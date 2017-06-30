@@ -8,11 +8,13 @@ import { CommonModule } from '@angular/common';
 
 
 import { UserComponent } from './users.component'
+import {AssetsComponent} from "./assets.component";
+import {AssetsService} from "./assets.service";
 
 
 @NgModule({
   imports:      [ manageRouting, HttpModule, FormsModule, CommonModule],
-  declarations: [  UserComponent],
-  providers:    [ UsersService, DatePipe]
+  declarations: [  UserComponent, AssetsComponent],
+  providers:    [ UsersService, DatePipe, AssetsService]
 })
 export class ManageModule {}
