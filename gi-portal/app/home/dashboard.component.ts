@@ -21,8 +21,12 @@ import {log} from "util";
 
 export class DashboardComponent implements OnInit{
 
+    private currentUserStorage = localStorage.getItem('currentUser');
+    private role = JSON.parse(this.currentUserStorage).role;
+
+
     ngOnInit(){
-        //
+
     }
 
 }

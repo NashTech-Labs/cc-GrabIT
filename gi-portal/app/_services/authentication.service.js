@@ -27,7 +27,6 @@ var AuthenticationService = (function () {
             .map(function (response) {
             // login successful if there's a token in the response
             var user = response.json();
-            console.log("Access token:::::::::::::::::" + JSON.stringify(user));
             if (user.accessToken) {
                 // store user details and  token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('currentUser', JSON.stringify(user));
