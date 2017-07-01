@@ -1,5 +1,8 @@
-# angular2-registration-login-example
+# GrabIt Frontend portal
 
-Angular 2 User Registration and Login Example & Tutorial
+Steps to run the project:
 
-To see a demo and further details go to http://jasonwatmore.com/post/2016/09/29/angular-2-user-registration-and-login-example-tutorial
+* Clone the repo
+* cd into `gi-portal`
+* run `npm install`
+* run `npm start`
