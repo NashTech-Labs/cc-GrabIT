@@ -39,6 +39,6 @@ trait UserApiHelper extends JsonHelper {
   private def getErrorMessage(error: String) = {
     if (error.contains("user_employee_id_key") || error.contains("user_email_key")) {
       "Email id or Employee Id already exists"
-    } else ex.getMessage
+    } else error
   }
 }
