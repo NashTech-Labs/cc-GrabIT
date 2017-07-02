@@ -48,7 +48,7 @@ var LoginComponent = (function () {
                 _this.router.navigate(['/home/user/dashboard']);
             }
         }, function (error) {
-            _this.alertService.error(error);
+            swal('Error Occurred', error._body, 'error');
             _this.loading = false;
         });
     };

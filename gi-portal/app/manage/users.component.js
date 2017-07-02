@@ -32,6 +32,8 @@ var UserComponent = (function () {
         // Getting the list of users when users view appear
         this.usersService.getUserList().subscribe(function (data) {
             _this.userData = data;
+        }, function (error) {
+            swal('Error Occurred', error._body, 'error');
         });
     };
     /**
@@ -47,7 +49,7 @@ var UserComponent = (function () {
             jQuery(".modal-body input").val("");
             jQuery('#newUserModal').modal('hide');
         }, function (error) {
-            swal('Error Ocuured', error._body, 'error');
+            swal('Error Occurred', error._body, 'error');
         });
     };
     return UserComponent;

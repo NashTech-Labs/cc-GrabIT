@@ -2,6 +2,8 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService, AuthenticationService } from '../_services/index';
 declare var jQuery:any;
+declare var swal: any;
+
 
 
 @Component({
@@ -53,7 +55,11 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 error => {
-                    this.alertService.error(error);
+                    swal(
+                        'Error Occurred',
+                        error._body,
+                        'error'
+                    )
                     this.loading = false;
                 });
     }

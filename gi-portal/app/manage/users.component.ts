@@ -32,6 +32,13 @@ export class UserComponent implements OnInit {
         this.usersService.getUserList().subscribe(
             (data) => {
                 this.userData = data
+            },
+            error => {
+                swal(
+                    'Error Occurred',
+                    error._body,
+                    'error'
+                )
             }
         )
     }
@@ -54,7 +61,7 @@ export class UserComponent implements OnInit {
             },
             error => {
                 swal(
-                    'Error Ocuured',
+                    'Error Occurred',
                     error._body,
                     'error'
                 )

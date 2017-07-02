@@ -30,7 +30,14 @@ export class AssetsComponent implements OnInit {
         this.assetsService.getAssetsList().subscribe(
             (data) => {
                 this.assetsData = data;
-            }
+            },
+            error => {
+            swal(
+                'Error Occurred',
+                error._body,
+                'error'
+            )
+         }
         )
     }
 
