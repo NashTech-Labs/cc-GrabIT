@@ -27,14 +27,18 @@ trait UserApiHelper extends JsonHelper {
       onComplete(addUser(userRegisterRequest)) {
         case Success(res) => complete(HttpResponse(StatusCodes.OK, entity = s"User has been Successfully Added"))
         case Failure(ex: PSQLException) =>
-          val a = if(ex.getMessage.contains("user_employee_id_key") || ex.getMessage.contains("user_email_key")) {
-            "Email id or Employee Id already exists"
-          } else ex.getMessage
-          ex.printStackTrace
-          complete(HttpResponse(StatusCodes.InternalServerError, entity = a))
+          val errorMessage = getErrorMessage(ex.getMessage)
+            ex.printStackTrace
+          complete(HttpResponse(StatusCodes.InternalServerError, entity = errorMessage))
         case Failure(ex) =>
           ex.printStackTrace
           complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
       }
+  }
+
+  private def getErrorMessage(error: String) = {
+    if (error.contains("user_employee_id_key") || error.contains("user_email_key")) {
+      "Email id or Employee Id already exists"
+    } else ex.getMessage
   }
 }

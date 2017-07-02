@@ -30,8 +30,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Asset Type</label>
-                                    <input type="text" #assetTypeRef="ngModel" required class="form-control" name="assetType"
-                                           [(ngModel)]="asset.assetType">
+
+                                    <select name="assetType" class="form-control" #assetTypeRef="ngModel" [(ngModel)]="asset.assetType" required>
+                                        <option *ngFor="let assetType of assetTypeList" [ngValue]="assetType">{{assetType}}</option>
+                                    </select>
                                     <div [hidden]="assetTypeRef.valid || assetTypeRef.pristine" class="alert alert-danger">Please
                                         enter asset type
                                     </div>

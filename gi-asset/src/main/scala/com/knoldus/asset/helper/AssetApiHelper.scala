@@ -16,11 +16,11 @@ trait AssetApiHelper extends JsonHelper {
     onComplete(addAsset(assetRequest)) {
       case Success(res) => complete(HttpResponse(StatusCodes.OK, entity = s"Asset has been Successfully Added"))
       case Failure(ex: PSQLException) =>
-        val a = if(ex.getMessage.contains("asset_unique_name_key")) {
-          "Unique name is required"
+        val errorMessage = if (ex.getMessage.contains("asset_unique_name_key")) {
+          "Asset unique name already exists"
         } else ex.getMessage
         ex.printStackTrace
-        complete(HttpResponse(StatusCodes.InternalServerError, entity = a))
+        complete(HttpResponse(StatusCodes.InternalServerError, entity = errorMessage))
       case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
     }
   }

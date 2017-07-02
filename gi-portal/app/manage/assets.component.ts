@@ -1,6 +1,3 @@
-/**
- * Created by knoldus on 29/6/17.
- */
 import {Component, ElementRef, OnInit} from "@angular/core";
 import {UserModel} from '../_models/userModel'
 import {AssetsService} from './assets.service'
@@ -24,7 +21,9 @@ export class AssetsComponent implements OnInit {
     asset: AssetsModel = new AssetsModel('', '', '');
     returnedAssetAddResponse:any =[];
     formValues: any = [];
-
+    private assetTypeList = [
+        "projector", "meeting room", "printer"
+    ];
 
     ngOnInit() {
         // Getting the list of assets when assets view appear
