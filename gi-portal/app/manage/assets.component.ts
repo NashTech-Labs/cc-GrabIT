@@ -1,6 +1,3 @@
-/**
- * Created by knoldus on 29/6/17.
- */
 import {Component, ElementRef, OnInit} from "@angular/core";
 import {UserModel} from '../_models/userModel'
 import {AssetsService} from './assets.service'
@@ -24,7 +21,9 @@ export class AssetsComponent implements OnInit {
     asset: AssetsModel = new AssetsModel('', '', '');
     returnedAssetAddResponse:any =[];
     formValues: any = [];
-
+    private assetTypeList = [
+        "projector", "meeting room", "printer"
+    ];
 
     ngOnInit() {
         // Getting the list of assets when assets view appear
@@ -41,16 +40,24 @@ export class AssetsComponent implements OnInit {
      */
     onSubmit(value: any) {
         this.assetsService.addAsset(this.asset).subscribe((data: any) => {
-            this.returnedAssetAddResponse = data;
-            this.formValues = value;
-            swal(
-                'Good job!',
-                'New asset has been added!',
-                'success'
-            )
-            jQuery(".modal-body input").val("");
-            jQuery('#newAssetModal').modal('hide');
-        })
+                this.returnedAssetAddResponse = data;
+                this.formValues = value;
+                swal(
+                    'Good job!',
+                    'New asset has been added!',
+                    'success'
+                )
+                jQuery(".modal-body input").val("");
+                jQuery('#newAssetModal').modal('hide');
+            },
+            error => {
+                swal(
+                    'Error Ocuured',
+                     error._body,
+                    'error'
+                )
+            }
+        )
     }
 
 }

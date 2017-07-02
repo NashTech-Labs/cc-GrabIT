@@ -5,6 +5,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import com.knoldus.asset.model.AssetRequest
 import com.knoldus.utils.json.JsonHelper
+import org.postgresql.util.PSQLException
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -14,6 +15,12 @@ trait AssetApiHelper extends JsonHelper {
   def handleAddAsset(assetRequest: AssetRequest, addAsset: (AssetRequest) => Future[Int]): Route = {
     onComplete(addAsset(assetRequest)) {
       case Success(res) => complete(HttpResponse(StatusCodes.OK, entity = s"Asset has been Successfully Added"))
+      case Failure(ex: PSQLException) =>
+        val errorMessage = if (ex.getMessage.contains("asset_unique_name_key")) {
+          "Asset unique name already exists"
+        } else ex.getMessage
+        ex.printStackTrace
+        complete(HttpResponse(StatusCodes.InternalServerError, entity = errorMessage))
       case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
     }
   }

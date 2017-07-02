@@ -30,6 +30,8 @@ export class UsersService {
     private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=' + this.accessToken;
     private addUserApi = 'http://localhost:9999/user/add?accessToken=' + this.accessToken;
 
+
+
     /**
      * AddUser method for adding new employee/admin
      * @param user

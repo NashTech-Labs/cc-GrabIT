@@ -13,14 +13,19 @@ var core_1 = require("@angular/core");
 var userModel_1 = require("../_models/userModel");
 var users_service_1 = require("./users.service");
 var router_1 = require("@angular/router");
+var index_1 = require("../_services/index");
 var UserComponent = (function () {
-    function UserComponent(usersService, route, router, elementRef) {
+    function UserComponent(usersService, route, router, alertService, elementRef) {
         this.usersService = usersService;
         this.route = route;
         this.router = router;
-        this.user = new userModel_1.UserModel('', '', '', '');
+        this.alertService = alertService;
+        this.user = new userModel_1.UserModel('', '', '', 'ADMINNN');
         this.userData = [];
         this.formValues = [];
+        this.roles = [
+            "admin", "employee"
+        ];
     }
     UserComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -41,6 +46,8 @@ var UserComponent = (function () {
             swal('Good job!', 'New user has been added!', 'success');
             jQuery(".modal-body input").val("");
             jQuery('#newUserModal').modal('hide');
+        }, function (error) {
+            swal('Error Ocuured', error._body, 'error');
         });
     };
     return UserComponent;
@@ -51,7 +58,8 @@ UserComponent = __decorate([
         templateUrl: 'app/manage/users.component.html',
         styleUrls: ['app/assets/css/user.component.css']
     }),
-    __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router, core_1.ElementRef])
+    __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router,
+        index_1.AlertService, core_1.ElementRef])
 ], UserComponent);
 exports.UserComponent = UserComponent;
 //# sourceMappingURL=users.component.js.map
