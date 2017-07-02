@@ -1,12 +1,19 @@
 .jumbotro {
-    background: url('../../app/assets/images/bg.gif') no-repeat center center fixed !important;
+    background: url('../../app/assets/images/bg.gif') no-repeat center top;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    background-size: cover;
-    height: 100vh;
-!important;
+    background-size: 100%;
+    background-attachment: fixed;
+    height: 100vh !important;
 }
+
+@media only screen and (max-width: 967px) and (min-width: 0px) {
+    .jumbotro {
+        background: url('../../app/assets/images/smallBg.jpg') no-repeat center top;
+    }
+}
+
 .panel-default {
     opacity: 0.9;
     margin-top: 30px;
