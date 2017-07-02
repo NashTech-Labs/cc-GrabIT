@@ -28,3 +28,10 @@
     font-family: "Open Sans";
     text-align: center;
 }
+
+
+@media only screen and (max-width: 967px) and (min-width: 0px) {
+    #dummyContent {
+        display: none;
+    }
+}
