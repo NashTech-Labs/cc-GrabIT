@@ -12,9 +12,9 @@ trait UserMapping {
   class UserMapping(tag: Tag) extends Table[User](tag, "user") {
     def id: Rep[String] = column[String]("id", O.PrimaryKey)
     def accessToken: Rep[String] = column[String]("access_token")
-    def employeeId: Rep[String] = column[String]("employee_id")
+    def employeeId: Rep[String] = column[String]("employee_id", O.Unique)
     def name: Rep[String] = column[String]("name")
-    def email: Rep[String] = column[String]("email")
+    def email: Rep[String] = column[String]("email", O.Unique)
     def password: Rep[String] = column[String]("password")
     def role: Rep[String] = column[String]("role")
     def createdAt: Rep[Timestamp] = column[Timestamp]("created_at")

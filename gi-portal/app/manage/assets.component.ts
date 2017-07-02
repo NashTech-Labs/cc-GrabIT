@@ -41,16 +41,24 @@ export class AssetsComponent implements OnInit {
      */
     onSubmit(value: any) {
         this.assetsService.addAsset(this.asset).subscribe((data: any) => {
-            this.returnedAssetAddResponse = data;
-            this.formValues = value;
-            swal(
-                'Good job!',
-                'New asset has been added!',
-                'success'
-            )
-            jQuery(".modal-body input").val("");
-            jQuery('#newAssetModal').modal('hide');
-        })
+                this.returnedAssetAddResponse = data;
+                this.formValues = value;
+                swal(
+                    'Good job!',
+                    'New asset has been added!',
+                    'success'
+                )
+                jQuery(".modal-body input").val("");
+                jQuery('#newAssetModal').modal('hide');
+            },
+            error => {
+                swal(
+                    'Error Ocuured',
+                     error._body,
+                    'error'
+                )
+            }
+        )
     }
 
 }

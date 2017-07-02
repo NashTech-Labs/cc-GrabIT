@@ -1,7 +1,8 @@
 import {Component, ElementRef, OnInit} from "@angular/core";
-import {UserModel} from '../_models/userModel'
-import {UsersService} from './users.service';
+import {UserModel} from "../_models/userModel";
+import {UsersService} from "./users.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {AlertService} from "../_services/index";
 declare var jQuery: any;
 declare var swal: any;
 
@@ -13,7 +14,8 @@ declare var swal: any;
 
 export class UserComponent implements OnInit {
 
-    constructor(private usersService: UsersService, private route: ActivatedRoute, private router: Router, elementRef: ElementRef) {
+    constructor(private usersService: UsersService, private route: ActivatedRoute, private router: Router,
+                private alertService: AlertService, elementRef: ElementRef) {
     }
 
     index: string;
@@ -40,15 +42,23 @@ export class UserComponent implements OnInit {
      */
     onSubmit(value: any) {
         this.usersService.addUser(this.user).subscribe((data: any) => {
-            this.returnedUseraddResponse = data;
-            this.formValues = value;
-            swal(
-                'Good job!',
-                'New user has been added!',
-                'success'
-            )
-            jQuery(".modal-body input").val("");
-            jQuery('#newUserModal').modal('hide');
-        })
+                this.returnedUseraddResponse = data;
+                this.formValues = value;
+                swal(
+                    'Good job!',
+                    'New user has been added!',
+                    'success'
+                )
+                jQuery(".modal-body input").val("");
+                jQuery('#newUserModal').modal('hide');
+            },
+            error => {
+                swal(
+                    'Error Ocuured',
+                    error._body,
+                    'error'
+                )
+            }
+        )
     }
 }

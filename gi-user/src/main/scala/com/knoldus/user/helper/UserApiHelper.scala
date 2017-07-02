@@ -8,6 +8,7 @@ import com.knoldus.utils.json.JsonHelper
 import com.knoldus.utils.models.User
 import io.circe.generic.auto._
 import io.circe.syntax._
+import org.postgresql.util.PSQLException
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -25,7 +26,15 @@ trait UserApiHelper extends JsonHelper {
   def handleAddUser(userRegisterRequest: UserRegisterRequest, addUser: (UserRegisterRequest) => Future[Int]): Route = {
       onComplete(addUser(userRegisterRequest)) {
         case Success(res) => complete(HttpResponse(StatusCodes.OK, entity = s"User has been Successfully Added"))
-        case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+        case Failure(ex: PSQLException) =>
+          val a = if(ex.getMessage.contains("user_employee_id_key") || ex.getMessage.contains("user_email_key")) {
+            "Email id or Employee Id already exists"
+          } else ex.getMessage
+          ex.printStackTrace
+          complete(HttpResponse(StatusCodes.InternalServerError, entity = a))
+        case Failure(ex) =>
+          ex.printStackTrace
+          complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
       }
   }
 }
