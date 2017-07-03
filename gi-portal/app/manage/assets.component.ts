@@ -26,18 +26,22 @@ export class AssetsComponent implements OnInit {
     ];
 
     ngOnInit() {
+        this.updateAssetList();
+    }
+
+    updateAssetList() {
         // Getting the list of assets when assets view appear
         this.assetsService.getAssetsList().subscribe(
             (data) => {
                 this.assetsData = data;
             },
             error => {
-            swal(
-                'Error Occurred',
-                error._body,
-                'error'
-            )
-         }
+                swal(
+                    'Error Occurred',
+                    error._body,
+                    'error'
+                )
+            }
         )
     }
 
@@ -53,7 +57,8 @@ export class AssetsComponent implements OnInit {
                     'Good job!',
                     'New asset has been added!',
                     'success'
-                )
+                );
+                this.updateAssetList();
                 jQuery(".modal-body input").val("");
                 jQuery('#newAssetModal').modal('hide');
             },
@@ -65,6 +70,10 @@ export class AssetsComponent implements OnInit {
                 )
             }
         )
+    }
+
+    resetForm() {
+        jQuery('form').trigger('reset');
     }
 
 }

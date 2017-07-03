@@ -28,6 +28,11 @@ export class UserComponent implements OnInit {
         "admin", "employee"
     ];
     ngOnInit() {
+        this.updateUserList();
+    }
+
+
+    updateUserList() {
         // Getting the list of users when users view appear
         this.usersService.getUserList().subscribe(
             (data) => {
@@ -43,6 +48,7 @@ export class UserComponent implements OnInit {
         )
     }
 
+
     /**
      * onSubmit method to store the new employee/admin details
      * @param value
@@ -55,7 +61,8 @@ export class UserComponent implements OnInit {
                     'Good job!',
                     'New user has been added!',
                     'success'
-                )
+                );
+                this.updateUserList();
                 jQuery(".modal-body input").val("");
                 jQuery('#newUserModal').modal('hide');
             },
@@ -67,5 +74,9 @@ export class UserComponent implements OnInit {
                 )
             }
         )
+    }
+
+    resetForm() {
+        jQuery('form').trigger('reset');
     }
 }

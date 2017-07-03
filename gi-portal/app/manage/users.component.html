@@ -39,9 +39,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Select Role</label>
+                                    <label>Role</label>
 
                                     <select name="role" class="form-control" #roleRef="ngModel" [(ngModel)]="user.role" required>
+                                        <option [ngValue]="undefined" selected>Select Role</option>
                                         <option *ngFor="let role of roles" [ngValue]="role">{{role}}</option>
                                     </select>
                                     <div [hidden]="roleRef.valid || roleRef.pristine" class="alert alert-danger">Please
@@ -53,7 +54,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="resetForm()">Close</button>
 
                         </div>
                     </div>

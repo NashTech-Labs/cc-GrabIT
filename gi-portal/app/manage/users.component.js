@@ -28,6 +28,9 @@ var UserComponent = (function () {
         ];
     }
     UserComponent.prototype.ngOnInit = function () {
+        this.updateUserList();
+    };
+    UserComponent.prototype.updateUserList = function () {
         var _this = this;
         // Getting the list of users when users view appear
         this.usersService.getUserList().subscribe(function (data) {
@@ -46,11 +49,15 @@ var UserComponent = (function () {
             _this.returnedUseraddResponse = data;
             _this.formValues = value;
             swal('Good job!', 'New user has been added!', 'success');
+            _this.updateUserList();
             jQuery(".modal-body input").val("");
             jQuery('#newUserModal').modal('hide');
         }, function (error) {
             swal('Error Occurred', error._body, 'error');
         });
+    };
+    UserComponent.prototype.resetForm = function () {
+        jQuery('form').trigger('reset');
     };
     return UserComponent;
 }());
