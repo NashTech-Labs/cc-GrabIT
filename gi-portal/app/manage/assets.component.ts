@@ -38,7 +38,7 @@ export class AssetsComponent implements OnInit {
             error => {
                 swal(
                     'Error Occurred',
-                    error._body,
+                    "Some problem, try again, check connections or assets details.",
                     'error'
                 )
             }
@@ -65,7 +65,7 @@ export class AssetsComponent implements OnInit {
             error => {
                 swal(
                     'Error Ocuured',
-                     error._body,
+                    "Some problem, try again, check connections or assets details.",
                     'error'
                 )
             }

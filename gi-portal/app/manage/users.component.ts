@@ -41,7 +41,7 @@ export class UserComponent implements OnInit {
             error => {
                 swal(
                     'Error Occurred',
-                    error._body,
+                    "Some problem, try again, check connections or user details.",
                     'error'
                 )
             }
@@ -69,7 +69,7 @@ export class UserComponent implements OnInit {
             error => {
                 swal(
                     'Error Occurred',
-                    error._body,
+                    "Some problem, try again, check connections or user details.",
                     'error'
                 )
             }

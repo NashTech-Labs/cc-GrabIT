@@ -36,7 +36,7 @@ var UserComponent = (function () {
         this.usersService.getUserList().subscribe(function (data) {
             _this.userData = data;
         }, function (error) {
-            swal('Error Occurred', error._body, 'error');
+            swal('Error Occurred', "Some problem, try again, check connections or user details.", 'error');
         });
     };
     /**
@@ -53,7 +53,7 @@ var UserComponent = (function () {
             jQuery(".modal-body input").val("");
             jQuery('#newUserModal').modal('hide');
         }, function (error) {
-            swal('Error Occurred', error._body, 'error');
+            swal('Error Occurred', "Some problem, try again, check connections or user details.", 'error');
         });
     };
     UserComponent.prototype.resetForm = function () {

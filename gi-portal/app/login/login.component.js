@@ -40,7 +40,6 @@ var LoginComponent = (function () {
             .subscribe(function (data) {
             // this.router.navigate([this.returnUrl]);
             var userRole = data.role;
-            console.log("User data:::::::::::::::::::::::" + userRole);
             if (userRole === 'admin') {
                 _this.router.navigate(['/home/manage/dashboard']);
             }
@@ -48,7 +47,8 @@ var LoginComponent = (function () {
                 _this.router.navigate(['/home/user/dashboard']);
             }
         }, function (error) {
-            swal('Error Occurred', error._body, 'error');
+            console.log("User data:::::::::::::::::::::::" + error);
+            swal('Error Occurred', "Some issues with login, please check", 'error');
             _this.loading = false;
         });
     };

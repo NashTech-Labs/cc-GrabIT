@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit {
                     // this.router.navigate([this.returnUrl]);
 
                     let userRole = data.role;
-                    console.log("User data:::::::::::::::::::::::"+ userRole);
                     if(userRole === 'admin'){
                         this.router.navigate(['/home/manage/dashboard']);
                     }else {
@@ -55,9 +54,11 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 error => {
+                    console.log("User data:::::::::::::::::::::::"+ error);
+
                     swal(
                         'Error Occurred',
-                        error._body,
+                        "Some issues with login, please check",
                         'error'
                     )
                     this.loading = false;
