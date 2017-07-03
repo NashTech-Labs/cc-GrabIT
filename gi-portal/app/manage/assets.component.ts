@@ -67,4 +67,8 @@ export class AssetsComponent implements OnInit {
         )
     }
 
+    resetForm() {
+        jQuery('form').trigger('reset');
+    }
+
 }

@@ -52,6 +52,9 @@ var UserComponent = (function () {
             swal('Error Occurred', error._body, 'error');
         });
     };
+    UserComponent.prototype.resetForm = function () {
+        jQuery('form').trigger('reset');
+    };
     return UserComponent;
 }());
 UserComponent = __decorate([

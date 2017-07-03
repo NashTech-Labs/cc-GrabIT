@@ -32,10 +32,11 @@
                                     <label>Asset Type</label>
 
                                     <select name="assetType" class="form-control" #assetTypeRef="ngModel" [(ngModel)]="asset.assetType" required>
+                                        <option [ngValue]="undefined" selected>Select Asset Type</option>
                                         <option *ngFor="let assetType of assetTypeList" [ngValue]="assetType">{{assetType}}</option>
                                     </select>
                                     <div [hidden]="assetTypeRef.valid || assetTypeRef.pristine" class="alert alert-danger">Please
-                                        enter asset type
+                                        select asset type
                                     </div>
                                 </div>
                                 <button [disabled]="!assetForm.valid" class="btn btn-primary" type="submit">Submit
@@ -43,7 +44,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="resetForm()">Close</button>
 
                         </div>
                     </div>

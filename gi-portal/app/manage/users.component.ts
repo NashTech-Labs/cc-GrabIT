@@ -68,4 +68,8 @@ export class UserComponent implements OnInit {
             }
         )
     }
+
+    resetForm() {
+        jQuery('form').trigger('reset');
+    }
 }
