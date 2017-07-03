@@ -47,8 +47,12 @@ var LoginComponent = (function () {
                 _this.router.navigate(['/home/user/dashboard']);
             }
         }, function (error) {
-            console.log("User data:::::::::::::::::::::::" + error);
-            swal('Error Occurred', "Some issues with login, please check", 'error');
+            if (error.status === 0) {
+                swal('Error Occurred', "Uh!! Some issue, Please try again or check your connections.", 'error');
+            }
+            else {
+                swal('Error Occurred', error._body, 'error');
+            }
             _this.loading = false;
         });
     };

@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
         private authenticationService: AuthenticationService,
         private alertService: AlertService,
         private elementRef: ElementRef
-        ) { }
+    ) { }
 
     ngOnInit() {
         // reset login status
@@ -44,23 +44,28 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 data => {
                     // this.router.navigate([this.returnUrl]);
-
                     let userRole = data.role;
                     if(userRole === 'admin'){
                         this.router.navigate(['/home/manage/dashboard']);
                     }else {
                         this.router.navigate(['/home/user/dashboard']);
-
                     }
                 },
                 error => {
-                    console.log("User data:::::::::::::::::::::::"+ error);
+                    if(error.status === 0) {
+                        swal(
+                            'Error Occurred',
+                            "Uh!! Some issue, Please try again or check your connections.",
+                            'error'
+                        )
+                    } else {
+                        swal(
+                            'Error Occurred',
+                            error._body,
+                            'error'
+                        )
+                    }
 
-                    swal(
-                        'Error Occurred',
-                        "Some issues with login, please check",
-                        'error'
-                    )
                     this.loading = false;
                 });
     }

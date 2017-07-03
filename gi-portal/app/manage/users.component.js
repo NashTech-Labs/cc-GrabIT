@@ -36,7 +36,12 @@ var UserComponent = (function () {
         this.usersService.getUserList().subscribe(function (data) {
             _this.userData = data;
         }, function (error) {
-            swal('Error Occurred', "Some problem, try again, check connections or user details.", 'error');
+            if (error.status === 0) {
+                swal('Error Occurred', 'Uh!! Some issue, Please try again or check your connections.', 'error');
+            }
+            else {
+                swal('Error Occurred', error._body, 'error');
+            }
         });
     };
     /**
@@ -53,7 +58,12 @@ var UserComponent = (function () {
             jQuery(".modal-body input").val("");
             jQuery('#newUserModal').modal('hide');
         }, function (error) {
-            swal('Error Occurred', "Some problem, try again, check connections or user details.", 'error');
+            if (error.status === 0) {
+                swal('Error Occurred', 'Uh!! Some Issue, Please try again or check your connections.', 'error');
+            }
+            else {
+                swal('Error Occurred', error._body, 'error');
+            }
         });
     };
     UserComponent.prototype.resetForm = function () {

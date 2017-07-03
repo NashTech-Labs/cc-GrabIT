@@ -39,11 +39,19 @@ export class UserComponent implements OnInit {
                 this.userData = data
             },
             error => {
-                swal(
-                    'Error Occurred',
-                    "Some problem, try again, check connections or user details.",
-                    'error'
-                )
+                if(error.status === 0) {
+                    swal(
+                        'Error Occurred',
+                        'Uh!! Some issue, Please try again or check your connections.',
+                        'error'
+                    )
+                } else {
+                    swal(
+                        'Error Occurred',
+                         error._body,
+                        'error'
+                    )
+                }
             }
         )
     }
@@ -67,11 +75,19 @@ export class UserComponent implements OnInit {
                 jQuery('#newUserModal').modal('hide');
             },
             error => {
-                swal(
-                    'Error Occurred',
-                    "Some problem, try again, check connections or user details.",
-                    'error'
-                )
+                if(error.status === 0) {
+                    swal(
+                        'Error Occurred',
+                        'Uh!! Some Issue, Please try again or check your connections.',
+                        'error'
+                    )
+                } else {
+                    swal(
+                        'Error Occurred',
+                         error._body,
+                        'error'
+                    )
+                }
             }
         )
     }

@@ -36,11 +36,19 @@ export class AssetsComponent implements OnInit {
                 this.assetsData = data;
             },
             error => {
-                swal(
-                    'Error Occurred',
-                    "Some problem, try again, check connections or assets details.",
-                    'error'
-                )
+                if(error.status === 0) {
+                    swal(
+                        'Error Occurred',
+                        'Uh!! Some issue, Please try again or check your connections.',
+                        'error'
+                    )
+                } else {
+                    swal(
+                        'Error Occurred',
+                        error._body,
+                        'error'
+                    )
+                }
             }
         )
     }
@@ -63,11 +71,19 @@ export class AssetsComponent implements OnInit {
                 jQuery('#newAssetModal').modal('hide');
             },
             error => {
-                swal(
-                    'Error Ocuured',
-                    "Some problem, try again, check connections or assets details.",
-                    'error'
-                )
+                if(error.status === 0) {
+                    swal(
+                        'Error Occurred',
+                        'Uh!! Some issue, Please try again or check your connections.',
+                        'error'
+                    )
+                } else {
+                    swal(
+                        'Error Occurred',
+                         error._body,
+                        'error'
+                    )
+                }
             }
         )
     }
