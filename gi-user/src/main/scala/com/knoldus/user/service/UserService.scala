@@ -75,7 +75,7 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     * @return
     */
   def isEmailExists(email: String): Future[Boolean] = {
-    userComponent.getUserByEmail(email).map(userOpt => userOpt.fold(false)(user => true))
+    userComponent.getUserByEmail(email).map(userOpt => userOpt.isDefined)
   }
 
   /**
