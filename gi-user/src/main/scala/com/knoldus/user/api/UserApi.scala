@@ -80,5 +80,48 @@ class UserApi @Inject()(userService: UserService) extends UserApiHelper {
     }
   }
 
-  val routes = addUser ~ signIn ~ getAllUsers
+
+  /**
+    * Creates http route to check user with email
+    * @return
+    */
+  def checkUserWithEmail: Route = {
+    cors() {
+      path("user" / "email" / "exists") {
+        get {
+          parameters("email", "accessToken") { (email, accessToken) =>
+            authorizeAsync(_ => userService.isAdmin(accessToken)) {
+              onComplete(userService.isEmailExists(email)) {
+                case Success(isEmailExists) => complete(HttpResponse(StatusCodes.OK, entity = isEmailExists.toString))
+                case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+    * Creates http route to check user with employee Id
+    * @return
+    */
+  def checkUserWithEmployeeId: Route = {
+    cors() {
+      path("user" / "employeeid" / "exists") {
+        get {
+          parameters("employeeId", "accessToken") { (employeeId, accessToken) =>
+            authorizeAsync(_ => userService.isAdmin(accessToken)) {
+              onComplete(userService.isEmployeeIdExists(employeeId)) {
+                case Success(isEmployeeIdExists) => complete(HttpResponse(StatusCodes.OK, entity = isEmployeeIdExists.toString))
+                case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  val routes = addUser ~ signIn ~ getAllUsers ~ checkUserWithEmail ~ checkUserWithEmployeeId
 }

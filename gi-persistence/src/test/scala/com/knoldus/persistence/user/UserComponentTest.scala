@@ -89,4 +89,14 @@ class UserComponentTest extends AsyncFunSuite with UserComponent with H2DBCompon
     }
   }
 
+  test("check user by employee Id") {
+    val result = isEmployeeIdExists("emp-id-1")
+    result.map(isExists => assert(isExists === true))
+  }
+
+  test("check user by employee Id for wrong employee id") {
+    val result = isEmployeeIdExists("wrong emp id")
+    result.map(isExists => assert(isExists === false))
+  }
+
 }

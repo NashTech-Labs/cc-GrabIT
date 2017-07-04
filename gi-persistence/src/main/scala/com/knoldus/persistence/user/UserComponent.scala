@@ -62,6 +62,16 @@ trait UserComponent extends UserMapping {
   def getAllUser: Future[List[User]] = {
     db.run(userInfo.to[List].result)
   }
+
+  /**
+    * Checks if user with employee id exists
+    * @param employeeId
+    * @return
+    */
+  def isEmployeeIdExists(employeeId: String): Future[Boolean] = {
+    val query = userInfo.filter(user => user.employeeId === employeeId).exists
+    db.run(query.result)
+  }
 }
 
 class UserPostgresComponent extends UserComponent with PostgresDbComponent
