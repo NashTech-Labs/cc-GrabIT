@@ -64,7 +64,7 @@ trait UserComponent extends UserMapping {
   }
 
   /**
-    * Checks if user with email id exists
+    * Checks if user with employee id exists
     * @param employeeId
     * @return
     */

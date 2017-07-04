@@ -83,7 +83,6 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     * @param email
     * @return
     */
-  def isEmployeeIdExists(email: String): Future[Boolean] = {
-    userComponent.isEmployeeIdExists(email)
-  }
+  def isEmployeeIdExists(email: String): Future[Boolean] = userComponent.isEmployeeIdExists(email)
+
 }
