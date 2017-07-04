@@ -57,20 +57,47 @@ class UserServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
   }
 
   test("whether user is admin successfully") {
-    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(Some(user)))
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future.successful(Some(user)))
     val output = userService.isAdmin(accessToken)
     output.map(result => result shouldBe true)
   }
 
   test("whether user is admin if role is Employee") {
-    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(Some(user.copy(role = "Employee"))))
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future.successful(Some(user.copy(role = "Employee"))))
     val output = userService.isAdmin(accessToken)
     output.map(result => result shouldBe false)
   }
 
   test("whether user is admin if user is not present") {
-    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future(None))
+    when(mockUserComponent.getUserByAccessToken(accessToken)).thenReturn(Future.successful(None))
     val output = userService.isAdmin(accessToken)
+    output.map(result => result shouldBe false)
+  }
+
+  test("whether user with email id is present") {
+    when(mockUserComponent.getUserByEmail(signInRequest.email)).thenReturn(Future.successful(Some(user)))
+    val output = userService.isEmailExists(signInRequest.email)
+    output.map(result => result shouldBe true)
+  }
+
+
+  test("whether user with email id is not present") {
+    when(mockUserComponent.getUserByEmail(signInRequest.email)).thenReturn(Future.successful(None))
+    val output = userService.isEmailExists(signInRequest.email)
+    output.map(result => result shouldBe false)
+  }
+
+
+  test("whether user with employee id is present") {
+    when(mockUserComponent.isEmployeeIdExists(userRegisterRequest.employeeId)).thenReturn(Future.successful(true))
+    val output = userService.isEmployeeIdExists(userRegisterRequest.employeeId)
+    output.map(result => result shouldBe true)
+  }
+
+
+  test("whether user with employee id is not present") {
+    when(mockUserComponent.isEmployeeIdExists(userRegisterRequest.employeeId)).thenReturn(Future.successful(false))
+    val output = userService.isEmployeeIdExists(userRegisterRequest.employeeId)
     output.map(result => result shouldBe false)
   }
 }

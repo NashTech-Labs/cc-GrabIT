@@ -56,10 +56,7 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     *
     * @return
     */
-  def getAllUsers: Future[List[User]] = userComponent.getAllUser.map { users =>
-    users
-  }
-
+  def getAllUsers: Future[List[User]] = userComponent.getAllUser
 
   /**
     * Checks whether user is admin or not
@@ -70,5 +67,23 @@ class UserService @Inject()(userComponent: UserComponent, email: EmailUtility) {
     userComponent.getUserByAccessToken(accessToken).map { user =>
       user.fold(false)(user => user.role == Admin)
     }
+  }
+
+  /**
+    * Check whether user with email exists or not
+    * @param email
+    * @return
+    */
+  def isEmailExists(email: String): Future[Boolean] = {
+    userComponent.getUserByEmail(email).map(userOpt => userOpt.fold(false)(user => true))
+  }
+
+  /**
+    * Check whether user with employee id exists or not
+    * @param email
+    * @return
+    */
+  def isEmployeeIdExists(email: String): Future[Boolean] = {
+    userComponent.isEmployeeIdExists(email)
   }
 }

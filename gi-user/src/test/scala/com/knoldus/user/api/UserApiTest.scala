@@ -170,4 +170,57 @@ class UserApiTest extends FunSuite with Matchers with ScalatestRouteTest with Mo
     }
   }
 
+  test("user Api route to check whether user with email id exists successfully") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.isEmailExists(signInRequest.email)).thenReturn(Future.successful(true))
+    Get(s"/user/email/exists?email=${signInRequest.email}&accessToken=$accessToken") ~> checkUserWithEmail ~> check {
+      status shouldBe StatusCodes.OK
+      responseAs[String] shouldBe "true"
+    }
+  }
+
+  test("user Api route to check whether user with email id does not exists") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.isEmailExists(signInRequest.email)).thenReturn(Future.successful(false))
+    Get(s"/user/email/exists?email=${signInRequest.email}&accessToken=$accessToken") ~> checkUserWithEmail ~> check {
+      status shouldBe StatusCodes.OK
+      responseAs[String] shouldBe "false"
+    }
+  }
+
+  test("user Api route to check whether user with email id exists: Failure case") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.isEmailExists(signInRequest.email)).thenReturn(Future.failed(new RuntimeException))
+    Get(s"/user/email/exists?email=${signInRequest.email}&accessToken=$accessToken") ~> checkUserWithEmail ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }
+
+  test("user Api route to check whether user with employee id exists successfully") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.isEmployeeIdExists(userRegisterRequest.employeeId)).thenReturn(Future.successful(true))
+    Get(s"/user/employeeid/exists?employeeId=${userRegisterRequest.employeeId}&accessToken=$accessToken") ~> checkUserWithEmployeeId ~> check {
+      status shouldBe StatusCodes.OK
+      responseAs[String] shouldBe "true"
+    }
+  }
+
+  test("user Api route to check whether user with employee id does not exists") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.isEmployeeIdExists(userRegisterRequest.employeeId)).thenReturn(Future.successful(false))
+    Get(s"/user/employeeid/exists?employeeId=${userRegisterRequest.employeeId}&accessToken=$accessToken") ~> checkUserWithEmployeeId ~> check {
+      status shouldBe StatusCodes.OK
+      responseAs[String] shouldBe "false"
+    }
+  }
+
+  test("user Api route to check whether user with employee id exists: Failure case") {
+    when(mockUserService.isAdmin(accessToken)).thenReturn(Future.successful(true))
+    when(mockUserService.isEmployeeIdExists(userRegisterRequest.employeeId)).thenReturn(Future.failed(new RuntimeException))
+    Get(s"/user/employeeid/exists?employeeId=${userRegisterRequest.employeeId}&accessToken=$accessToken") ~> checkUserWithEmployeeId ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }
 }
