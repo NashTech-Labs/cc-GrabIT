@@ -14,7 +14,8 @@ import 'rxjs/Observable';
 @Injectable()
 export class UsersService {
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) {
+    }
 
     /**
      * Api urls to interact with backend services
@@ -27,10 +28,27 @@ export class UsersService {
      * Api urls of backend
      * @type {string}
      */
-    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=' + this.accessToken;
-    private addUserApi = 'http://localhost:9999/user/add?accessToken=' + this.accessToken;
+    private baseApiUrl = 'http://localhost:9999/';
+    private listUsersApi = this.baseApiUrl + 'user/get/all?accessToken=' + this.accessToken;
+    private addUserApi = this.baseApiUrl + 'user/add?accessToken=' + this.accessToken;
 
 
+    /**
+     * Method to check whether entered employeeId already exists or not
+     * @param empId
+     * @returns {Observable<R>}
+     */
+    isEmpIdExists(empId: any) {
+        return this.http.get(this.baseApiUrl + 'user/employeeid/exists?employeeId=' + empId + '&accessToken=' + this.accessToken).map(
+            (response: Response) => response.json()
+        )
+    }
+
+    isEmailExists(emailId: any) {
+        return this.http.get(this.baseApiUrl + 'user/email/exists?email=' + emailId + '&accessToken=' + this.accessToken).map(
+            (response: Response) => response.json()
+        )
+    }
 
     /**
      * AddUser method for adding new employee/admin
@@ -91,6 +109,5 @@ export class UsersService {
         catch (e) {
             errMsg = 'Somthing Went Wrong try again!!'
         }
-        // return Observable.throw(new Error(errMsg));
     }
 }

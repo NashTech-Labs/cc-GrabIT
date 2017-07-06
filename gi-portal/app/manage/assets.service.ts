@@ -32,9 +32,9 @@ export class AssetsService {
      * Api urls of backend
      * @type {string}
      */
+
     private listAssets = 'http://localhost:9991/asset/get/all?accessToken=' + this.accessToken;
     private addAssets = 'http://localhost:9991/asset/add?accessToken=' + this.accessToken;
-
 
 
     /**
@@ -48,16 +48,14 @@ export class AssetsService {
         });
         let obj = {
             name: asset.name,
-            uniqueName:asset.uniqueName,
-            assetType:asset.assetType
+            uniqueName: asset.uniqueName,
+            assetType: asset.assetType
         };
         return this.http.post(this.addAssets, obj, {headers: jsonHeader})
             .map(data => {
-                //return this.extractData(data)
                 data;
             })
     }
-
 
     /**
      * getAssetsList method to list the assets available

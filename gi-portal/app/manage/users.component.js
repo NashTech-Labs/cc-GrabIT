@@ -15,12 +15,12 @@ var users_service_1 = require("./users.service");
 var router_1 = require("@angular/router");
 var index_1 = require("../_services/index");
 var UserComponent = (function () {
-    function UserComponent(usersService, route, router, alertService, elementRef) {
+    function UserComponent(usersService, route, router, alertService) {
         this.usersService = usersService;
         this.route = route;
         this.router = router;
         this.alertService = alertService;
-        this.user = new userModel_1.UserModel('', '', '', 'ADMINNN');
+        this.user = new userModel_1.UserModel('', '', '', '');
         this.userData = [];
         this.formValues = [];
         this.roles = [
@@ -30,6 +30,27 @@ var UserComponent = (function () {
     UserComponent.prototype.ngOnInit = function () {
         this.updateUserList();
     };
+    /**
+     * isEmpIdExitsCheck method to check whether the entered employeeId already exists in db
+     */
+    UserComponent.prototype.isEmpIdExistsCheck = function () {
+        var _this = this;
+        this.usersService.isEmpIdExists(this.user.employeeId).subscribe(function (data) {
+            _this.isEmployeeIdAvailable = data;
+        });
+    };
+    /**
+     * isEmailExits method to check whether the entered email already exists in db
+     */
+    UserComponent.prototype.isEmailExists = function () {
+        var _this = this;
+        this.usersService.isEmailExists(this.user.emailId).subscribe(function (data) {
+            _this.isEmailIdAvailable = data;
+        });
+    };
+    /**
+     * updatedUserList method to reload the users list and display on OnInit
+     */
     UserComponent.prototype.updateUserList = function () {
         var _this = this;
         // Getting the list of users when users view appear
@@ -61,11 +82,17 @@ var UserComponent = (function () {
             if (error.status === 0) {
                 swal('Error Occurred', 'Uh!! Some Issue, Please try again or check your connections.', 'error');
             }
-            else {
-                swal('Error Occurred', error._body, 'error');
+            else if (_this.isEmailIdAvailable) {
+                swal('Error Occurred', 'EmailId already exists, please try with different one', 'error');
+            }
+            else if (_this.isEmployeeIdAvailable) {
+                swal('Error Occurred', 'EmployeeId already exists, please try with different one', 'error');
             }
         });
     };
+    /**
+     * resetForm method to remove the values in form when press close
+     */
     UserComponent.prototype.resetForm = function () {
         jQuery('form').trigger('reset');
     };
@@ -78,7 +105,7 @@ UserComponent = __decorate([
         styleUrls: ['app/assets/css/user.component.css']
     }),
     __metadata("design:paramtypes", [users_service_1.UsersService, router_1.ActivatedRoute, router_1.Router,
-        index_1.AlertService, core_1.ElementRef])
+        index_1.AlertService])
 ], UserComponent);
 exports.UserComponent = UserComponent;
 //# sourceMappingURL=users.component.js.map
