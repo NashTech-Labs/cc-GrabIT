@@ -37,6 +37,25 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
       }
     }
 
-  val routes = addBooking
-}
 
+  /**
+    * http route to get list of assets available  for booking
+    * @return
+    */
+  def getAvailableAssets: Route = cors() {
+    path("available" / "asset") {
+      get {
+        parameters("startTime", "endTime", "assetType") { (startTime, endTime, assetType) =>
+          onComplete(bookingService.getAvailableAssets(startTime, endTime, assetType)) {
+            case Success(res) => complete(res.toString)
+            case Failure(ex) =>
+              ex.printStackTrace()
+              complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+          }
+        }
+      }
+    }
+  }
+
+  val routes = addBooking ~ getAvailableAssets
+}
