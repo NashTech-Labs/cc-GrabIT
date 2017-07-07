@@ -1,7 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { Http, Headers, Response } from '@angular/http'
+import {devEnvironment} from '../environments/environment.dev';
+import {prodEnvironment } from '../environments/environment.prod';
 import { Observable } from 'rxjs/Observable';
-
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
@@ -15,8 +16,16 @@ import 'rxjs/Observable';
 export class AuthenticationService {
     constructor(private http: Http) { }
 
-    login(email: string, password: string) {
-        return this.http.post('http://localhost:9999/signin', JSON.stringify({ email: email, password: password }))
+    /**
+     *  Change environment var as per the environments
+     * @type {{production: boolean; loginApiUrl: string; userApiUrl: string; assetApiUrl: string}}
+     */
+        environment = devEnvironment;
+     // environment = prodEnvironment;
+
+
+   login(email: string, password: string) {
+        return this.http.post(this.environment.loginApiUrl+'signin', JSON.stringify({ email: email, password: password }))
             .map((response: Response) => {
                 // login successful if there's a token in the response
                 let user = response.json();
