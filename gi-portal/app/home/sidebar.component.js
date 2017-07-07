@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var SidebarComponent = (function () {
     function SidebarComponent(elementRef) {
+        this.currentUserStorage = localStorage.getItem('currentUser');
+        this.role = JSON.parse(this.currentUserStorage).role;
         this.elementRef = elementRef;
     }
     SidebarComponent.prototype.ngOnInit = function () {

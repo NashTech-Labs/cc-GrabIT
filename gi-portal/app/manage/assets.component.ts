@@ -1,5 +1,4 @@
 import {Component, ElementRef, OnInit} from "@angular/core";
-import {UserModel} from '../_models/userModel'
 import {AssetsService} from './assets.service'
 import {ActivatedRoute, Router} from "@angular/router";
 import {AssetsModel} from "../_models/assetsModel";

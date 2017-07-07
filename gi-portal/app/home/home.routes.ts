@@ -1,11 +1,10 @@
 import { Routes, RouterModule } from '@angular/router';
-
 import { HomeComponent } from '../home/index';
 import { AuthGuard } from '../_guards/index';
-import { SidebarComponent } from '../home/sidebar.component'
 import { UserComponent } from '../manage/users.component';
 import { DashboardComponent } from './dashboard.component';
 import {AssetsComponent} from "../manage/assets.component";
+import {BookingComponent} from "../userManage/booking.component";
 
 const routes:Routes = [ 
     {
@@ -24,6 +23,10 @@ const routes:Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent
+            },
+            {
+                path: 'manage/booking',
+                component: BookingComponent
             }
 
         ]

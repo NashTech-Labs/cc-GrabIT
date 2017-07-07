@@ -6,6 +6,7 @@ var index_2 = require("../_guards/index");
 var users_component_1 = require("../manage/users.component");
 var dashboard_component_1 = require("./dashboard.component");
 var assets_component_1 = require("../manage/assets.component");
+var booking_component_1 = require("../userManage/booking.component");
 var routes = [
     {
         path: 'home',
@@ -23,6 +24,10 @@ var routes = [
             {
                 path: 'dashboard',
                 component: dashboard_component_1.DashboardComponent
+            },
+            {
+                path: 'manage/booking',
+                component: booking_component_1.BookingComponent
             }
         ]
     }
