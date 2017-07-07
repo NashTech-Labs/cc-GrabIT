@@ -9,8 +9,6 @@ import {ChartComponent} from './chart.component'
 import { ChartsModule } from 'ng2-charts';
 
 
-
-
 @NgModule({
   imports:      [ homeRouting, HttpModule, CommonModule, ChartsModule ],
   declarations: [ HomeComponent,SidebarComponent, DashboardComponent, ChartComponent]

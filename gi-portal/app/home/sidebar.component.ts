@@ -17,12 +17,13 @@ export class SidebarComponent  implements OnInit {
 elementRef: ElementRef;
 
 constructor(elementRef: ElementRef){
-
     this.elementRef = elementRef;
 }
 
+    private currentUserStorage = localStorage.getItem('currentUser');
+    private role = JSON.parse(this.currentUserStorage).role;
+
      ngOnInit():any {
-      
       jQuery(this.elementRef.nativeElement).find('#menu-toggle').on('click', function(e:any){
           e.preventDefault();
           jQuery("#wrapper").toggleClass("toggled");
