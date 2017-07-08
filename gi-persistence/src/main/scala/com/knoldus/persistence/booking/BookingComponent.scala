@@ -1,5 +1,7 @@
 package com.knoldus.persistence.booking
 
+import java.sql.Timestamp
+
 import com.google.inject.ImplementedBy
 import com.knoldus.persistence.PostgresDbComponent
 import com.knoldus.persistence.asset.mappings.AssetMapping
@@ -25,6 +27,15 @@ trait BookingComponent extends BookingMapping with AssetMapping {
 
   def insert(booking: Booking): Future[Int] = {
     db.run(bookingInfo += booking)
+  }
+
+  /**
+    * Get All Booking
+    *
+    * @return
+    */
+  def getAllBooking: Future[List[Booking]] = {
+    db.run(bookingInfo.to[List].result)
   }
 
   /**
@@ -69,6 +80,26 @@ trait BookingComponent extends BookingMapping with AssetMapping {
       .map(value => (value.userRating, value.userFeedback))
       .update((userRating, userFeedback)))
   }
+
+  /**
+    * Get list of assets available for booking
+    * @param startTime
+    * @param endTime
+    * @param assetType
+    * @return
+    */
+  def getAssetsAvailableForBooking(startTime: Timestamp, endTime: Timestamp, assetType: String): Future[List[Asset]] = {
+    val query = bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
+      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
+        (booking.startTime <= endTime && booking.endTime >= endTime))) joinRight assetInfo.filter(asset => asset.assetType.toLowerCase === assetType.toLowerCase) on {
+      case (bi, ai) => bi.assetId === ai.id
+    } map {
+      case (bi, ai) => ai
+    }
+    db.run(query.to[List].result)
+  }
+
+ 
 }
 
 class BookingPostgresComponent extends BookingComponent with PostgresDbComponent

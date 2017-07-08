@@ -7,3 +7,5 @@ INSERT INTO asset VALUES ('id-1', 'test asset', 'asset-unique-1', 'projector', f
 INSERT INTO asset VALUES ('asset-id-1', 'test asset 2', 'asset-unique-2', 'projector', false, Now(), Now());
 
 INSERT INTO booking VALUES ('id-1', 'user-id-1', 'asset-id-1', 4, 'user rating', 3, 'asset rating', 'booked', 'user-id-2', Now(), Now(), Now(), Now());
+
+INSERT INTO booking VALUES ('id-3', 'user-id-1', 'asset-id-1', 4, 'user rating', 3, 'asset rating', 'booked', 'user-id-2', Now(), '2017-07-08 11:00:00.0', '2017-07-08 11:00:00.0', Now());
