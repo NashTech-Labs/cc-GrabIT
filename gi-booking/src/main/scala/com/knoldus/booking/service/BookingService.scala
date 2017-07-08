@@ -28,4 +28,14 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
     bookingComponent.insert(bookingData)
   }
 
+  /**
+    * Get list of bookings by user id
+    *
+    * @param userId
+    * @return
+    */
+  def getBookingsByUserId(userId: String): Future[List[Booking]] = {
+    bookingComponent.getBookingsByUserId(userId)
+  }
+
 }

@@ -10,6 +10,7 @@ import com.knoldus.booking.model.BookingRequest
 import com.knoldus.booking.service.BookingService
 import io.circe.generic.auto._
 import io.circe.parser._
+import io.circe.syntax._
 
 import scala.util.{Failure, Success, Try}
 
@@ -37,6 +38,23 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
       }
     }
 
-  val routes = addBooking
-}
+  /**
+    * Creates http route to get list of bookings by user id
+    *
+    * @return
+    */
+  def getBookingsByUserId: Route = cors() {
+    path("bookings") {
+      get {
+        parameters("userId") { userId =>
+          onComplete(bookingService.getBookingsByUserId(userId)) {
+            case Success(bookings) => complete(HttpResponse(status = StatusCodes.OK, entity = bookings.asJson.toString))
+            case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+          }
+        }
+      }
+    }
+  }
 
+  val routes = addBooking ~ getBookingsByUserId
+}
