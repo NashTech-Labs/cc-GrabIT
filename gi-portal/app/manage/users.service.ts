@@ -1,7 +1,9 @@
-import {Injectable}     from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
-import {Observable}     from 'rxjs/Observable';
+import {Observable} from 'rxjs/Observable';
 import {UserModel} from '../_models/userModel';
+import {devEnvironment} from '../environments/environment.dev';
+import {prodEnvironment} from '../environments/environment.prod';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
@@ -14,7 +16,15 @@ import 'rxjs/Observable';
 @Injectable()
 export class UsersService {
 
-    constructor(private http: Http) {}
+    constructor(private http: Http) {
+    }
+
+    /**
+     *  Change environment var as per the environments
+     * @type {{production: boolean; loginApiUrl: string; userApiUrl: string; assetApiUrl: string}}
+     */
+       environment = devEnvironment;
+    // environment = prodEnvironment;
 
     /**
      * Api urls to interact with backend services
@@ -27,10 +37,26 @@ export class UsersService {
      * Api urls of backend
      * @type {string}
      */
-    private listUsersApi = 'http://localhost:9999/user/get/all?accessToken=' + this.accessToken;
-    private addUserApi = 'http://localhost:9999/user/add?accessToken=' + this.accessToken;
+    private listUsersApi = this.environment.userApiUrl + 'user/get/all?accessToken=' + this.accessToken;
+    private addUserApi = this.environment.userApiUrl + 'user/add?accessToken=' + this.accessToken;
 
 
+    /**
+     * Method to check whether entered employeeId already exists or not
+     * @param empId
+     * @returns {Observable<R>}
+     */
+    isEmpIdExists(empId: any) {
+        return this.http.get(this.environment.userApiUrl + 'user/employeeid/exists?employeeId=' + empId + '&accessToken=' + this.accessToken).map(
+            (response: Response) => response.json()
+        )
+    }
+
+    isEmailExists(emailId: any) {
+        return this.http.get(this.environment.userApiUrl + 'user/email/exists?email=' + emailId + '&accessToken=' + this.accessToken).map(
+            (response: Response) => response.json()
+        )
+    }
 
     /**
      * AddUser method for adding new employee/admin
@@ -91,6 +117,5 @@ export class UsersService {
         catch (e) {
             errMsg = 'Somthing Went Wrong try again!!'
         }
-        // return Observable.throw(new Error(errMsg));
     }
 }

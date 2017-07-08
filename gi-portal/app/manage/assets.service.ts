@@ -5,6 +5,8 @@ import {Injectable}     from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
 import {Observable}     from 'rxjs/Observable';
 import {UserModel} from '../_models/userModel';
+import {devEnvironment} from '../environments/environment.dev';
+import {prodEnvironment} from '../environments/environment.prod';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
@@ -22,6 +24,14 @@ export class AssetsService {
     }
 
     /**
+     * Change environment var as per environment
+     * @type {{production: boolean; loginApiUrl: string; userApiUrl: string; assetApiUrl: string}}
+     */
+    environment = devEnvironment;
+    // environment = prodEnvironment;
+
+
+    /**
      * Api urls to interact with backend services
      * @type {string|any}
      */
@@ -32,9 +42,9 @@ export class AssetsService {
      * Api urls of backend
      * @type {string}
      */
-    private listAssets = 'http://localhost:9991/asset/get/all?accessToken=' + this.accessToken;
-    private addAssets = 'http://localhost:9991/asset/add?accessToken=' + this.accessToken;
 
+    private listAssets = this.environment.assetApiUrl+'asset/get/all?accessToken=' + this.accessToken;
+    private addAssets = this.environment.assetApiUrl+'asset/add?accessToken=' + this.accessToken;
 
 
     /**
@@ -48,16 +58,14 @@ export class AssetsService {
         });
         let obj = {
             name: asset.name,
-            uniqueName:asset.uniqueName,
-            assetType:asset.assetType
+            uniqueName: asset.uniqueName,
+            assetType: asset.assetType
         };
         return this.http.post(this.addAssets, obj, {headers: jsonHeader})
             .map(data => {
-                //return this.extractData(data)
                 data;
             })
     }
-
 
     /**
      * getAssetsList method to list the assets available

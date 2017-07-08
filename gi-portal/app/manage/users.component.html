@@ -1,4 +1,4 @@
-<div class="jumbotron">
+<!--<div class="jumbotron">-->
     <div class="container">
         <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12 col-md-offset-2 col-sm-offset-0  col-xs-offset-0">
             <!--modal in which add user form opens-->
@@ -17,24 +17,29 @@
                                     <input type="text" #nameRef="ngModel" required class="form-control" name="name"
                                            [(ngModel)]="user.name">
                                     <div [hidden]="nameRef.valid || nameRef.pristine" class="alert alert-danger">Please
-                                        enter name
+                                      enter name
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Email</label>
-                                    <input type="email" #emailRef="ngModel"
-                                           pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required
+                                    <input type="email" (focusout)="isEmailExists(emailRef)" #emailRef="ngModel" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required
                                            class="form-control" name="email" [(ngModel)]="user.emailId">
                                     <div [hidden]="emailRef.valid || emailRef.pristine" class="alert alert-danger">Valid
                                         email required
                                     </div>
+                                    <div *ngIf="isEmailIdAvailable"  class="alert alert-danger">
+                                        This emailId already exists.
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>EmployeeId</label>
-                                    <input type="text" #employeeIdRef="ngModel" required class="form-control"
+                                    <input type="text" (focusout)="isEmpIdExistsCheck(employeeIdRef)" #employeeIdRef="ngModel" required class="form-control"
                                            name="employeeId" [(ngModel)]="user.employeeId">
                                     <div [hidden]="employeeIdRef.valid || employeeIdRef.pristine"
                                          class="alert alert-danger">EmployeeId is required
+                                    </div>
+                                    <div *ngIf="isEmployeeIdAvailable"  class="alert alert-danger">
+                                        This employeeId already exists.
                                     </div>
                                 </div>
 
@@ -49,6 +54,7 @@
                                         select role
                                     </div>
                                 </div>
+
                                 <button [disabled]="!userForm.valid" class="btn btn-primary" type="submit">Submit
                                 </button>
                             </form>
@@ -99,7 +105,7 @@
             </div>
         </div>
     </div>
-</div>
+<!--</div>-->
 
 
 
