@@ -29,4 +29,14 @@ object CommonUtility {
   def generateRandomString(length: Int): String = {
     Random.alphanumeric.take(length).toList.mkString
   }
+
+  /**
+    *
+    * @param hours
+    * @param minutes
+    * @return
+    */
+  def addExtraHoursToTimestamp(timestamp: Timestamp, hours: Int, minutes: Int): Timestamp = {
+    new Timestamp(timestamp.getTime + ((hours * 60 * 60 * 1000) + (minutes * 60 * 1000)))
+  }
 }

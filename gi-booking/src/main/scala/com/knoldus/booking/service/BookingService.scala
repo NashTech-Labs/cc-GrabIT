@@ -1,18 +1,16 @@
 package com.knoldus.booking.service
 
 import java.sql.Timestamp
-import java.util.Calendar
 
 import com.google.inject.Inject
+import com.knoldus.booking.Constants.{ADMIN, BOOKED, _}
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.persistence.booking.BookingComponent
+import com.knoldus.persistence.user.UserComponent
 import com.knoldus.utils.CommonUtility._
 import com.knoldus.utils.models.{Asset, Booking}
-import com.knoldus.booking.Constants.{BOOKED, ADMIN}
-import com.knoldus.persistence.user.UserComponent
+
 import scala.concurrent.ExecutionContext.Implicits.global
-
-
 import scala.concurrent.Future
 
 
@@ -25,10 +23,11 @@ class BookingService @Inject()(bookingComponent: BookingComponent, userComponent
     * @return
     */
   def addBooking(bookingRequest: BookingRequest): Future[Int] = {
-
-    val bookingDate = new Timestamp(System.currentTimeMillis())
-    val bookingData = Booking(getUUID, bookingRequest.userId, bookingRequest.assetId, None, None, None, None, BOOKED, None,
-      bookingDate, Timestamp.valueOf(bookingRequest.startTime), Timestamp.valueOf(bookingRequest.endTime), None)
+    val bookingDate = addExtraHoursToTimestamp(new Timestamp(System.currentTimeMillis()), Five, Thirty)
+    val startTime = addExtraHoursToTimestamp(Timestamp.valueOf(bookingRequest.startTime), Five, Thirty)
+    val endTime = addExtraHoursToTimestamp(Timestamp.valueOf(bookingRequest.endTime), Five, Thirty)
+    val bookingData = Booking(getUUID, bookingRequest.userId, bookingRequest.assetId, None, None, None, None, Booked, None,
+      bookingDate, startTime, endTime, None)
 
     bookingComponent.insert(bookingData)
   }
@@ -61,4 +60,14 @@ class BookingService @Inject()(bookingComponent: BookingComponent, userComponent
       user.fold(false)(user => user.role == ADMIN)
     }
   }
+
+  /** Get list of bookings by user id
+    *
+    * @param userId
+    * @return
+    */
+  def getBookingsByUserId(userId: String): Future[List[Booking]] = {
+    bookingComponent.getBookingsByUserId(userId)
+  }
+
 }
