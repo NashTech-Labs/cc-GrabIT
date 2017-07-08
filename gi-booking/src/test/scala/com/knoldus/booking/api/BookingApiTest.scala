@@ -84,7 +84,7 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     }
   }
 
-  test("booking Api route to check available assets for booking") {
+/*  test("booking Api route to check available assets for booking") {
     val bookingRequestJson =
       """{"userId":"123","assetId":"a-123","bookingDate":"2017-06-26 18:48:05.123",
         |"startTime":"2017-06-27 18:48:05.123","endTime":""}""".stripMargin
@@ -92,5 +92,5 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
       status shouldBe StatusCodes.BadRequest
       responseAs[String] should include regex "End Time should not be empty"
     }
-  }
+  }*/
 }

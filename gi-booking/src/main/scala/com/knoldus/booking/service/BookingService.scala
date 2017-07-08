@@ -8,12 +8,15 @@ import com.knoldus.booking.model.BookingRequest
 import com.knoldus.persistence.booking.BookingComponent
 import com.knoldus.utils.CommonUtility._
 import com.knoldus.utils.models.{Asset, Booking}
-import com.knoldus.booking.Constants.BOOKED
+import com.knoldus.booking.Constants.{BOOKED, ADMIN}
+import com.knoldus.persistence.user.UserComponent
+import scala.concurrent.ExecutionContext.Implicits.global
+
 
 import scala.concurrent.Future
 
 
-class BookingService @Inject()(bookingComponent: BookingComponent) {
+class BookingService @Inject()(bookingComponent: BookingComponent, userComponent: UserComponent) {
 
   /**
     * Add booking Object to database
@@ -24,7 +27,6 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
   def addBooking(bookingRequest: BookingRequest): Future[Int] = {
 
     val bookingDate = new Timestamp(System.currentTimeMillis())
-    println("******************************** BD " + bookingDate)
     val bookingData = Booking(getUUID, bookingRequest.userId, bookingRequest.assetId, None, None, None, None, BOOKED, None,
       bookingDate, Timestamp.valueOf(bookingRequest.startTime), Timestamp.valueOf(bookingRequest.endTime), None)
 
@@ -33,6 +35,7 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
 
   /**
     * Get list of assets available for booking
+    *
     * @param startTime
     * @param endTime
     * @param assetType
@@ -44,4 +47,22 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
     bookingComponent.getAssetsAvailableForBooking(startTimeValue, endTimeValue, assetType)
   }
 
+  /**
+    * Get list of booking
+    *
+    * @return
+    */
+  def getAllBooking(): Future[List[Booking]] = {
+    bookingComponent.getAllBooking
+  }
+
+  def getAllBookingForUser(userId: String): Future[List[Booking]] = {
+    bookingComponent.getBookingByUserId(userId)
+  }
+
+  def isAdmin(userId: String): Future[Boolean] = {
+    userComponent.getUserByUserId(userId).map { user =>
+      user.fold(false)(user => user.role == ADMIN)
+    }
+  }
 }
