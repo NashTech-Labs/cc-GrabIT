@@ -4,4 +4,6 @@ INSERT INTO user VALUES ('id-2', 'acc-tok-2', 'emp-id-2', 'knol-joy', 'jyotsana@
 
 INSERT INTO asset VALUES ('id-1', 'test asset', 'asset-unique-1', 'projector', false, Now(), Now());
 
+INSERT INTO asset VALUES ('asset-id-1', 'test asset 2', 'asset-unique-2', 'projector', false, Now(), Now());
+
 INSERT INTO booking VALUES ('id-1', 'user-id-1', 'asset-id-1', 4, 'user rating', 3, 'asset rating', 'booked', 'user-id-2', Now(), Now(), Now(), Now());

@@ -32,7 +32,7 @@ class AssetComponentTest extends AsyncFunSuite with AssetComponent with H2DBComp
   test("Fetch all asset"){
     val result = getAllAsset
     result.map { assets =>
-      assert(assets.length === 1)
+      assert(assets.length === 2)
     }
   }
 
