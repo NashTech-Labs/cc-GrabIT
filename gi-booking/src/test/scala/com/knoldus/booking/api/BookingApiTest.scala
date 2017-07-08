@@ -7,7 +7,7 @@ import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.booking.service.BookingService
 import com.knoldus.utils.json.JsonHelper
-import com.knoldus.utils.models.Booking
+import com.knoldus.utils.models.{Asset, Booking}
 import org.mockito.Mockito.when
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.mockito.MockitoSugar
@@ -104,10 +104,11 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     val timestamp = new Timestamp(123)
     val booking = Booking("id-123", "user-123", "asset-123", None, None, None, None, "booked",
       None, timestamp, timestamp, timestamp, None)
-    when(mockBookingService.getBookingsByUserId("user-123")).thenReturn(Future.successful(List(booking)))
+    val asset = Asset("asset-123", "projector1", "projector1", "projector", true, timestamp, timestamp)
+    when(mockBookingService.getBookingsByUserId("user-123")).thenReturn(Future.successful(List((booking, asset))))
     Get(s"/bookings?userId=user-123") ~> getBookingsByUserId ~> check {
       status shouldBe StatusCodes.OK
-      decode[List[Booking]](responseAs[String]).right.get shouldBe List(booking)
+      decode[List[(Booking, Asset)]](responseAs[String]).right.get shouldBe List((booking, asset))
     }
   }
 

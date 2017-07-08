@@ -1,15 +1,13 @@
 package com.knoldus.booking.service
 
 import java.sql.Timestamp
-import java.util.Calendar
 
 import com.google.inject.Inject
+import com.knoldus.booking.Constants._
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.persistence.booking.BookingComponent
 import com.knoldus.utils.CommonUtility._
 import com.knoldus.utils.models.{Asset, Booking}
-import com.knoldus.booking.Constants._
-import com.knoldus.utils.CommonUtility._
 
 import scala.concurrent.Future
 
@@ -51,7 +49,7 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
     * @param userId
     * @return
     */
-  def getBookingsByUserId(userId: String): Future[List[Booking]] = {
+  def getBookingsByUserId(userId: String): Future[List[(Booking, Asset)]] = {
     bookingComponent.getBookingsByUserId(userId)
   }
 

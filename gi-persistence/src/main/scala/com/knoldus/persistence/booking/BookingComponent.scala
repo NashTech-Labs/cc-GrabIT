@@ -35,8 +35,13 @@ trait BookingComponent extends BookingMapping with AssetMapping {
     * @param userId
     * @return Future[List[Booking]]
     **/
-  def getBookingsByUserId(userId: String): Future[List[Booking]] = {
-    db.run(bookingInfo.filter(booking => booking.userId === userId).to[List].result)
+  def getBookingsByUserId(userId: String): Future[List[(Booking, Asset)]] = {
+    val query = bookingInfo.filter(booking => booking.userId === userId) join assetInfo on {
+      case (bi, ai) => bi.assetId === ai.id
+    } map {
+      case (bi, ai) => (bi, ai)
+    }
+    db.run(query.to[List].result)
   }
 
   /**

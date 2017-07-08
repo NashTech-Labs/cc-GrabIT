@@ -30,7 +30,8 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
     val result = getBookingsByUserId("user-id-1")
     result.map { bookings =>
       assert(bookings.length === 1)
-      assert(bookings.head.id === "id-1")
+      assert(bookings.head._1.id === "id-1")
+      assert(bookings.head._2.id === "asset-id-1")
     }
   }
 
