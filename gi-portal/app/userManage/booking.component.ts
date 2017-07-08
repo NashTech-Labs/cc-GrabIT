@@ -19,11 +19,7 @@ export class BookingComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private router: Router, elementRef: ElementRef, private bookingService: BookingService) {
     }
-
-    bookingData: any = [];
-    asset: AssetsModel = new AssetsModel('', '', '');
-    returnedAssetAddResponse: any = [];
-    formValues: any = [];
+    assetsList:any=[];
 
 
     ngOnInit() {
