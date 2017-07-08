@@ -38,7 +38,7 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
     * @param assetType
     * @return
     */
-  def getAvailableAssets(startTime: String, endTime: String, assetType: String): Future[List[(Asset, Booking)]] = {
+  def getAvailableAssets(startTime: String, endTime: String, assetType: String): Future[List[Asset]] = {
     val startTimeValue = Timestamp.valueOf(startTime)
     val endTimeValue = Timestamp.valueOf(endTime)
     bookingComponent.getAssetsAvailableForBooking(startTimeValue, endTimeValue, assetType)

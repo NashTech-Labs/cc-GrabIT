@@ -9,7 +9,7 @@ trait UserMapping {
 
   import driver.api._
 
-  class UserMapping(tag: Tag) extends Table[User](tag, "users") {
+  class UserMapping(tag: Tag) extends Table[User](tag, "user") {
     def id: Rep[String] = column[String]("id", O.PrimaryKey)
     def accessToken: Rep[String] = column[String]("access_token")
     def employeeId: Rep[String] = column[String]("employee_id", O.Unique)

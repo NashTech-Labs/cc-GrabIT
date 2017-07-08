@@ -26,8 +26,6 @@ trait BookingComponent extends BookingMapping with AssetMapping {
     */
 
   def insert(booking: Booking): Future[Int] = {
-    println("*********************** booking " + booking)
-    println(s"Booking start time ${booking.startTime}")
     db.run(bookingInfo += booking)
   }
 
@@ -38,7 +36,6 @@ trait BookingComponent extends BookingMapping with AssetMapping {
     * @return Future[List[Booking]]
     **/
   def getBookingByUserId(userId: String): Future[List[Booking]] = {
-    println(s">>>>>>>>>>>>> ${userId}")
     db.run(bookingInfo.filter(booking => booking.userId === userId).to[List].result)
   }
 
@@ -70,15 +67,14 @@ trait BookingComponent extends BookingMapping with AssetMapping {
       .update((userRating, userFeedback)))
   }
 
-  def getAssetsAvailableForBooking(startTime: Timestamp, endTime: Timestamp, assetType: String): Future[List[(Asset, Booking)]] = {
-    val query = bookingInfo
-      .filterNot(booking => booking.status.toLowerCase === "booked" &&
-        ((booking.startTime >= startTime && booking.endTime <= startTime) ||
-          (booking.startTime >= endTime && booking.endTime <= endTime) )) join
+  def getAssetsAvailableForBooking(startTime: Timestamp, endTime: Timestamp, assetType: String): Future[List[Asset]] = {
+    val query = bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
+      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
+          (booking.startTime <= endTime && booking.endTime >= endTime))) joinRight
       assetInfo.filter(asset => asset.assetType.toLowerCase === assetType) on {
       case (bi, ai) => bi.assetId === ai.id
     } map {
-      case (bi, ai) => (ai, bi)
+      case (bi, ai) => ai
     }
     db.run(query.to[List].result)
   }

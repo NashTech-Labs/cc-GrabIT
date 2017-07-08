@@ -10,6 +10,7 @@ import com.knoldus.booking.model.BookingRequest
 import com.knoldus.booking.service.BookingService
 import io.circe.generic.auto._
 import io.circe.parser._
+import io.circe.syntax._
 
 import scala.util.{Failure, Success, Try}
 
@@ -47,7 +48,7 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
       get {
         parameters("startTime", "endTime", "assetType") { (startTime, endTime, assetType) =>
           onComplete(bookingService.getAvailableAssets(startTime, endTime, assetType)) {
-            case Success(res) => complete(res.toString)
+            case Success(assets) => complete(HttpResponse(StatusCodes.OK, entity = assets.asJson.toString))
             case Failure(ex) =>
               ex.printStackTrace()
               complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
