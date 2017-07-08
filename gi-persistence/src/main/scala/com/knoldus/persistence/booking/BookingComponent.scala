@@ -32,7 +32,7 @@ trait BookingComponent extends BookingMapping {
     * @param userId
     * @return Future[List[Booking]]
     **/
-  def getBookingByUserId(userId: String): Future[List[Booking]] = {
+  def getBookingsByUserId(userId: String): Future[List[Booking]] = {
     db.run(bookingInfo.filter(booking => booking.userId === userId).to[List].result)
   }
 
