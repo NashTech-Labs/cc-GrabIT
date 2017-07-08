@@ -3,17 +3,15 @@ package com.knoldus.asset.api
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.knoldus.asset.model.AssetRequest
-import com.knoldus.asset.service.AssetService
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import org.scalatest.{AsyncFunSuite, Matchers}
 import com.knoldus.asset.TestData._
+import com.knoldus.asset.service.AssetService
 import com.knoldus.utils.json.JsonHelper
 import com.knoldus.utils.models.Asset
 import io.circe.generic.auto._
 import io.circe.parser._
-import io.circe.syntax._
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
+import org.scalatest.{AsyncFunSuite, Matchers}
 
 import scala.concurrent.Future
 

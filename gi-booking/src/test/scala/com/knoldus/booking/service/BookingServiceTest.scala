@@ -1,5 +1,7 @@
 package com.knoldus.booking.service
 
+import java.sql.Timestamp
+
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.persistence.booking.BookingComponent
 import com.knoldus.utils.models.Booking
@@ -24,4 +26,14 @@ class BookingServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
     val output = bookingService.addBooking(bookingRequest)
     output.map { result => result shouldBe 1 }
   }
+
+  test("get list of bookings by user id") {
+    val timestamp = new Timestamp(123)
+    val booking = Booking("id-123", "user-123", "asset-123", None, None, None, None, "booked",
+      None, timestamp, timestamp, timestamp, None)
+    when(mockBookingComponent.getBookingsByUserId("user-123")).thenReturn(Future.successful(List(booking)))
+    val output = bookingService.getBookingsByUserId("user-123")
+    output.map { bookings => bookings shouldBe List(booking)}
+  }
+
 }

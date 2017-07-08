@@ -45,4 +45,14 @@ class BookingService @Inject()(bookingComponent: BookingComponent) {
     bookingComponent.getAssetsAvailableForBooking(startTimeValue, endTimeValue, assetType)
   }
 
+  /**
+    * Get list of bookings by user id
+    *
+    * @param userId
+    * @return
+    */
+  def getBookingsByUserId(userId: String): Future[List[Booking]] = {
+    bookingComponent.getBookingsByUserId(userId)
+  }
+
 }

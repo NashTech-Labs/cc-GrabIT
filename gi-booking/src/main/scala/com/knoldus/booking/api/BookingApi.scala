@@ -58,5 +58,24 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
     }
   }
 
-  val routes = addBooking ~ getAvailableAssets
+  /**
+    * Creates http route to get list of bookings by user id
+    *
+    * @return
+    */
+  def getBookingsByUserId: Route = cors() {
+    path("bookings") {
+      get {
+        parameters("userId") { userId =>
+          onComplete(bookingService.getBookingsByUserId(userId)) {
+            case Success(bookings) => complete(HttpResponse(status = StatusCodes.OK, entity = bookings.asJson.toString))
+            case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+          }
+        }
+      }
+    }
+  }
+
+  val routes = addBooking ~ getAvailableAssets ~ getBookingsByUserId
 }
+

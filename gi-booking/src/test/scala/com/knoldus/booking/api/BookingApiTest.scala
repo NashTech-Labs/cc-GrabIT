@@ -1,9 +1,13 @@
 package com.knoldus.booking.api
 
+import java.sql.Timestamp
+
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.booking.service.BookingService
+import com.knoldus.utils.json.JsonHelper
+import com.knoldus.utils.models.Booking
 import org.mockito.Mockito.when
 import org.scalatest.{FunSuite, Matchers}
 import org.scalatest.mockito.MockitoSugar
@@ -12,8 +16,10 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import io.circe.generic.auto._
 import io.circe.syntax._
+import io.circe.generic.auto._
+import io.circe.parser._
 
-class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with MockitoSugar {
+class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with MockitoSugar with JsonHelper {
 
   override def testConfigSource: String = "akka.loglevel = WARNING"
 
@@ -91,6 +97,25 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     Get(s"/available/asset?") ~> getAvailableAssets ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] should include regex "End Time should not be empty"
+    }
+  }
+
+  test("http route to booking list by user id successfully") {
+    val timestamp = new Timestamp(123)
+    val booking = Booking("id-123", "user-123", "asset-123", None, None, None, None, "booked",
+      None, timestamp, timestamp, timestamp, None)
+    when(mockBookingService.getBookingsByUserId("user-123")).thenReturn(Future.successful(List(booking)))
+    Get(s"/bookings?userId=user-123") ~> getBookingsByUserId ~> check {
+      status shouldBe StatusCodes.OK
+      decode[List[Booking]](responseAs[String]).right.get shouldBe List(booking)
+    }
+  }
+
+  test("http route to booking list by user id : failure case") {
+    when(mockBookingService.getBookingsByUserId("user-123")).thenReturn(Future.failed(new RuntimeException()))
+    Get(s"/bookings?userId=user-123") ~> getBookingsByUserId ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
     }
   }
 }
