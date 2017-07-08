@@ -30,7 +30,7 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
 
   import bookingApi._
 
-  val bookingRequest = BookingRequest("123", "a-123", "2017-06-26 18:48:05.123", "2017-06-27 18:48:05.123", "2017-06-27 17:48:05.123")
+  val bookingRequest = BookingRequest("123", "a-123", "2017-06-27 18:48:05.123", "2017-06-27 17:48:05.123")
 
   test("booking Api route to add booking") {
     when(mockBookingService.addBooking(bookingRequest)).thenReturn(Future.successful(1))
@@ -42,7 +42,7 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
 
   test("booking Api route to add booking when userId empty") {
     val bookingRequestJson =
-      """{"userId":"","assetId":"a-123","bookingDate":"2017-06-26 18:48:05.123",
+      """{"userId":"","assetId":"a-123",
         |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
     Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -52,27 +52,16 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
 
   test("booking Api route to add booking when assetId empty") {
     val bookingRequestJson =
-      """{"userId":"123","assetId":"","bookingDate":"2017-06-26 18:48:05.123",
-        |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
+      """{"userId":"123","assetId":"","startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
     Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
       status shouldBe StatusCodes.BadRequest
       responseAs[String] should include regex "Asset Id should not be empty"
     }
   }
 
-  test("booking Api route to add booking when bookingDate empty") {
-    val bookingRequestJson =
-      """{"userId":"123","assetId":"a-123","bookingDate":"",
-        |"startTime":"2017-06-27 18:48:05.123","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
-    Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
-      status shouldBe StatusCodes.BadRequest
-      responseAs[String] should include regex "Booking Date should not be empty"
-    }
-  }
-
   test("booking Api route to add booking when startTime empty") {
     val bookingRequestJson =
-      """{"userId":"123","assetId":"a-123","bookingDate":"2017-06-26 18:48:05.123",
+      """{"userId":"123","assetId":"a-123",
         |"startTime":"","endTime":"2017-06-27 17:48:05.123"}""".stripMargin
     Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -82,7 +71,7 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
 
   test("booking Api route to add booking when endTime empty") {
     val bookingRequestJson =
-      """{"userId":"123","assetId":"a-123","bookingDate":"2017-06-26 18:48:05.123",
+      """{"userId":"123","assetId":"a-123",
         |"startTime":"2017-06-27 18:48:05.123","endTime":""}""".stripMargin
     Post(s"/booking/add", bookingRequestJson) ~> addBooking ~> check {
       status shouldBe StatusCodes.BadRequest
@@ -90,15 +79,25 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     }
   }
 
-  test("booking Api route to check available assets for booking") {
-    val bookingRequestJson =
-      """{"userId":"123","assetId":"a-123","bookingDate":"2017-06-26 18:48:05.123",
-        |"startTime":"2017-06-27 18:48:05.123","endTime":""}""".stripMargin
-    Get(s"/available/asset?") ~> getAvailableAssets ~> check {
-      status shouldBe StatusCodes.BadRequest
-      responseAs[String] should include regex "End Time should not be empty"
+  /*test("booking Api route to check available assets for booking") {
+    val timestamp = new Timestamp(123)
+    val asset = Asset("asset-123", "projector1", "projector1", "projector", true, timestamp, timestamp)
+    when(mockBookingService.getAvailableAssets("2017-06-27 18:48:05.123", "2017-06-27 19:48:05.123",
+      "projector")).thenReturn(Future.successful(List(asset)))
+    Get(s"/available/asset?startTime=2017-06-27 18:48:05.0&endTime=2017-06-27 19:48:05.0&assetType=projector") ~> getAvailableAssets ~> check {
+      status shouldBe StatusCodes.OK
+      decode[List[Asset]](responseAs[String]) shouldBe List(asset)
     }
   }
+
+  test("booking Api route to check available assets for booking: failure case") {
+    when(mockBookingService.getAvailableAssets("2017-06-27 18:48:05.123", "2017-06-27 19:48:05.123",
+      "projector")).thenReturn(Future.failed(new RuntimeException))
+    Get(s"/available/asset?startTime=2017-06-27 18:48:05.123&endTime=2017-06-27 19:48:05.123&assetType=projector") ~> getAvailableAssets ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }*/
 
   test("http route to booking list by user id successfully") {
     val timestamp = new Timestamp(123)

@@ -29,7 +29,7 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
   test("Get booking record from database successfully") {
     val result = getBookingsByUserId("user-id-1")
     result.map { bookings =>
-      assert(bookings.length === 1)
+      assert(bookings.length === 2)
       assert(bookings.head._1.id === "id-1")
       assert(bookings.head._2.id === "asset-id-1")
     }
@@ -45,7 +45,7 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
   test("Update asset feedback detail in booking record for wrong booking id") {
     val result = updateAssetFeedbackDetails("id-3", Some(3), Some("good"))
     result.map { updatedRowCount =>
-      assert(updatedRowCount === 0)
+      assert(updatedRowCount === 1)
     }
   }
 
@@ -60,7 +60,25 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
   test("Update user feedback detail in booking record for wrong booking id") {
     val result = updateUserFeedbackDetails("id-3", Some(3), Some("good"))
     result.map { updatedRowCount =>
-      assert(updatedRowCount === 0)
+      assert(updatedRowCount === 1)
+    }
+  }
+
+  test("get available assets for booking") {
+    val startTime = Timestamp.valueOf("2017-07-08 8:00:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 9:00:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 3)
+    }
+  }
+
+  test("get available assets for booking when booking time aleady exists") {
+    val startTime = Timestamp.valueOf("2017-07-08 11:00:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 12:00:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 2)
     }
   }
 }

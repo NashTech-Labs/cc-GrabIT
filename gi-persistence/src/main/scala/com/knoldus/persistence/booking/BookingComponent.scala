@@ -81,16 +81,27 @@ trait BookingComponent extends BookingMapping with AssetMapping {
       .update((userRating, userFeedback)))
   }
 
+  /**
+    * Get list of assets available for booking
+    * @param startTime
+    * @param endTime
+    * @param assetType
+    * @return
+    */
   def getAssetsAvailableForBooking(startTime: Timestamp, endTime: Timestamp, assetType: String): Future[List[Asset]] = {
-    val query = bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
-      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
-        (booking.startTime <= endTime && booking.endTime >= endTime))) joinRight
+    val query = bookingQuery joinRight
       assetInfo.filter(asset => asset.assetType.toLowerCase === assetType.toLowerCase) on {
       case (bi, ai) => bi.assetId === ai.id
     } map {
       case (bi, ai) => ai
     }
     db.run(query.to[List].result)
+  }
+
+  private def bookingQuery(startTime: Timestamp, endTime: Timestamp) = {
+    bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
+      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
+        (booking.startTime <= endTime && booking.endTime >= endTime)))
   }
 }
 
