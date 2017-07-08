@@ -30,6 +30,15 @@ trait BookingComponent extends BookingMapping with AssetMapping {
   }
 
   /**
+    * Get All Booking
+    *
+    * @return
+    */
+  def getAllBooking: Future[List[Booking]] = {
+    db.run(bookingInfo.to[List].result)
+  }
+
+  /**
     * Get Booking details by userID
     *
     * @param userId

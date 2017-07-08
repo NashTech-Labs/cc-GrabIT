@@ -41,6 +41,7 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
 
   /**
     * http route to get list of assets available  for booking
+    *
     * @return
     */
   def getAvailableAssets: Route = cors() {
@@ -52,6 +53,23 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
             case Failure(ex) =>
               ex.printStackTrace()
               complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+          }
+        }
+      }
+    }
+  }
+
+  def getAll: Route = {
+    cors() {
+      path("getAll" / "userId") {
+        get {
+          parameters("userId") { (userId) =>
+            authorizeAsync(_ => bookingService.isAdmin(userId)) {
+              onComplete(bookingService.getAllBooking()) {
+                case Success(bookings) => complete(HttpResponse(StatusCodes.OK, entity = bookings.asJson.toString()))
+                case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+              }
+            }
           }
         }
       }
@@ -76,6 +94,6 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
     }
   }
 
-  val routes = addBooking ~ getAvailableAssets ~ getBookingsByUserId
+  val routes = addBooking ~ getAvailableAssets ~ getBookingsByUserId ~ getAll
 }
 
