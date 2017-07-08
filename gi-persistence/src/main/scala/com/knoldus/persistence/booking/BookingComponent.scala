@@ -89,8 +89,9 @@ trait BookingComponent extends BookingMapping with AssetMapping {
     * @return
     */
   def getAssetsAvailableForBooking(startTime: Timestamp, endTime: Timestamp, assetType: String): Future[List[Asset]] = {
-    val query = bookingQuery joinRight
-      assetInfo.filter(asset => asset.assetType.toLowerCase === assetType.toLowerCase) on {
+    val query = bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
+      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
+        (booking.startTime <= endTime && booking.endTime >= endTime))) joinRight assetInfo.filter(asset => asset.assetType.toLowerCase === assetType.toLowerCase) on {
       case (bi, ai) => bi.assetId === ai.id
     } map {
       case (bi, ai) => ai
@@ -98,11 +99,7 @@ trait BookingComponent extends BookingMapping with AssetMapping {
     db.run(query.to[List].result)
   }
 
-  private def bookingQuery(startTime: Timestamp, endTime: Timestamp) = {
-    bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
-      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
-        (booking.startTime <= endTime && booking.endTime >= endTime)))
-  }
+ 
 }
 
 class BookingPostgresComponent extends BookingComponent with PostgresDbComponent
