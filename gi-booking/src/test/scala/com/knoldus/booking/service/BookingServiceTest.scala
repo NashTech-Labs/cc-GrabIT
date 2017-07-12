@@ -43,12 +43,12 @@ class BookingServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
   }
 
   test("get available assets for booking") {
-    val startTime = Timestamp.valueOf("2017-06-26 18:48:05.123")
-    val endTime = Timestamp.valueOf("2017-06-26 19:48:05.123")
+    val startTime = new Timestamp(123)
+    val endTime = new Timestamp(123)
     val asset = Asset("asset-123", "projector1", "projector1", "projector", true, timestamp, timestamp)
     when(mockBookingComponent.getAssetsAvailableForBooking(startTime, endTime,
       "projector")).thenReturn(Future.successful(List(asset)))
-    val output = bookingService.getAvailableAssets("2017-06-26 18:48:05.123", "2017-06-26 19:48:05.123", "projector")
+    val output = bookingService.getAvailableAssets(123, 123, "projector")
     output.map { assets => assets shouldBe List(asset)}
   }
 

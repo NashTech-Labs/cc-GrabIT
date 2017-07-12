@@ -8,7 +8,10 @@ import com.knoldus.persistence.asset.mappings.AssetMapping
 import com.knoldus.persistence.booking.mappings.BookingMapping
 import com.knoldus.persistence.db.DBComponent
 import com.knoldus.utils.models.{Asset, Booking}
+import slick.dbio.DBIOAction
+import slick.dbio.Effect.Read
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @ImplementedBy(classOf[BookingPostgresComponent])
@@ -89,19 +92,22 @@ trait BookingComponent extends BookingMapping with AssetMapping {
     * @param assetType
     * @return
     */
-  // scalastyle:off
   def getAssetsAvailableForBooking(startTime: Timestamp, endTime: Timestamp, assetType: String): Future[List[Asset]] = {
-    val query = bookingInfo.filterNot(booking => booking.status.toLowerCase === "booked" &&
-      ((booking.startTime <= startTime && booking.endTime >= startTime) ||
-        (booking.startTime <= endTime && booking.endTime >= endTime))) joinRight assetInfo
-      .filter(asset => asset.assetType.toLowerCase === assetType.toLowerCase) on {
-      case (bi, ai) => bi.assetId === ai.id
-    } map {
-      case (bi, ai) => ai
-    }
-    db.run(query.to[List].result)
+    val query = for {
+      ids: Seq[String] <- bookingInfo.filter(booking =>
+        (checkBookedTimings(booking.startTime, booking.endTime, startTime, endTime) ||
+          (booking.startTime > startTime && booking.endTime < endTime)
+          ) && booking.status.toLowerCase === "booked").map(_.assetId).result
+      assets <- assetInfo.filterNot(_.id inSetBind ids).filter(_.assetType === assetType).to[List].result
+    } yield assets
+    db.run(query)
+  }
+
+  private def checkBookedTimings(dbStartTime: Rep[Timestamp], dbEndTime: Rep[Timestamp],
+                startTime: Timestamp, endTime: Timestamp) = {
+    (dbStartTime <= startTime && dbEndTime >= startTime) ||
+      (dbStartTime <= endTime && dbEndTime >= endTime)
   }
 }
-// scalastyle:on
 
 class BookingPostgresComponent extends BookingComponent with PostgresDbComponent

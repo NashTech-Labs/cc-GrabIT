@@ -12,7 +12,7 @@ class AssetComponentTest extends AsyncFunSuite with AssetComponent with H2DBComp
 
   test("Insert asset functionality") {
     val timestamp = new Timestamp(123)
-    val asset = Asset("id-3", "test asset", "asset-unique-3", "projector", false, timestamp, timestamp)
+    val asset = Asset("id-3", "test asset", "asset-unique-New", "projector", false, timestamp, timestamp)
     val result = insert(asset)
     result.map { count => assert(count === 1)}
   }
@@ -32,7 +32,7 @@ class AssetComponentTest extends AsyncFunSuite with AssetComponent with H2DBComp
   test("Fetch all asset"){
     val result = getAllAsset
     result.map { assets =>
-      assert(assets.length === 2)
+      assert(assets.length === 3)
     }
   }
 

@@ -29,9 +29,9 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
   test("Get booking record from database successfully") {
     val result = getBookingsByUserId("user-id-1")
     result.map { bookings =>
-      assert(bookings.length === 2)
+      assert(bookings.length === 3)
       assert(bookings.head._1.id === "id-1")
-      assert(bookings.head._2.id === "asset-id-1")
+      assert(bookings.head._2.id === "asset-id-2")
     }
   }
 
@@ -63,17 +63,7 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
       assert(updatedRowCount === 1)
     }
   }
-
-  test("get available assets for booking") {
-    val startTime = Timestamp.valueOf("2017-07-08 8:00:00.0")
-    val endTime = Timestamp.valueOf("2017-07-08 9:00:00.0")
-    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
-    result.map { assets =>
-      assert(assets.length === 3)
-    }
-  }
-
-  test("get available assets for booking when booking time aleady exists") {
+  test("get available assets for booking, when exact booking slot already booked") {
     val startTime = Timestamp.valueOf("2017-07-08 11:00:00.0")
     val endTime = Timestamp.valueOf("2017-07-08 12:00:00.0")
     val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
@@ -81,4 +71,59 @@ class BookingComponentTest extends AsyncFunSuite with BookingComponent with H2DB
       assert(assets.length === 2)
     }
   }
+
+  test("get available assets for booking, when booking slot overlaps") {
+    val startTime = Timestamp.valueOf("2017-07-08 11:30:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 12:30:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 2)
+    }
+  }
+
+  test("get available assets for booking, when booking slot overlaps start time less than booked time") {
+    val startTime = Timestamp.valueOf("2017-07-08 10:30:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 11:30:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 2)
+    }
+  }
+
+  test("get available assets for booking, when booking slot overlaps end time greater than booked time") {
+    val startTime = Timestamp.valueOf("2017-07-08 10:00:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 13:00:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 2)
+    }
+  }
+
+  test("get available assets for booking, when booking slot doesn't overlaps") {
+    val startTime = Timestamp.valueOf("2017-07-08 08:00:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 09:00:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 3)
+    }
+  }
+
+  test("get available assets for booking, when asset type is wrong") {
+    val startTime = Timestamp.valueOf("2017-07-08 08:00:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 09:00:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "wrong type")
+    result.map { assets =>
+      assert(assets.length === 0)
+    }
+  }
+
+  test("get available assets for booking, when booking slot overlaps but status is not booked") {
+    val startTime = Timestamp.valueOf("2017-07-08 14:00:00.0")
+    val endTime = Timestamp.valueOf("2017-07-08 15:00:00.0")
+    val result = getAssetsAvailableForBooking(startTime, endTime, "projector")
+    result.map { assets =>
+      assert(assets.length === 3)
+    }
+  }
+
 }

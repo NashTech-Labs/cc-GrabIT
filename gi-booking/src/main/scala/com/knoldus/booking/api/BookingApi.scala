@@ -38,9 +38,8 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
       }
     }
 
-
   /**
-    * http route to get list of assets available  for booking
+    * Creates http route to get list of assets available for booking
     *
     * @return
     */
@@ -48,7 +47,7 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
     path("available" / "asset") {
       get {
         parameters("startTime", "endTime", "assetType") { (startTime, endTime, assetType) =>
-          onComplete(bookingService.getAvailableAssets(startTime, endTime, assetType)) {
+          onComplete(bookingService.getAvailableAssets(startTime.toLong, endTime.toLong, assetType)) {
             case Success(assets) => complete(HttpResponse(StatusCodes.OK, entity = assets.asJson.toString))
             case Failure(ex) =>
               ex.printStackTrace()

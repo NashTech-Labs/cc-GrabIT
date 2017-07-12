@@ -79,25 +79,23 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     }
   }
 
-  /*test("booking Api route to check available assets for booking") {
+  test("booking Api route to check available assets for booking") {
     val timestamp = new Timestamp(123)
     val asset = Asset("asset-123", "projector1", "projector1", "projector", true, timestamp, timestamp)
-    when(mockBookingService.getAvailableAssets("2017-06-27 18:48:05.123", "2017-06-27 19:48:05.123",
-      "projector")).thenReturn(Future.successful(List(asset)))
-    Get(s"/available/asset?startTime=2017-06-27 18:48:05.0&endTime=2017-06-27 19:48:05.0&assetType=projector") ~> getAvailableAssets ~> check {
+    when(mockBookingService.getAvailableAssets(123, 123, "projector")).thenReturn(Future.successful(List(asset)))
+    Get(s"/available/asset?startTime=123&endTime=123&assetType=projector") ~> getAvailableAssets ~> check {
       status shouldBe StatusCodes.OK
-      decode[List[Asset]](responseAs[String]) shouldBe List(asset)
+      decode[List[Asset]](responseAs[String]).right.get shouldBe List(asset)
     }
   }
 
   test("booking Api route to check available assets for booking: failure case") {
-    when(mockBookingService.getAvailableAssets("2017-06-27 18:48:05.123", "2017-06-27 19:48:05.123",
-      "projector")).thenReturn(Future.failed(new RuntimeException))
-    Get(s"/available/asset?startTime=2017-06-27 18:48:05.123&endTime=2017-06-27 19:48:05.123&assetType=projector") ~> getAvailableAssets ~> check {
+    when(mockBookingService.getAvailableAssets(123, 123, "projector")).thenReturn(Future.failed(new RuntimeException))
+    Get(s"/available/asset?startTime=123&endTime=123&assetType=projector") ~> getAvailableAssets ~> check {
       status shouldBe StatusCodes.InternalServerError
       responseAs[String] should include regex "Internal Server Error"
     }
-  }*/
+  }
 
   test("http route to booking list by user id successfully") {
     val timestamp = new Timestamp(123)
