@@ -3,6 +3,7 @@ package com.knoldus.booking.api
 import java.sql.Timestamp
 
 import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.AuthorizationFailedRejection
 import akka.http.scaladsl.testkit.{RouteTestTimeout, ScalatestRouteTest}
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.booking.service.BookingService
@@ -79,6 +80,22 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
     }
   }
 
+  test("booking Api route to add booking: failure case") {
+    when(mockBookingService.addBooking(bookingRequest)).thenReturn(Future.failed(new RuntimeException))
+    Post(s"/booking/add", bookingRequest.asJson.noSpaces) ~> addBooking ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }
+
+  test("booking Api route to add booking when invalid body passed") {
+    when(mockBookingService.addBooking(bookingRequest)).thenReturn(Future.successful(1))
+    Post(s"/booking/add", """{}""") ~> addBooking ~> check {
+      status shouldBe StatusCodes.BadRequest
+      responseAs[String] should include regex "Body params are missing or incorrect"
+    }
+  }
+
   test("booking Api route to check available assets for booking") {
     val timestamp = new Timestamp(123)
     val asset = Asset("asset-123", "projector1", "projector1", "projector", true, timestamp, timestamp)
@@ -112,6 +129,39 @@ class BookingApiTest extends FunSuite with Matchers with ScalatestRouteTest with
   test("http route to booking list by user id : failure case") {
     when(mockBookingService.getBookingsByUserId("user-123")).thenReturn(Future.failed(new RuntimeException()))
     Get(s"/bookings?userId=user-123") ~> getBookingsByUserId ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }
+
+
+  test("http route to all booking list successfully") {
+    val timestamp = new Timestamp(123)
+    val booking = Booking("id-123", "user-123", "asset-123", None, None, None, None, "booked",
+      None, timestamp, timestamp, timestamp, None)
+    when(mockBookingService.isAdmin("accessToken123")).thenReturn(Future.successful(true))
+    when(mockBookingService.getAllBooking()).thenReturn(Future.successful(List(booking)))
+    Get(s"/bookings?accessToken=accessToken123") ~> getAll ~> check {
+      status shouldBe StatusCodes.OK
+      decode[List[Booking]](responseAs[String]).right.get shouldBe List(booking)
+    }
+  }
+
+  test("http route to all booking list, when user is not admin") {
+    val timestamp = new Timestamp(123)
+    val booking = Booking("id-123", "user-123", "asset-123", None, None, None, None, "booked",
+      None, timestamp, timestamp, timestamp, None)
+    when(mockBookingService.isAdmin("accessToken123")).thenReturn(Future.successful(false))
+    when(mockBookingService.getAllBooking()).thenReturn(Future.successful(List(booking)))
+    Get(s"/bookings?accessToken=accessToken123") ~> getAll ~> check {
+      rejection shouldBe AuthorizationFailedRejection
+    }
+  }
+
+  test("http route to all booking list : failure case") {
+    when(mockBookingService.isAdmin("accessToken123")).thenReturn(Future.successful(true))
+    when(mockBookingService.getAllBooking()).thenReturn(Future.failed(new RuntimeException()))
+    Get(s"/bookings?accessToken=accessToken123") ~> getAll ~> check {
       status shouldBe StatusCodes.InternalServerError
       responseAs[String] should include regex "Internal Server Error"
     }

@@ -48,4 +48,10 @@ class AssetServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
     val result = assetService.getAllAssets
     result.map(assets => assets shouldBe List(asset))
   }
+
+  test("get all asset types functionality") {
+    when(mockAssetComponent.getAllAsset).thenReturn(Future.successful(List(asset)))
+    val result = assetService.getAssetTypes
+    result.map(assetTypes => assetTypes shouldBe List("projector"))
+  }
 }

@@ -55,7 +55,7 @@ class AssetAPITest extends AsyncFunSuite with ScalatestRouteTest with Matchers w
     }
   }
 
-  test("get All users Api route successfully") {
+  test("get All assets Api route successfully") {
     when(mockAssetService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     when(mockAssetService.getAllAssets).thenReturn(Future.successful(List(asset)))
     Get(s"/asset/get/all?accessToken=$accessToken") ~> getAllAssets ~> check {
@@ -64,17 +64,33 @@ class AssetAPITest extends AsyncFunSuite with ScalatestRouteTest with Matchers w
     }
   }
 
-  test("get All users Api route when user is not admin") {
+  test("get All assets Api route when user is not admin") {
     when(mockAssetService.isAdmin(accessToken)).thenReturn(Future.successful(false))
     Get(s"/asset/get/all?accessToken=$accessToken") ~> getAllAssets ~> check {
       rejection shouldBe AuthorizationFailedRejection
     }
   }
 
-  test("get All users Api route when asset service fails") {
+  test("get All assets Api route when asset service fails") {
     when(mockAssetService.isAdmin(accessToken)).thenReturn(Future.successful(true))
     when(mockAssetService.getAllAssets).thenReturn(Future.failed(new RuntimeException))
     Get(s"/asset/get/all?accessToken=$accessToken") ~> getAllAssets ~> check {
+      status shouldBe StatusCodes.InternalServerError
+      responseAs[String] should include regex "Internal Server Error"
+    }
+  }
+
+  test("get All asset types Api route successfully") {
+    when(mockAssetService.getAssetTypes).thenReturn(Future.successful(List("projector")))
+    Get(s"/asset/types?accessToken=$accessToken") ~> getAssetTypes ~> check {
+      status shouldBe StatusCodes.OK
+      decode[List[String]](responseAs[String]).right.get shouldBe List("projector")
+    }
+  }
+
+  test("get All asset types Api route when asset service fails") {
+    when(mockAssetService.getAssetTypes).thenReturn(Future.failed(new RuntimeException))
+    Get(s"/asset/types?accessToken=$accessToken") ~> getAssetTypes ~> check {
       status shouldBe StatusCodes.InternalServerError
       responseAs[String] should include regex "Internal Server Error"
     }

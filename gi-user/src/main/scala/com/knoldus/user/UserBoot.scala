@@ -22,5 +22,4 @@ object UserBoot extends App {
   Http().bindAndHandle(userApi.routes, "localhost", Port)
 
 }
-
 // $COVERAGE-ON$

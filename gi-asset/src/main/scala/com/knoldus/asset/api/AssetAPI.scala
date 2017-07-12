@@ -47,21 +47,40 @@ class AssetAPI @Inject()(assetService: AssetService) extends AssetApiHelper {
     * @return
     */
   def getAllAssets: Route =
-    cors() {
-      path("asset" / "get" / "all") {
-        get {
-          parameters("accessToken") { accessToken =>
-            authorizeAsync(_ => assetService.isAdmin(accessToken)) {
-              onComplete(assetService.getAllAssets) {
-                case Success(assets) => complete(HttpResponse(StatusCodes.OK, entity = assets.asJson.toString))
-                case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
-              }
+  cors() {
+    path("asset" / "get" / "all") {
+      get {
+        parameters("accessToken") { accessToken =>
+          authorizeAsync(_ => assetService.isAdmin(accessToken)) {
+            onComplete(assetService.getAllAssets) {
+              case Success(assets) => complete(HttpResponse(StatusCodes.OK, entity = assets.asJson.toString))
+              case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
             }
           }
         }
       }
     }
+  }
 
-  val routes = addAsset ~ getAllAssets
+
+  /**
+    * Creates http route to get asset type list
+    *
+    * @return
+    */
+  def getAssetTypes: Route = cors() {
+    path("asset" / "types") {
+      get {
+        parameters("accessToken") { accessToken =>
+          onComplete(assetService.getAssetTypes) {
+            case Success(assetTypes) => complete(HttpResponse(StatusCodes.OK, entity = assetTypes.asJson.toString))
+            case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))
+          }
+        }
+      }
+    }
+  }
+
+  val routes = addAsset ~ getAllAssets ~ getAssetTypes
 
 }

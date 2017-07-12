@@ -9,6 +9,7 @@ import com.knoldus.asset.module.AssetModule
 import net.codingwell.scalaguice.InjectorExtensions._
 import Constants._
 
+// $COVERAGE-OFF$
 object AssetBoot extends App {
 
   val injector: Injector = Guice.createInjector(new AssetModule)
@@ -19,3 +20,4 @@ object AssetBoot extends App {
 
   Http().bindAndHandle(assetApi.routes, "localhost", Port)
 }
+// $COVERAGE-ON$

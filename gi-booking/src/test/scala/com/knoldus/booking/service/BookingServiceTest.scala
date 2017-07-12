@@ -5,8 +5,7 @@ import java.sql.Timestamp
 import com.knoldus.booking.model.BookingRequest
 import com.knoldus.persistence.booking.BookingComponent
 import com.knoldus.persistence.user.UserComponent
-import com.knoldus.utils.models.Booking
-import com.knoldus.utils.models.{Asset, Booking}
+import com.knoldus.utils.models.{Asset, Booking, User}
 import org.mockito.Matchers._
 import org.mockito.Mockito._
 import org.scalatest._
@@ -40,6 +39,28 @@ class BookingServiceTest extends AsyncFunSuite with Matchers with MockitoSugar {
     when(mockBookingComponent.getBookingsByUserId("user-123")).thenReturn(Future.successful(List((booking, asset))))
     val output = bookingService.getBookingsByUserId("user-123")
     output.map { bookings => bookings shouldBe List((booking, asset))}
+  }
+
+  test("get list of all bookings") {
+    val booking = Booking("id-123", "user-123", "asset-123", None, None, None, None, "booked",
+      None, timestamp, timestamp, timestamp, None)
+    when(mockBookingComponent.getAllBooking).thenReturn(Future.successful(List(booking)))
+    val output = bookingService.getAllBooking
+    output.map { bookings => bookings shouldBe List(booking)}
+  }
+
+  test("whether user is admin successfully") {
+    val user = User("id-3", "accessToken123", "emp-id-3", "knol-joy", "anurag@knoldus.com", "knol-password3",
+      "admin", timestamp, timestamp)
+    when(mockUserComponent.getUserByAccessToken("accessToken123")).thenReturn(Future.successful(Some(user)))
+    val output = bookingService.isAdmin("accessToken123")
+    output.map { bookings => bookings shouldBe true}
+  }
+
+  test("whether user is not admin") {
+    when(mockUserComponent.getUserByAccessToken("accessToken123")).thenReturn(Future.successful(None))
+    val output = bookingService.isAdmin("accessToken123")
+    output.map { bookings => bookings shouldBe false}
   }
 
   test("get available assets for booking") {

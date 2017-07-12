@@ -9,7 +9,7 @@ import com.knoldus.booking.api.BookingApi
 import com.knoldus.booking.module.BookingModule
 import net.codingwell.scalaguice.InjectorExtensions._
 
-
+// $COVERAGE-OFF$
 object BookingBoot extends App {
   val injector = Guice.createInjector(new BookingModule)
 
@@ -19,3 +19,4 @@ object BookingBoot extends App {
   implicit val materializer = ActorMaterializer()
   Http().bindAndHandle(bookingApi.routes, "localhost", Port)
 }
+// $COVERAGE-ON$

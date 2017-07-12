@@ -58,12 +58,17 @@ class BookingApi @Inject()(bookingService: BookingService) extends BookingApiHel
     }
   }
 
+  /**
+    * Creates http route to get all bookings
+    *
+    * @return
+    */
   def getAll: Route = {
     cors() {
-      path("getAll" / "userId") {
+      path("bookings") {
         get {
-          parameters("userId") { (userId) =>
-            authorizeAsync(_ => bookingService.isAdmin(userId)) {
+          parameters("accessToken") { (accessToken) =>
+            authorizeAsync(_ => bookingService.isAdmin(accessToken)) {
               onComplete(bookingService.getAllBooking()) {
                 case Success(bookings) => complete(HttpResponse(StatusCodes.OK, entity = bookings.asJson.toString()))
                 case Failure(ex) => complete(HttpResponse(StatusCodes.InternalServerError, entity = s"Internal Server Error ${ex.getMessage}"))

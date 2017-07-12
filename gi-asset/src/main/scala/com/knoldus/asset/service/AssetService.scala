@@ -32,6 +32,13 @@ class AssetService @Inject()(assetComponent: AssetComponent, userComponent: User
   def getAllAssets: Future[List[Asset]] = assetComponent.getAllAsset
 
   /**
+    * Fetches list of asset types available
+    *
+    * @return
+    */
+  def getAssetTypes: Future[List[String]] = assetComponent.getAllAsset.map(a => a.map(_.assetType).distinct)
+
+  /**
     * Checks if a user is admin
     * @param accessToken
     * @return Future[List[Asset]]

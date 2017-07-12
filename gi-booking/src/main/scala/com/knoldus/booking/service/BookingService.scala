@@ -55,8 +55,8 @@ class BookingService @Inject()(bookingComponent: BookingComponent, userComponent
     bookingComponent.getAllBooking
   }
 
-  def isAdmin(userId: String): Future[Boolean] = {
-    userComponent.getUserByUserId(userId).map { user =>
+  def isAdmin(accessToken: String): Future[Boolean] = {
+    userComponent.getUserByAccessToken(accessToken).map { user =>
       user.fold(false)(user => user.role == ADMIN)
     }
   }

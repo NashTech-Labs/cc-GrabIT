@@ -8,8 +8,6 @@ import com.knoldus.persistence.asset.mappings.AssetMapping
 import com.knoldus.persistence.booking.mappings.BookingMapping
 import com.knoldus.persistence.db.DBComponent
 import com.knoldus.utils.models.{Asset, Booking}
-import slick.dbio.DBIOAction
-import slick.dbio.Effect.Read
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
